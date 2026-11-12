@@ -4,13 +4,16 @@
  */
 declare(strict_types=1);
 
-function current_user(): ?array
+function current_user(bool $refresh = false): ?array
 {
     static $user = false;
-    if ($user !== false) {
+    static $forId = null;
+    $id = $_SESSION['uid'] ?? null;
+    // Cache invalidé si l'identité de session change (connexion / déconnexion dans la même requête)
+    if (!$refresh && $user !== false && $forId === $id) {
         return $user;
     }
-    $id = $_SESSION['uid'] ?? null;
+    $forId = $id;
     if (!$id) {
         return $user = null;
     }
@@ -165,6 +168,7 @@ function login_user(int $userId): void
     $_SESSION['_csrf'] = bin2hex(random_bytes(32));
     unset($_SESSION['perms']);
     q('UPDATE users SET last_login_at = UTC_TIMESTAMP() WHERE id = ?', [$userId]);
+    current_user(true);
 }
 
 function logout_user(): void
