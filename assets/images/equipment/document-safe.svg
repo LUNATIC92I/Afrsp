@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none" stroke="#00C8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="78" y="34" width="164" height="160" rx="10"/><rect x="92" y="48" width="136" height="132" rx="6" stroke-width="1.2"/>
+<circle cx="160" cy="114" r="34" stroke="#D5B36A"/><circle cx="160" cy="114" r="6" stroke="#D5B36A"/>
+<path d="M160 80v8M160 140v8M126 114h8M186 114h8M136 90l6 6M178 132l6 6M136 138l6-6M178 96l6-6" stroke="#D5B36A" stroke-width="1.5"/>
+<path d="M228 92h10v44h-10" stroke-width="3"/><path d="M90 194v12M230 194v12"/>
+<path d="M30 70h36M30 82h28M30 94h32" stroke="#00F0D0" stroke-width="1.5"/>
+<text x="250" y="60" fill="#AEBBC9" stroke="none" font-family="monospace" font-size="10">CLASSE</text>
+<text x="250" y="72" fill="#AEBBC9" stroke="none" font-family="monospace" font-size="10">S2 / EN 14450</text>
+</svg>

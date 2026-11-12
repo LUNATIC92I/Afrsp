@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none" stroke="#00C8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="40" y="62" width="170" height="110" rx="12"/><path d="M80 62l12-20h46l12 20"/>
+<rect x="210" y="80" width="70" height="74" rx="8"/><path d="M280 92h14v50h-14"/>
+<circle cx="125" cy="117" r="38" stroke="#00F0D0"/><circle cx="125" cy="117" r="24"/><circle cx="125" cy="117" r="10" stroke="#D5B36A"/>
+<rect x="176" y="72" width="22" height="12" rx="3" stroke-width="1.5"/><circle cx="60" cy="78" r="5" stroke="#FF4057"/>
+<g stroke="#AEBBC9" stroke-width="1" opacity=".55" stroke-dasharray="3 4"><path d="M40 192h254M40 186v12M294 186v12"/></g>
+<text x="40" y="34" fill="#AEBBC9" stroke="none" font-family="monospace" font-size="10">FOCALE 70–300 mm · OBSERVATION LÉGALE</text>
+</svg>

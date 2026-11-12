@@ -1,0 +1,15 @@
+/config/config.local.php
+/install/install.lock
+/storage/logs/*
+/storage/cache/*
+/storage/fonts/*
+!/storage/**/.gitkeep
+/certificates/generated/*
+!/certificates/generated/.gitkeep
+/uploads/**/*
+!/uploads/**/
+!/uploads/**/.gitkeep
+!/uploads/videos/seed-*.mp4
+!/uploads/documents/seed-*.pdf
+.DS_Store
+*.swp

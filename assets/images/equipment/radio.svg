@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none" stroke="#00C8FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="112" y="60" width="96" height="136" rx="14"/><path d="M140 60V18" stroke-width="4"/><path d="M180 60V40"/>
+<rect x="126" y="76" width="68" height="34" rx="4" stroke="#00F0D0"/><text x="134" y="98" fill="#00F0D0" stroke="none" font-family="monospace" font-size="12">AES·CH2</text>
+<path d="M128 124h64M128 136h64M128 148h64M128 160h64" stroke-width="1.2"/>
+<rect x="150" y="174" width="20" height="10" rx="3" stroke="#D5B36A"/>
+<path d="M232 92a40 40 0 0 1 0 56M248 78a62 62 0 0 1 0 84" stroke="#AEBBC9" stroke-width="1.4" opacity=".7"/>
+<path d="M88 92a40 40 0 0 0 0 56M72 78a62 62 0 0 0 0 84" stroke="#AEBBC9" stroke-width="1.4" opacity=".7"/>
+</svg>
