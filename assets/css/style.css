@@ -308,7 +308,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .hero__copy { max-width: 720px; }
 .hero__coords { display: flex; flex-wrap: wrap; gap: 8px 22px; font: .74rem var(--f-mono); letter-spacing: .18em; color: var(--turq); margin-bottom: 26px; text-transform: uppercase; }
 .hero__coords span { display: inline-flex; gap: 8px; align-items: center; }
-.hero__title { margin: 0; font: 900 clamp(2.9rem, 8.4vw, 6.6rem)/.92 var(--f-display); letter-spacing: .06em; color: var(--white); }
+.hero__title { margin: 0; font: 900 clamp(2.4rem, 7vw, 5.6rem)/.95 var(--f-display); letter-spacing: .05em; color: var(--white); white-space: nowrap; }
 .hero__title .apos { color: var(--gold); }
 .hero__tagline { margin: 18px 0 14px; font: 600 clamp(1.05rem, 2.2vw, 1.55rem)/1.2 var(--f-head); letter-spacing: .2em; text-transform: uppercase;
   background: var(--holo); -webkit-background-clip: text; background-clip: text; color: transparent; background-size: 200% 100%; animation: holo-shift 8s linear infinite; }
