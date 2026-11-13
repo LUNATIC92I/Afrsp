@@ -3,7 +3,7 @@
  * Catalogue initial AFRICA'SPY : domaines (catégories) + formations.
  * Chargé par database/build-sql.php pour générer database/africaspy.sql.
  */
-return [
+$__catalog = [
     'categories' => [
         ['code' => 'A', 'slug' => 'fondements-du-renseignement', 'name' => 'Fondements du renseignement', 'accent' => '#00C8FF',
          'description' => 'Le socle commun : cycle du renseignement, histoire des services, disciplines de collecte et méthodes d\'analyse.'],
@@ -26,3 +26,19 @@ return [
         require __DIR__ . '/courses_EF.php'
     ),
 ];
+
+// Fusion des enrichissements (approfondissements, QCM supplémentaires, glossaire, bibliographie)
+$__enrich = require __DIR__ . '/enrichment.php';
+foreach ($__catalog['courses'] as &$__c) {
+    $__e = $__enrich[$__c['code']] ?? null;
+    if (!$__e) continue;
+    foreach ($__e['chapters'] as $__i => $__add) {
+        if (!isset($__c['chapters'][$__i])) continue;
+        array_push($__c['chapters'][$__i]['lessons'], ...$__add['lessons']);
+        array_push($__c['chapters'][$__i]['quiz'], ...$__add['quiz']);
+    }
+    $__last = count($__c['chapters']) - 1;
+    array_push($__c['chapters'][$__last]['lessons'], ...$__e['final']);
+}
+unset($__c);
+return $__catalog;

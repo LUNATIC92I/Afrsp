@@ -11,7 +11,7 @@ Plateforme web complète de formation aux métiers du renseignement, du contre-e
 | Domaine | Contenu |
 |---|---|
 | **Site public** | Accueil cinématographique (séquence d'ouverture, particules Canvas, carte holographique de l'Afrique, centre de commandement interactif, radar, cartes holographiques, chiffres clés réels), Institution, Académie (filtres + recherche AJAX), fiches formations, galerie des outils (module E), vérification des certificats, contact (AJAX), mentions légales |
-| **Catalogue initial** | 6 domaines (modules A à F), **11 formations**, 53 chapitres, 86 leçons rédigées (leçons, briefings vidéo, supports PDF, exercices, études de cas), **126 questions QCM** avec explications |
+| **Catalogue initial** | 6 domaines (modules A à F), **11 formations**, 53 chapitres, **150 leçons** rédigées (leçons, approfondissements avec points clés, briefings vidéo, supports PDF, exercices, études de cas, glossaires, bibliographies), **210 questions QCM** avec explications |
 | **Espace apprenant** | Inscription, connexion, réinitialisation du mot de passe, profil, tableau de bord « terminal » (statistiques, activité, prochaines étapes, notifications), inscription aux formations, lecteur de cours immersif, progression, QCM de chapitre corrigés, téléchargements protégés, examens chronométrés, historique, certificats |
 | **Certification** | Banque de questions, tirage aléatoire, correction automatique, seuil et nombre de tentatives configurables, résultat immédiat, certificat PDF (logo, nom, formation, date, numéro unique, QR Code, signature institutionnelle **fictive explicitement signalée**), vérification publique par numéro ou QR Code, signature HMAC anti-falsification, révocation |
 | **Administration** | Tableau de bord (statistiques d'inscription et de réussite), utilisateurs & rôles, formations, catégories, chapitres, leçons & médias, examens & QCM, résultats (réouverture de tentatives), certificats (révocation, régénération), médiathèque, annonces, messages, paramètres institutionnels, journal d'audit |
@@ -108,6 +108,7 @@ php install/cli.php --db-host=127.0.0.1 --db-name=africaspy --db-user=USER --db-
   ],
   ```
   L'URL de notification à déclarer chez CinetPay est `https://votre-domaine/payment-notify.php`. Sans clés CinetPay, seul le virement / dépôt est proposé (instructions et coordonnées à saisir dans *Administration › Paramètres*). Le prix de chaque formation se règle dans *Administration › Formations*.
+- **Enrichissement des contenus sur une base existante** : `php database/enrich-apply.php` ajoute les leçons d'approfondissement, les questions QCM supplémentaires, les glossaires et les bibliographies (idempotent : relançable sans doublon) et recalcule la progression des apprenants.
 - **Mise à jour d'une installation existante** : `mysql africaspy < database/migrations/2026_11_13_payments.sql` (ajoute les prix, la table `payments` et la permission `payments.manage` ; les inscriptions existantes conservent leur accès).
 - **E-mails** : par défaut (`transport = log`), les e-mails (liens de réinitialisation) sont écrits dans `storage/logs/mail.log`. Configurez `smtp` ou `mail` en production.
 - Les variables d'environnement `AFRICASPY_DB_HOST`, `AFRICASPY_DB_NAME`, `AFRICASPY_DB_USER`, `AFRICASPY_DB_PASS`, `AFRICASPY_APP_KEY`, `AFRICASPY_BASE_URL` peuvent remplacer le fichier.
@@ -188,7 +189,7 @@ Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ;
 
 ## 9. Contenus, visuels et régénération
 
-- **Contenus pédagogiques** : `database/seed/courses_*.php` (format PHP lisible). Après modification : `php database/build-sql.php` régénère `database/africaspy.sql` et les supports PDF `uploads/documents/seed-*.pdf`. En production, éditez plutôt les contenus depuis l'administration.
+- **Contenus pédagogiques** : `database/seed/courses_*.php` (leçons de base), `enrich_*.php` (approfondissements et QCM supplémentaires) et `glossaries.php` (glossaires, bibliographies), au format PHP lisible. Après modification : `php database/build-sql.php` régénère `database/africaspy.sql` et les supports PDF `uploads/documents/seed-*.pdf`. En production, éditez plutôt les contenus depuis l'administration.
 - **Visuels** : toutes les images (salle de commandement, salle d'analyse, table géopolitique, laboratoire numérique, couvertures A–F, illustrations d'équipements, emblème et favicon) sont des **créations originales** rendues de manière procédurale à partir des tracés cartographiques Natural Earth (domaine public) — aucune licence tierce à attribuer. Régénération : `python3 resources/tools/generate_visuals.py` (Pillow, numpy).
 - **Vidéos** : briefings pédagogiques (MP4, sans narration) générés par `python3 resources/tools/generate_videos.py <catalog.json>` (Pillow + ffmpeg).
 - Pour utiliser des **photographies réelles**, téléversez-les depuis *Administration › Médiathèque* ou dans la fiche d'une formation, en renseignant le champ « Crédit / licence » qui conserve l'attribution.

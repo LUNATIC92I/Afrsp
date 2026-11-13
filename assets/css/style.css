@@ -867,3 +867,21 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .scroll-progress { position: fixed; left: 0; right: 0; top: 0; z-index: 120; height: 2px; transform-origin: left; transform: scaleX(0); background: var(--holo); box-shadow: 0 0 12px rgba(0, 240, 208, .8); pointer-events: none; }
 /* Glitch de la marque au survol */
 .brand:hover .brand__name { animation: glitch .45s steps(2) 1; }
+
+/* =====================================================================
+   Blocs pédagogiques enrichis : points clés, glossaire, bibliographie
+   ===================================================================== */
+.prose .keypoints { position: relative; margin: 1.6em 0; padding: 18px 20px 14px 22px; border: 1px solid rgba(26, 255, 156, .35); border-left: 3px solid var(--green); border-radius: var(--r-sm); background: linear-gradient(90deg, rgba(26, 255, 156, .06), transparent 70%); }
+.prose .keypoints > strong { display: block; margin-bottom: 8px; font: 700 .74rem var(--f-mono); letter-spacing: .2em; color: var(--green); text-transform: uppercase; }
+.prose .keypoints ul { margin: 0; padding-left: 1.1em; }
+.prose .keypoints li::marker { color: var(--green); }
+.prose .glossary { display: grid; grid-template-columns: minmax(150px, 230px) 1fr; gap: 0; margin: 1.4em 0; border: 1px solid var(--line-strong); border-radius: var(--r-md); overflow: hidden; }
+.prose .glossary dt, .prose .glossary dd { margin: 0; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.prose .glossary dt { font: 700 .95rem var(--f-head); letter-spacing: .04em; color: var(--gold); background: rgba(213, 179, 106, .05); }
+.prose .glossary dd { font-size: .95rem; }
+.prose .glossary dt:nth-last-of-type(1), .prose .glossary dd:last-child { border-bottom: 0; }
+.prose .biblio { list-style: none; padding: 0; margin: 1.4em 0; counter-reset: ref; display: grid; gap: 12px; }
+.prose .biblio li { counter-increment: ref; position: relative; padding: 14px 16px 14px 56px; border: 1px solid var(--line-strong); border-radius: var(--r-sm); }
+.prose .biblio li::before { content: "[" counter(ref) "]"; position: absolute; left: 16px; top: 14px; font: .82rem var(--f-mono); color: var(--cyan); }
+.prose .biblio small { display: block; margin-top: 4px; color: var(--text-dim); font-size: .84rem; }
+@media (max-width: 640px) { .prose .glossary { grid-template-columns: 1fr; } .prose .glossary dt { border-bottom: 0; padding-bottom: 2px; } }

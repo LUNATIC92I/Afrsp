@@ -114,6 +114,10 @@ pre code { color: #CFE9F5; }
 table.toc td { border: 0; border-bottom: 1px dotted #c9ced6; padding: 2mm 0; font-size: 10.5pt; }
 table.toc td.n { width: 12mm; font-family: ShareTechMono; color: #B08A3E; }
 .cols td { width: 50%; }
+.keypoints { padding: 3mm 4mm; border: 1px solid #8fdcb6; border-left: 3px solid #0a9a5c; background: #F0FBF5; margin: 3mm 0; }
+.keypoints strong { font-family: ShareTechMono; color: #0a7a49; letter-spacing: 1pt; font-size: 8pt; }
+dl.glossary { margin: 3mm 0; } dl.glossary dt { font-family: Rajdhani; font-weight: 600; color: #8A6A2A; margin-top: 2mm; } dl.glossary dd { margin: 0 0 1mm 0; padding-bottom: 1.5mm; border-bottom: 1px dotted #c9ced6; }
+ul.biblio { padding-left: 5mm; } ul.biblio li { margin-bottom: 2.5mm; } ul.biblio small { display: block; color: #6b7686; }
 </style></head><body>
 <div class="cover"><div class="band"></div>
 <img src="{$logo}" alt="">
