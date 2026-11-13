@@ -19,7 +19,12 @@ async function settle(p, sel) {
 }
 async function shot(p, name, sel, opts = {}) {
   await settle(p, sel);
-  if (sel && opts.element) await p.locator(sel).first().screenshot({ path: path.join(OUT, name + '.jpg'), type: 'jpeg', quality: 86 });
+  if (sel && opts.element) {
+    // L'en-tête fixe et le lien d'évitement se superposeraient à la capture d'un élément haut
+    const hide = await p.addStyleTag({ content: '.site-header,.skip-link,.toast,.flash-stack{visibility:hidden!important}' });
+    await p.locator(sel).first().screenshot({ path: path.join(OUT, name + '.jpg'), type: 'jpeg', quality: 86 });
+    await hide.evaluate(n => n.remove());
+  }
   else await p.screenshot({ path: path.join(OUT, name + '.jpg'), type: 'jpeg', quality: 86, fullPage: !!opts.full });
   console.log('OK', name);
 }
