@@ -39,8 +39,30 @@ foreach ($enrich as $code => $e) {
         }
     }
     if ($chapters) foreach ($e['final'] as $l) $addLesson((int) end($chapters)['id'], $l);
+    // Chapitre « Mise en situation » inséré avant le dernier chapitre (atelier)
+    if (!empty($e['scenario']) && $chapters) {
+        $sc = $e['scenario'];
+        $scId = (int) q_val('SELECT id FROM chapters WHERE course_id = ? AND title = ?', [$course['id'], $sc['title']]);
+        if (!$scId) {
+            $last = q_one('SELECT id, sort_order FROM chapters WHERE course_id = ? ORDER BY sort_order DESC, id DESC LIMIT 1', [$course['id']]);
+            q('UPDATE chapters SET sort_order = sort_order + 1 WHERE id = ?', [$last['id']]);
+            q('INSERT INTO chapters (course_id, title, summary, sort_order) VALUES (?,?,?,?)', [$course['id'], $sc['title'], $sc['summary'], (int) $last['sort_order']]);
+            $scId = (int) db()->lastInsertId();
+            $stats['chapters'] = ($stats['chapters'] ?? 0) + 1;
+        }
+        foreach ($sc['lessons'] as $l) $addLesson($scId, $l);
+        foreach ($sc['quiz'] as [$prompt, $opts, $correct, $exp]) {
+            if (!$exam || q_val('SELECT 1 FROM questions WHERE exam_id = ? AND prompt = ?', [$exam, $prompt])) { $stats['skipped']++; continue; }
+            q('INSERT INTO questions (exam_id, chapter_id, prompt, explanation, is_active) VALUES (?,?,?,?,1)', [$exam, $scId, $prompt, $exp]);
+            $qid = (int) db()->lastInsertId();
+            foreach ($opts as $k => $label) q('INSERT INTO answers (question_id, label, is_correct, sort_order) VALUES (?,?,?,?)', [$qid, $label, $k === $correct ? 1 : 0, $k + 1]);
+            $stats['questions']++;
+        }
+    }
+    // Examens plus complets, uniquement si les réglages d'origine n'ont pas été modifiés par un administrateur
+    if ($exam) q('UPDATE exams SET question_count = 15, time_limit_min = 35 WHERE id = ? AND question_count IN (8, 10) AND time_limit_min IN (20, 25)', [$exam]);
 }
 db()->commit();
 // Les nouvelles leçons modifient le pourcentage de progression des apprenants inscrits
 foreach (q_all('SELECT user_id, course_id FROM course_enrollments') as $r) recompute_progress((int) $r['user_id'], (int) $r['course_id']);
-printf("Leçons ajoutées : %d · Questions ajoutées : %d · Éléments déjà présents : %d\n", $stats['lessons'], $stats['questions'], $stats['skipped']);
+printf("Chapitres ajoutés : %d · Leçons ajoutées : %d · Questions ajoutées : %d · Éléments déjà présents : %d\n", $stats['chapters'] ?? 0, $stats['lessons'], $stats['questions'], $stats['skipped']);

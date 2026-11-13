@@ -39,6 +39,13 @@ foreach ($__catalog['courses'] as &$__c) {
     }
     $__last = count($__c['chapters']) - 1;
     array_push($__c['chapters'][$__last]['lessons'], ...$__e['final']);
+    // Chapitre « Mise en situation » inséré avant l'atelier final
+    if (!empty($__e['scenario'])) {
+        array_splice($__c['chapters'], $__last, 0, [$__e['scenario']]);
+    }
+    // Banque de questions élargie : examens plus complets
+    $__c['exam']['count'] = 15;
+    $__c['exam']['time'] = 35;
 }
 unset($__c);
 return $__catalog;

@@ -254,3 +254,75 @@
   // Sélecteur de formation → filtre automatique
   doc.querySelectorAll('select[data-autosubmit]').forEach(function (s) { s.addEventListener('change', function () { s.form.submit(); }); });
 })();
+
+/* =====================================================================
+   Fiches de révision : transforme un glossaire (dl.glossary) en cartes
+   à retourner, avec mélange et suivi « acquis / à revoir ».
+   ===================================================================== */
+(function () {
+  'use strict';
+  var doc = document;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  doc.querySelectorAll('.lesson-body dl.glossary').forEach(function (dl, n) {
+    var cards = [];
+    dl.querySelectorAll('dt').forEach(function (dt) {
+      var dd = dt.nextElementSibling;
+      if (dd && dd.tagName === 'DD') cards.push({ t: dt.textContent.trim(), d: dd.textContent.trim() });
+    });
+    if (cards.length < 3) return;
+    var key = 'afspy-cards-' + location.search + '-' + n, known = {};
+    try { known = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { known = {}; }
+    var save = function () { try { localStorage.setItem(key, JSON.stringify(known)); } catch (e) {} };
+
+    var wrap = doc.createElement('section');
+    wrap.className = 'flash';
+    wrap.setAttribute('aria-label', 'Fiches de révision');
+    wrap.innerHTML =
+      '<div class="flash__head"><h2>Fiches de révision</h2><span class="flash__score" aria-live="polite"></span></div>' +
+      '<button class="flash__card" type="button" aria-describedby="flash-hint-' + n + '"><span class="flash__inner"><span class="flash__face flash__front"><small>NOTION</small><b></b></span><span class="flash__face flash__back"><small>DÉFINITION</small><span></span></span></span></button>' +
+      '<p class="flash__hint" id="flash-hint-' + n + '">Cliquez (ou Espace) pour retourner la carte · ← → pour naviguer</p>' +
+      '<div class="flash__bar"><button class="btn btn--sm" type="button" data-f="prev">←</button><span class="flash__pos mono"></span><button class="btn btn--sm" type="button" data-f="next">→</button></div>' +
+      '<div class="flash__actions"><button class="btn btn--sm" type="button" data-f="again">À revoir</button><button class="btn btn--sm btn--primary" type="button" data-f="known">Je sais</button><button class="btn btn--sm btn--ghost" type="button" data-f="shuffle">Mélanger</button><button class="btn btn--sm" type="button" data-f="reset">Réinitialiser</button></div>';
+    dl.parentNode.insertBefore(wrap, dl);
+
+    var order = cards.map(function (_, i) { return i; }), pos = 0;
+    var card = wrap.querySelector('.flash__card'), front = wrap.querySelector('.flash__front b'), back = wrap.querySelector('.flash__back span');
+    var score = wrap.querySelector('.flash__score'), posEl = wrap.querySelector('.flash__pos');
+    function render() {
+      var c = cards[order[pos]];
+      card.classList.remove('is-flipped');
+      front.textContent = c.t; back.textContent = c.d;
+      card.setAttribute('aria-label', 'Notion : ' + c.t + '. Retourner pour voir la définition.');
+      card.classList.toggle('is-known', !!known[c.t]);
+      posEl.textContent = (pos + 1) + ' / ' + cards.length;
+      var k = cards.filter(function (x) { return known[x.t]; }).length;
+      score.textContent = k + ' / ' + cards.length + ' acquises';
+      score.classList.toggle('is-done', k === cards.length);
+    }
+    function go(d) { pos = (pos + d + cards.length) % cards.length; render(); }
+    card.addEventListener('click', function () {
+      card.classList.toggle('is-flipped');
+      card.setAttribute('aria-label', card.classList.contains('is-flipped') ? 'Définition : ' + cards[order[pos]].d : 'Notion : ' + cards[order[pos]].t);
+    });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    });
+    wrap.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-f]'); if (!b) return;
+      var c = cards[order[pos]];
+      switch (b.dataset.f) {
+        case 'prev': go(-1); break;
+        case 'next': go(1); break;
+        case 'known': known[c.t] = 1; save(); go(1); break;
+        case 'again': delete known[c.t]; save(); go(1); break;
+        case 'shuffle':
+          for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = order[i]; order[i] = order[j]; order[j] = t; }
+          pos = 0; render(); break;
+        case 'reset': known = {}; save(); pos = 0; render(); break;
+      }
+    });
+    if (reduced) wrap.classList.add('flash--flat');
+    render();
+  });
+})();

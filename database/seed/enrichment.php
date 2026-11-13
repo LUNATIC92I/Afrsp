@@ -6,6 +6,7 @@
  */
 $parts = array_merge(require __DIR__ . '/enrich_AB.php', require __DIR__ . '/enrich_CD.php', require __DIR__ . '/enrich_EF.php');
 $gloss = require __DIR__ . '/glossaries.php';
+$scenarios = require __DIR__ . '/enrich_scenarios.php';
 $out = [];
 foreach ($parts as $code => $def) {
     $final = [];
@@ -26,6 +27,6 @@ foreach ($parts as $code => $def) {
             'content' => '<p>Sélection d\'ouvrages, de normes et de ressources reconnues pour prolonger la formation. Les ressources en accès libre sont signalées.</p><ul class="biblio">' . $li . '</ul>'
                 . '<div class="note">Ces références sont indiquées à titre pédagogique ; AFRICA\'SPY n\'a aucun lien d\'affiliation avec leurs auteurs ou éditeurs.</div>'];
     }
-    $out[$code] = ['chapters' => $def['chapters'], 'final' => $final];
+    $out[$code] = ['chapters' => $def['chapters'], 'final' => $final, 'scenario' => $scenarios[$code] ?? null];
 }
 return $out;
