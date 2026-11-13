@@ -36,6 +36,7 @@ $csrfMeta        = session_status() === PHP_SESSION_ACTIVE ? csrf_token() : '';
 <script src="<?= e(asset('js/boot.js')) ?>"></script>
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
 <script src="<?= e(asset('js/interactions.js')) ?>" defer></script>
+<script src="<?= e(asset('js/effects.js')) ?>" defer></script>
 <?php foreach (($extraJs ?? []) as $js): ?>
 <script src="<?= e(asset($js)) ?>" defer></script>
 <?php endforeach; ?>

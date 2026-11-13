@@ -188,7 +188,19 @@ function course_card(array $c, string $extraClass = ''): string
         . '<p class="holo-card__desc">' . e(str_limit($c['summary'], 210)) . '</p>'
         . '<span class="holo-card__meta"><span>Durée <b>' . (int) $c['duration_hours'] . ' h</b></span><span>Chapitres <b>' . (int) $c['chapter_count'] . '</b></span><span>Domaine <b>' . e($c['category_code']) . '</b></span></span>'
         . $prog
+        . (!($c['enrolled'] ?? false) && isset($c['price_xof']) ? card_price_tag($c) : '')
         . '<span class="holo-card__cta">' . (($c['enrolled'] ?? false) ? 'Reprendre la formation →' : 'Consulter la formation →') . '</span></span></a>';
+}
+
+/** Étiquette de prix compacte sur les cartes (sans dépendance au module de paiement). */
+function card_price_tag(array $c): string
+{
+    $list = (int) $c['price_xof'];
+    $promo = $c['promo_price_xof'] !== null ? (int) $c['promo_price_xof'] : null;
+    $price = ($promo !== null && $promo < $list) ? $promo : $list;
+    $f = static fn (int $v) => number_format($v, 0, ',', "\u{202F}") . "\u{00A0}FCFA";
+    if ($price <= 0) return '<span class="card-price"><b>Gratuit</b></span>';
+    return '<span class="card-price">' . ($price < $list ? '<s>' . e($f($list)) . '</s><i>−' . (int) round(100 - $price * 100 / $list) . ' %</i>' : '') . '<b>' . e($f($price)) . '</b></span>';
 }
 
 /** Résultats du catalogue groupés par domaine (rendu partagé page + AJAX). */

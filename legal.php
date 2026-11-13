@@ -20,6 +20,15 @@ require APP_ROOT . '/includes/header.php';
       <li><strong>Droits</strong> : vous pouvez demander l'accès, la rectification ou la suppression de vos données via la page Contact, conformément à la législation applicable (notamment la Convention de Malabo et les lois nationales).</li>
       <li><strong>Cookies</strong> : un unique cookie de session technique, indispensable à la connexion. Aucun cookie publicitaire ni traceur tiers.</li>
     </ul>
+    <h2 id="vente">Conditions de vente</h2>
+    <ul>
+      <li><strong>Prix</strong> : chaque formation est vendue à l'unité, en francs CFA (XOF), toutes taxes applicables comprises selon la législation du pays de l'éditeur. Le prix promotionnel affiché (par exemple 170 000 FCFA au lieu de 900 000 FCFA) est celui facturé au moment de la commande.</li>
+      <li><strong>Paiement</strong> : Mobile Money ou carte bancaire via un prestataire de paiement agréé, ou virement / dépôt. Aucune donnée bancaire n'est saisie ni conservée par AFRICA'SPY.</li>
+      <li><strong>Accès</strong> : ouvert dès la confirmation du paiement par le prestataire, ou après vérification d'un virement par l'administration. L'accès est personnel, non cessible et sans limite de durée tant que la plateforme est exploitée.</li>
+      <li><strong>Reçu</strong> : un reçu PDF est disponible dans l'espace « Mes paiements ».</li>
+      <li><strong>Remboursement</strong> : toute demande est à adresser via la page Contact ; un remboursement entraîne la fermeture de l'accès à la formation concernée.</li>
+      <li><strong>Usage</strong> : l'accès suppose le respect de la charte éthique ; un usage abusif peut entraîner la fermeture du compte.</li>
+    </ul>
     <h2>Visuels</h2>
     <p>Les illustrations, cartes et vidéos de la plateforme sont des créations originales générées pour AFRICA'SPY à partir de données cartographiques du domaine public (Natural Earth). Les noms d'outils logiciels cités sont des marques de leurs détenteurs, mentionnées à titre pédagogique sans affiliation.</p>
   </div></section>

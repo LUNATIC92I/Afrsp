@@ -57,6 +57,7 @@ $perms = [
     'settings.manage' => 'Modifier les paramètres institutionnels',
     'audit.view' => 'Consulter le journal d\'audit',
     'messages.view' => 'Consulter les messages de contact',
+    'payments.manage' => 'Gérer les paiements et valider les règlements',
 ];
 $permRows = [];
 $i = 0;
@@ -86,6 +87,7 @@ foreach ($catalog['courses'] as $sort => $c) {
         'id' => $cid, 'category_id' => $cats[$c['category']]['id'], 'code' => $c['code'], 'slug' => $c['slug'], 'title' => $c['title'],
         'subtitle' => $c['subtitle'], 'summary' => $c['summary'], 'description' => $c['description'], 'objectives' => $c['objectives'],
         'skills' => $c['skills'], 'prerequisites' => $c['prerequisites'], 'level' => $c['level'], 'duration_hours' => $c['hours'],
+        'price_xof' => $c['price'] ?? 900000, 'promo_price_xof' => $c['promo'] ?? 170000,
         'is_featured' => $c['featured'] ? 1 : 0, 'status' => 'published', 'sort_order' => $sort + 1,
     ];
     // Médias de la formation : vidéo de briefing + support PDF
@@ -144,6 +146,10 @@ $settings = [
     'certificate_signatory_title' => "Direction académique AFRICA'SPY",
     'signature_is_fictitious' => '1',
     'registration_open' => '1',
+    'payment_manual_enabled' => '1',
+    'payment_manual_instructions' => "Virement bancaire ou dépôt Mobile Money au nom d'AFRICA'SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration › Paramètres.",
+    'promo_label' => 'Offre de lancement',
+    'promo_ends_at' => '',
 ];
 $settingRows = array_map(static fn ($k, $v) => ['setting_key' => $k, 'setting_value' => $v], array_keys($settings), $settings);
 

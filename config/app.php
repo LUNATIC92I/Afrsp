@@ -40,6 +40,16 @@ $defaults = [
         'max_document' => 25 * 1024 * 1024,
         'max_video'    => 200 * 1024 * 1024,
     ],
+    'payments' => [
+        // CinetPay : Orange Money, MTN MoMo, Moov, Wave, cartes Visa/Mastercard (zone UEMOA/CEMAC)
+        'cinetpay_enabled' => false,
+        'cinetpay_apikey'  => '',
+        'cinetpay_site_id' => '',
+        'cinetpay_secret'  => '',             // clé secrète (vérification HMAC x-token des notifications)
+        'cinetpay_api'     => 'https://api-checkout.cinetpay.com/v2',
+        // Mode test : simulation locale du paiement. JAMAIS en production.
+        'sandbox'          => false,
+    ],
     'security' => [
         'login_max_per_email' => 5,           // échecs tolérés par compte
         'login_max_per_ip'    => 20,          // échecs tolérés par adresse IP

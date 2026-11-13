@@ -15,6 +15,7 @@ Plateforme web complète de formation aux métiers du renseignement, du contre-e
 | **Espace apprenant** | Inscription, connexion, réinitialisation du mot de passe, profil, tableau de bord « terminal » (statistiques, activité, prochaines étapes, notifications), inscription aux formations, lecteur de cours immersif, progression, QCM de chapitre corrigés, téléchargements protégés, examens chronométrés, historique, certificats |
 | **Certification** | Banque de questions, tirage aléatoire, correction automatique, seuil et nombre de tentatives configurables, résultat immédiat, certificat PDF (logo, nom, formation, date, numéro unique, QR Code, signature institutionnelle **fictive explicitement signalée**), vérification publique par numéro ou QR Code, signature HMAC anti-falsification, révocation |
 | **Administration** | Tableau de bord (statistiques d'inscription et de réussite), utilisateurs & rôles, formations, catégories, chapitres, leçons & médias, examens & QCM, résultats (réouverture de tentatives), certificats (révocation, régénération), médiathèque, annonces, messages, paramètres institutionnels, journal d'audit |
+| **Paiement** | Accès payant par formation (prix de référence **900 000 FCFA**, prix promotionnel **170 000 FCFA**, modifiables par formation), caisse en 3 étapes, Mobile Money / carte via **CinetPay** (statut toujours revérifié auprès de l'API), virement / dépôt validé par l'administration, reçus PDF, historique « Mes paiements », console *Paiements* (chiffre d'affaires, validation, annulation, remboursement avec retrait d'accès), compte à rebours optionnel de fin d'offre |
 | **Rôles** | `admin` (tout), `instructor` / Responsable pédagogique (contenus, examens, médias, annonces, statistiques), `learner` — permissions fines en base (`roles`, `permissions`, `role_permissions`) |
 
 ## 2. Technologies
@@ -96,6 +97,18 @@ php install/cli.php --db-host=127.0.0.1 --db-name=africaspy --db-user=USER --db-
 ];
 ```
 
+- **Paiement** : ajoutez dans `config/config.local.php` :
+  ```php
+  'payments' => [
+      'cinetpay_enabled' => true,
+      'cinetpay_apikey'  => '…',      // tableau de bord CinetPay › Intégrations
+      'cinetpay_site_id' => '…',
+      'cinetpay_secret'  => '…',      // facultatif : vérifie la signature x-token des notifications
+      'sandbox'          => false,    // true uniquement en développement (ignoré si env = production)
+  ],
+  ```
+  L'URL de notification à déclarer chez CinetPay est `https://votre-domaine/payment-notify.php`. Sans clés CinetPay, seul le virement / dépôt est proposé (instructions et coordonnées à saisir dans *Administration › Paramètres*). Le prix de chaque formation se règle dans *Administration › Formations*.
+- **Mise à jour d'une installation existante** : `mysql africaspy < database/migrations/2026_11_13_payments.sql` (ajoute les prix, la table `payments` et la permission `payments.manage` ; les inscriptions existantes conservent leur accès).
 - **E-mails** : par défaut (`transport = log`), les e-mails (liens de réinitialisation) sont écrits dans `storage/logs/mail.log`. Configurez `smtp` ou `mail` en production.
 - Les variables d'environnement `AFRICASPY_DB_HOST`, `AFRICASPY_DB_NAME`, `AFRICASPY_DB_USER`, `AFRICASPY_DB_PASS`, `AFRICASPY_APP_KEY`, `AFRICASPY_BASE_URL` peuvent remplacer le fichier.
 - Paramètres institutionnels (coordonnées, signataire des certificats, ouverture des inscriptions) : *Administration › Paramètres*.
@@ -164,11 +177,14 @@ php -S 127.0.0.1:8080 resources/dev-router.php
 npm i -D playwright && npx playwright install chromium   # une fois
 node tests/learner.e2e.js     # inscription → formation → leçons → QCM → examen → certificat PDF → vérification
 ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/security.e2e.js
-# 32 contrôles : CSRF, force brute, contrôle d'accès, IDOR, injection SQL, XSS, en-têtes,
+# 44 contrôles (dont 9 sur le paiement) : CSRF, force brute, contrôle d'accès, IDOR, injection SQL, XSS, en-têtes,
 # cookie de session, téléversement frauduleux, parcours admin complet, révocation et
 # falsification de certificat, journal d'audit
 ```
 Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ; ils sont destinés à un environnement de développement, pas à la production.
+
+### Captures d'écran
+26 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
 
 ## 9. Contenus, visuels et régénération
 
@@ -180,5 +196,6 @@ Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ;
 
 ## 10. Accessibilité et performances
 
+- Animations : séquence d'ouverture, particules, carte holographique, radar, cartes holographiques, transitions de pages, texte « déchiffré », boutons magnétiques, satellites en orbite, bandeau défilant, tracé SVG progressif, bordure conique animée de l'offre, barre de progression de lecture, projecteur suivant le pointeur, effet « Access granted » après paiement
 - Respect de `prefers-reduced-motion` (séquence d'ouverture, parallaxe, particules, transitions désactivées), navigation clavier (onglets ARIA du centre de commandement, modales avec focus piégé, zones de carte activables au clavier), lien d'évitement, contrastes élevés, curseur d'appoint qui ne remplace jamais le curseur natif
 - Animations limitées à `transform` / `opacity`, Canvas suspendu hors écran et onglet masqué, particules réduites sur mobile, images WebP en chargement différé, polices `woff2` préchargées, aucune bibliothèque front-end

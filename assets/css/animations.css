@@ -140,3 +140,28 @@ main { transition: transform .6s var(--ease), opacity .5s; }
   .hero__layer, .mission__bg { transform: none !important; }
   .holo-card { transform: none !important; }
 }
+
+/* ---------------------------------------------------------------------
+   Animations complémentaires
+   --------------------------------------------------------------------- */
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes granted-ring { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(4); opacity: 0; } }
+@keyframes glitch {
+  0% { text-shadow: 2px 0 var(--red), -2px 0 var(--cyan); transform: translateX(1px); }
+  50% { text-shadow: -2px 0 var(--red), 2px 0 var(--cyan); transform: translateX(-1px); clip-path: inset(10% 0 40% 0); }
+  100% { text-shadow: none; transform: none; clip-path: none; }
+}
+/* Texte « déchiffré » : caractères brouillés le temps du décodage */
+[data-decrypt].is-decrypting { color: var(--turq); text-shadow: 0 0 10px rgba(0, 240, 208, .6); }
+/* Tracé progressif des lignes SVG */
+.js [data-draw] path { stroke-dasharray: var(--len, 1600); stroke-dashoffset: var(--len, 1600); transition: stroke-dashoffset 2.6s var(--ease-io); }
+.js [data-draw].is-drawn path { stroke-dashoffset: 0; }
+/* Barre de prix barrée qui se trace à l'apparition */
+.js .offer-card:not(.is-visible) .offer-card__old s::after { --strike: 0; }
+/* Boutons magnétiques */
+[data-magnetic] { transition: transform .35s var(--ease), border-color .25s, box-shadow .3s, color .2s, background .3s; }
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track, .orbit, .offer-card::before, .granted__rings i { animation: none !important; }
+  .js [data-draw] path { stroke-dashoffset: 0 !important; }
+  .scroll-progress { display: none; }
+}

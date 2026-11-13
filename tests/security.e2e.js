@@ -72,7 +72,33 @@ const token = html => (html.match(/name="_csrf" value="([^"]+)"/) || [])[1];
   const san = execFileSync('php', ['-r', 'define("APP_ROOT","' + __dirname + '/.."); function config($k,$d=null){return $d;} require "' + __dirname + '/../includes/functions.php"; echo sanitize_html("<p onclick=\\"x()\\">ok<script>bad()</script><a href=\\"javascript:alert(1)\\">l</a><iframe src=//e></iframe></p>");']).toString();
   check('XSS: sanitize_html retire script/onclick/javascript:/iframe', !/script|onclick|javascript:|iframe/i.test(san), san);
 
-  // ---------- 6. En-têtes de sécurité & cookie de session
+  // ---------- 5b. Paiement : aucun accès sans règlement confirmé
+  const paidCourse = sql("SELECT id FROM courses WHERE slug='contre-espionnage-menaces-protection'");
+  const lid = sql("SELECT id FROM users WHERE email='" + lem + "'");
+  t = token(await (await learner.get('/course.php?slug=contre-espionnage-menaces-protection')).text());
+  r = await learner.post('/enroll.php', { form: { _csrf: t, course_id: paidCourse }, maxRedirects: 0 });
+  check('Paiement: inscription directe forcée -> redirection vers la caisse', r.status() === 303 && /checkout\.php/.test(r.headers()['location'] || ''));
+  check('Paiement: aucune inscription créée sans paiement', sql('SELECT COUNT(*) FROM course_enrollments WHERE user_id=' + lid + ' AND course_id=' + paidCourse) === '0');
+  t = token(await (await learner.get('/checkout.php?course=contre-espionnage-menaces-protection')).text());
+  r = await learner.post('/checkout.php?course=contre-espionnage-menaces-protection', { form: { _csrf: t, method: 'manual', terms: '1' }, maxRedirects: 0 });
+  const mref = sql("SELECT reference FROM payments WHERE user_id=" + lid + " AND provider='manual' ORDER BY id DESC LIMIT 1");
+  check('Paiement: virement -> commande en attente au prix promotionnel', sql("SELECT CONCAT(status,'/',amount_xof) FROM payments WHERE reference='" + mref + "'") === 'pending/170000');
+  r = await learner.get('/learner/learning.php?course=' + paidCourse, { maxRedirects: 0 });
+  check('Paiement: virement non validé -> cours inaccessible', r.status() === 303);
+  r = await learner.post('/checkout.php?course=contre-espionnage-menaces-protection', { form: { _csrf: t, method: 'sandbox', terms: '1', amount: '5' }, maxRedirects: 0 });
+  check('Paiement: montant imposé par le client ignoré', sql("SELECT amount_xof FROM payments WHERE user_id=" + lid + " AND provider='sandbox' ORDER BY id DESC LIMIT 1") === '170000');
+  const otherRef = sql("SELECT reference FROM payments WHERE user_id<>" + lid + " AND status='paid' LIMIT 1");
+  r = await learner.get('/learner/receipt.php?ref=' + otherRef);
+  check('Paiement: reçu d\'autrui -> 404 (IDOR)', r.status() === 404);
+  r = await learner.get('/payment-return.php?ref=' + otherRef);
+  check('Paiement: statut d\'une commande d\'autrui -> 404', r.status() === 404);
+  r = await anon.post('/payment-notify.php', { form: { cpm_trans_id: mref, cpm_site_id: 'x' } });
+  check('Paiement: notification forgée rejetée, commande inchangée', r.status() >= 400 && sql("SELECT status FROM payments WHERE reference='" + mref + "'") === 'pending');
+  t = token(await (await learner.get('/learner/payments.php')).text());
+  r = await learner.post('/admin/payments.php', { form: { _csrf: t, action: 'validate', id: sql("SELECT id FROM payments WHERE reference='" + mref + "'") } });
+  check('Paiement: un apprenant ne peut pas valider son virement (403)', r.status() === 403 && sql("SELECT status FROM payments WHERE reference='" + mref + "'") === 'pending');
+
+
   const fresh = await request.newContext({ baseURL: B });
   r = await fresh.get('/index.php');
   const h = r.headers();
@@ -145,12 +171,13 @@ const token = html => (html.match(/name="_csrf" value="([^"]+)"/) || [])[1];
   // Révocation de certificat
   const certId = sql("SELECT id FROM certificates WHERE certificate_no='" + otherCert + "'");
   await p.goto(B + '/admin/certificates.php');
-  await p.fill('form[data-confirm] input[name=reason]', 'Test de révocation');
-  await Promise.all([p.waitForNavigation(), p.click('form[data-confirm] button.btn--danger')]);
+  const revokeForm = 'form:has(input[name=action][value=revoke]):has(input[name=id][value="' + certId + '"])';
+  await p.fill(revokeForm + ' input[name=reason]', 'Test de révocation');
+  await Promise.all([p.waitForNavigation(), p.click(revokeForm + ' button.btn--danger')]);
   r = await anon.get('/verify-certificate.php?code=' + otherCert);
   check('Certificat révoqué -> vérification publique "RÉVOQUÉ"', /CERTIFICAT RÉVOQUÉ/.test(await r.text()));
   await p.goto(B + '/admin/certificates.php');
-  await Promise.all([p.waitForNavigation(), p.click('form:has(input[value=restore]) button')]);
+  await Promise.all([p.waitForNavigation(), p.click('form:has(input[value=restore]):has(input[name=id][value="' + certId + '"]) button')]);
   r = await anon.get('/verify-certificate.php?code=' + otherCert);
   check('Certificat rétabli -> AUTHENTIQUE', /CERTIFICAT AUTHENTIQUE/.test(await r.text()));
   // Falsification en base : la signature HMAC ne correspond plus
@@ -160,6 +187,17 @@ const token = html => (html.match(/name="_csrf" value="([^"]+)"/) || [])[1];
   r = await anon.get('/verify-certificate.php?code=' + otherCert);
   check('Certificat altéré en base (date) -> non valide', /AUCUN CERTIFICAT VALIDE/.test(await r.text()));
   sql("UPDATE certificates SET issued_at = issued_at + INTERVAL 1 DAY, holder_name='Kofi MENSAH', score=100 WHERE id=" + certId);
+  // Validation d'un virement par l'administrateur, puis remboursement
+  const mid = sql("SELECT id FROM payments WHERE reference='" + mref + "'");
+  await p.goto(B + '/admin/payments.php?status=pending');
+  await p.screenshot({ path: OUT + '/admin-payments.png', fullPage: true });
+  await Promise.all([p.waitForNavigation(), p.click('form:has(input[name=id][value="' + mid + '"]):has(input[value=validate]) button')]);
+  check('Admin: virement validé -> payé + accès ouvert', sql("SELECT status FROM payments WHERE id=" + mid) === 'paid' && sql('SELECT COUNT(*) FROM course_enrollments WHERE user_id=' + lid + ' AND course_id=' + paidCourse) === '1');
+  r = await learner.get('/learner/learning.php?course=' + paidCourse, { maxRedirects: 0 });
+  check('Apprenant: cours accessible après validation', r.status() === 200);
+  await p.goto(B + '/admin/payments.php?status=paid');
+  await Promise.all([p.waitForNavigation(), p.click('form:has(input[name=id][value="' + mid + '"]):has(input[value=refund]) button')]);
+  check('Admin: remboursement -> accès retiré', sql("SELECT status FROM payments WHERE id=" + mid) === 'refunded' && sql('SELECT COUNT(*) FROM course_enrollments WHERE user_id=' + lid + ' AND course_id=' + paidCourse) === '0');
   // Audit
   check('Journal d\'audit alimenté', Number(sql("SELECT COUNT(*) FROM audit_logs WHERE action LIKE 'course.%' OR action LIKE 'certificate.%'")) >= 3);
   await p.goto(B + '/admin/audit.php');

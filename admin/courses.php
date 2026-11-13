@@ -16,13 +16,17 @@ if (is_post()) {
             'summary' => input('summary'), 'description' => sanitize_html($_POST['description'] ?? ''), 'objectives' => input('objectives'),
             'skills' => input('skills'), 'prerequisites' => input('prerequisites'), 'level' => input('level'), 'duration_hours' => input('duration_hours'),
             'status' => input('status'), 'sort_order' => input('sort_order', '0'), 'slug' => input('slug'),
+            'price_xof' => input('price_xof', '0'), 'promo_price_xof' => input('promo_price_xof'),
         ];
         $errors = validate($d, [
             'category_id' => 'required', 'code' => 'required|max:20', 'title' => 'required|min:4|max:190', 'subtitle' => 'max:255',
             'summary' => 'required|min:20|max:2000', 'level' => 'required|in:fondamental,intermediaire,avance', 'duration_hours' => 'required|int',
             'status' => 'required|in:draft,published', 'sort_order' => 'int', 'slug' => 'max:160',
+            'price_xof' => 'required|int', 'promo_price_xof' => 'int',
         ], ['category_id' => 'Catégorie', 'code' => 'Code', 'title' => 'Titre', 'summary' => 'Résumé', 'level' => 'Niveau', 'duration_hours' => 'Durée', 'status' => 'Statut']);
         if (!preg_match('/^[A-Z0-9\-]{2,20}$/', $d['code'])) $errors['code'] = 'Code : majuscules, chiffres et tirets uniquement (ex. AFS-A301).';
+        if ((int) $d['price_xof'] < 0 || ($d['promo_price_xof'] !== '' && ((int) $d['promo_price_xof'] < 0 || (int) $d['promo_price_xof'] > (int) $d['price_xof']))) $errors['price'] = 'Le prix promotionnel doit être positif et inférieur ou égal au prix de référence.';
+        if ((int) $d['price_xof'] % 5 !== 0 || ($d['promo_price_xof'] !== '' && (int) $d['promo_price_xof'] % 5 !== 0)) $errors['price5'] = 'Les montants en FCFA doivent être des multiples de 5.';
         $d['slug'] = slugify($d['slug'] !== '' ? $d['slug'] : $d['title']);
         if (q_val('SELECT 1 FROM courses WHERE code = ? AND id <> ?', [$d['code'], $id])) $errors['code'] = 'Ce code est déjà utilisé.';
         if (q_val('SELECT 1 FROM courses WHERE slug = ? AND id <> ?', [$d['slug'], $id])) $errors['slug'] = 'Cette adresse (slug) est déjà utilisée.';
@@ -38,13 +42,13 @@ if (is_post()) {
             back(['action' => $id ? 'edit' : 'new', 'id' => $id ?: null]);
         }
         $vals = [$d['category_id'], $d['code'], $d['slug'], $d['title'], $d['subtitle'] ?: null, $d['summary'], $d['description'], $d['objectives'], $d['skills'],
-            $d['prerequisites'], $d['level'], (int) $d['duration_hours'], $coverId, isset($_POST['is_featured']) ? 1 : 0, $d['status'], (int) $d['sort_order']];
+            $d['prerequisites'], $d['level'], (int) $d['duration_hours'], (int) $d['price_xof'], $d['promo_price_xof'] === '' ? null : (int) $d['promo_price_xof'], $coverId, isset($_POST['is_featured']) ? 1 : 0, $d['status'], (int) $d['sort_order']];
         if ($id) {
-            q('UPDATE courses SET category_id=?, code=?, slug=?, title=?, subtitle=?, summary=?, description=?, objectives=?, skills=?, prerequisites=?, level=?, duration_hours=?, cover_media_id=?, is_featured=?, status=?, sort_order=? WHERE id=?', array_merge($vals, [$id]));
+            q('UPDATE courses SET category_id=?, code=?, slug=?, title=?, subtitle=?, summary=?, description=?, objectives=?, skills=?, prerequisites=?, level=?, duration_hours=?, price_xof=?, promo_price_xof=?, cover_media_id=?, is_featured=?, status=?, sort_order=? WHERE id=?', array_merge($vals, [$id]));
             audit('course.update', 'course', $id, $d['code']);
             flash('success', 'Formation mise à jour.');
         } else {
-            q('INSERT INTO courses (category_id, code, slug, title, subtitle, summary, description, objectives, skills, prerequisites, level, duration_hours, cover_media_id, is_featured, status, sort_order, created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array_merge($vals, [$admin['id']]));
+            q('INSERT INTO courses (category_id, code, slug, title, subtitle, summary, description, objectives, skills, prerequisites, level, duration_hours, price_xof, promo_price_xof, cover_media_id, is_featured, status, sort_order, created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array_merge($vals, [$admin['id']]));
             $id = (int) db()->lastInsertId();
             q('INSERT INTO exams (course_id, title, instructions, pass_mark, max_attempts, question_count, time_limit_min) VALUES (?, ?, ?, 70, 3, 10, 25)',
                 [$id, 'Examen final — ' . $d['title'], 'Questionnaire à choix multiples tiré au sort dans la banque de questions. Une seule bonne réponse par question.']);
@@ -106,6 +110,8 @@ if ($action === 'new' || $action === 'edit') {
     <?= fld('slug', 'Adresse (slug)', $v('slug'), 'text', ['maxlength' => 160], 'Laisser vide pour la générer depuis le titre.') ?>
     <?= sel('level', 'Niveau', ['fondamental' => 'Fondamental', 'intermediaire' => 'Intermédiaire', 'avance' => 'Avancé'], $v('level', 'fondamental')) ?>
     <?= fld('duration_hours', 'Durée indicative (heures)', $v('duration_hours', '10'), 'number', ['min' => 1, 'max' => 500]) ?>
+    <?= fld('price_xof', 'Prix de référence (FCFA)', $v('price_xof', '900000'), 'number', ['min' => 0, 'step' => 5, 'required' => true], '0 = formation gratuite.') ?>
+    <?= fld('promo_price_xof', 'Prix promotionnel (FCFA)', $v('promo_price_xof', '170000'), 'number', ['min' => 0, 'step' => 5], 'Laisser vide pour aucune promotion.') ?>
     <?= fld('sort_order', 'Ordre d\'affichage', $v('sort_order', '0'), 'number') ?>
     <?= sel('status', 'Statut', ['draft' => 'Brouillon (invisible)', 'published' => 'Publiée'], $v('status', 'draft')) ?>
     <div class="field"><label class="check" style="margin-top:30px"><input type="checkbox" name="is_featured" value="1" <?= ($c['is_featured'] ?? 0) ? 'checked' : '' ?>> Mettre à la une (page d'accueil)</label></div>
@@ -138,11 +144,12 @@ require APP_ROOT . '/includes/app-header.php'; ?>
   <a class="btn btn--primary btn--sm" href="<?= e(url('admin/courses.php', ['action' => 'new'])) ?>">+ Nouvelle formation</a>
 </div>
 <section class="box reveal"><div class="table-wrap"><table class="table">
-  <thead><tr><th>Formation</th><th>Niveau</th><th class="num">Chap.</th><th class="num">Leçons</th><th class="num">QCM</th><th class="num">Inscrits</th><th>Statut</th><th></th></tr></thead>
+  <thead><tr><th>Formation</th><th class="num">Prix</th><th>Niveau</th><th class="num">Chap.</th><th class="num">Leçons</th><th class="num">QCM</th><th class="num">Inscrits</th><th>Statut</th><th></th></tr></thead>
   <tbody>
   <?php foreach ($rows as $r): ?>
     <tr>
       <td><span class="mono cyan" style="font-size:.72rem"><?= e($r['code']) ?></span><?= $r['is_featured'] ? ' <span class="tag tag--gold" style="font-size:.6rem;padding:1px 6px">À la une</span>' : '' ?><br><strong><?= e($r['title']) ?></strong></td>
+      <td class="num"><?php if ($r['promo_price_xof'] !== null && $r['promo_price_xof'] < $r['price_xof']): ?><s class="dim"><?= number_format((int) $r['price_xof'], 0, ',', ' ') ?></s><br><?php endif; ?><strong class="gold"><?= number_format((int) ($r['promo_price_xof'] ?? $r['price_xof']), 0, ',', ' ') ?></strong> <small>FCFA</small></td>
       <td><?= e(level_label($r['level'])) ?></td>
       <td class="num"><?= (int) $r['chapters'] ?></td><td class="num"><?= (int) $r['lessons'] ?></td><td class="num"><?= (int) $r['questions'] ?></td><td class="num"><?= (int) $r['enrolled'] ?></td>
       <td><?= $r['status'] === 'published' ? '<span class="status-pill status-pill--on">● Publiée</span>' : '<span class="status-pill status-pill--off">● Brouillon</span>' ?></td>

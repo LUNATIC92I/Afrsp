@@ -2,7 +2,7 @@
 /** AFRICA'SPY — fiche détaillée d'une formation. */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
-require APP_ROOT . '/includes/catalog.php';
+require APP_ROOT . '/includes/payments.php';
 
 $slug = input('slug');
 $course = $slug !== '' ? find_course($slug) : null;
@@ -17,6 +17,8 @@ $quizTotal = array_sum(array_column($outline, 'quiz_count'));
 $minutes = (int) q_val('SELECT COALESCE(SUM(l.duration_minutes),0) FROM lessons l JOIN chapters ch ON ch.id = l.chapter_id WHERE ch.course_id = ?', [$course['id']]);
 $enrolledCount = (int) q_val('SELECT COUNT(*) FROM course_enrollments WHERE course_id = ?', [$course['id']]);
 $hasCert = $me ? (bool) q_val("SELECT 1 FROM certificates WHERE user_id = ? AND course_id = ? AND status = 'valid'", [$me['id'], $course['id']]) : false;
+$pendingPay = $me ? q_one("SELECT reference, provider FROM payments WHERE user_id = ? AND course_id = ? AND status = 'pending' ORDER BY id DESC LIMIT 1", [$me['id'], $course['id']]) : null;
+$deadline = promo_deadline();
 $cover = !empty($course['cover_stored']) ? url('uploads/courses/' . rawurlencode($course['cover_stored'])) : url('assets/images/covers/' . $course['category_code'] . '.webp');
 
 $pageTitle = $course['title'];
@@ -37,6 +39,7 @@ require APP_ROOT . '/includes/header.php';
         <div><dt>Durée</dt><dd><?= (int) $course['duration_hours'] ?> h</dd></div>
         <div><dt>Chapitres</dt><dd><?= (int) $course['chapter_count'] ?></dd></div>
         <div><dt>Leçons</dt><dd><?= (int) $course['lesson_count'] ?></dd></div>
+        <div><dt>Prix</dt><dd><?php if (course_discount_pct($course)): ?><s class="dim" style="font-weight:400"><?= e(fmt_xof((int) $course['price_xof'])) ?></s> <?php endif; ?><span class="gold"><?= e(fmt_xof(course_price($course))) ?></span></dd></div>
         <div><dt>Certification</dt><dd><?= $exam ? 'Oui · ' . (int) $exam['pass_mark'] . ' %' : 'Non' ?></dd></div>
       </dl>
     </div>
@@ -107,14 +110,12 @@ require APP_ROOT . '/includes/header.php';
         <p class="mono mt-1" style="font-size:.8rem"><?= (int) $course['progress'] ?> % complété</p>
         <a class="btn btn--primary mt-1" href="<?= e(url('learner/learning.php', ['course' => $course['id']])) ?>"><?= $course['progress'] > 0 ? 'Reprendre la formation' : 'Commencer la formation' ?></a>
         <?php if ($hasCert): ?><a class="btn btn--gold mt-1" href="<?= e(url('learner/certificates.php')) ?>">Mon certificat</a><?php endif; ?>
-      <?php elseif ($me): ?>
-        <form method="post" action="<?= e(url('enroll.php')) ?>">
-          <?= csrf_field() ?><input type="hidden" name="course_id" value="<?= (int) $course['id'] ?>">
-          <button class="btn btn--primary" type="submit">S'inscrire à la formation</button>
-        </form>
       <?php else: ?>
-        <a class="btn btn--primary" href="<?= e(url('register.php', ['formation' => $course['slug']])) ?>">S'inscrire à la formation</a>
-        <p class="dim mt-1" style="font-size:.85rem">Déjà membre ? <a href="<?= e(url('login.php')) ?>">Connectez-vous</a></p>
+        <?= price_block($course, 'price--aside') ?>
+        <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>"><span class="mono">Fin de l'offre dans</span><b data-cd>—</b></div><?php endif; ?>
+        <a class="btn btn--primary btn--pay mt-1" href="<?= e(url('checkout.php', ['course' => $course['slug']])) ?>" data-magnetic><span class="btn__stack"><?= course_is_free($course) ? 'Accéder gratuitement' : 'Acheter la formation' ?><small><?= course_is_free($course) ? 'Accès immédiat' : 'Mobile Money · carte · virement' ?></small></span></a>
+        <?php if ($pendingPay): ?><p class="dim mt-1" style="font-size:.85rem">Paiement en attente : <a href="<?= e(url('payment-return.php', ['ref' => $pendingPay['reference']])) ?>"><?= e($pendingPay['reference']) ?></a></p><?php endif; ?>
+        <?php if (!$me): ?><p class="dim mt-1" style="font-size:.85rem">Déjà membre ? <a href="<?= e(url('login.php')) ?>">Connectez-vous</a></p><?php endif; ?>
       <?php endif; ?>
       <ul>
         <li><span>Domaine</span><span><?= e($course['category_code']) ?> · <?= e(explode(' et ', $course['category_name'])[0]) ?></span></li>
@@ -122,7 +123,8 @@ require APP_ROOT . '/includes/header.php';
         <li><span>Durée indicative</span><span><?= (int) $course['duration_hours'] ?> h</span></li>
         <li><span>Temps de lecture estimé</span><span><?= intdiv($minutes, 60) ?> h <?= sprintf('%02d', $minutes % 60) ?></span></li>
         <li><span>Apprenants inscrits</span><span><?= $enrolledCount ?></span></li>
-        <li><span>Accès</span><span>En ligne, à votre rythme</span></li>
+        <li><span>Accès</span><span>Illimité, à votre rythme</span></li>
+        <li><span>Paiement</span><span>Unique, en FCFA</span></li>
       </ul>
       <p class="disclaimer">Certificat d'organisme de formation privé, vérifiable en ligne. Il ne constitue pas un diplôme d'État.</p>
     </aside>

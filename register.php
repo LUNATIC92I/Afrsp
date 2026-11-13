@@ -40,7 +40,7 @@ if (is_post() && $open) {
             flash('success', 'Compte créé. Bienvenue à l\'Académie AFRICA\'SPY.');
             $slug = input('formation');
             if ($slug !== '' && ($cid = q_val("SELECT id FROM courses WHERE slug = ? AND status = 'published'", [$slug]))) {
-                redirect('course.php', ['slug' => $slug]);
+                redirect('checkout.php', ['course' => $slug]);
             }
             redirect('learner/dashboard.php');
         }

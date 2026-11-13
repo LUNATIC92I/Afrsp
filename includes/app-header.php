@@ -27,6 +27,7 @@ $ico = static function (string $n): string {
         'mail' => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
         'globe' => '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
         'check' => '<path d="M5 12l5 5 9-10"/>',
+        'wallet' => '<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/><path d="M6 6l9-3 1 3"/>',
     ][$n] ?? '';
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $p . '</svg>';
 };
@@ -47,6 +48,7 @@ if ($appArea === 'admin') {
         ]],
         ['Apprenants', [
             ['users', 'admin/users.php', 'Utilisateurs', 'users', 'users.manage'],
+            ['payments', 'admin/payments.php', 'Paiements', 'wallet', 'payments.manage'],
             ['results', 'admin/results.php', 'Résultats', 'check', 'results.view'],
             ['certificates', 'admin/certificates.php', 'Certificats', 'cert', 'certificates.manage'],
         ]],
@@ -64,6 +66,7 @@ if ($appArea === 'admin') {
             ['courses', 'learner/courses.php', 'Mes formations', 'book', null],
             ['exams', 'learner/exams.php', 'Examens & résultats', 'exam', null],
             ['certificates', 'learner/certificates.php', 'Certificats', 'cert', null],
+            ['payments', 'learner/payments.php', 'Paiements', 'wallet', null],
             ['profile', 'learner/profile.php', 'Profil', 'user', null],
         ]],
         ['Académie', [

@@ -2,7 +2,7 @@
 /** AFRICA'SPY — page d'accueil. */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
-require APP_ROOT . '/includes/catalog.php';
+require APP_ROOT . '/includes/payments.php';
 require APP_ROOT . '/includes/content.php';
 require_once APP_ROOT . '/includes/logo.php';
 
@@ -17,6 +17,11 @@ if (count($featured) < 6) {
 $m = platform_metrics();
 $panels = command_panels();
 $zones = study_zones();
+$offerList = (int) q_val("SELECT MAX(price_xof) FROM courses WHERE status = 'published'");
+$offerPrice = (int) q_val("SELECT MIN(COALESCE(LEAST(promo_price_xof, price_xof), price_xof)) FROM courses WHERE status = 'published'");
+$offerPct = $offerList > 0 && $offerPrice < $offerList ? (int) round(100 - $offerPrice * 100 / $offerList) : 0;
+$deadline = promo_deadline();
+$tickerItems = ['Analyse structurée', 'HUMINT éthique', 'OSINT', 'GEOINT', 'Contre-espionnage', 'Cyber Threat Intelligence', 'Protection des sources', 'Intelligence économique', 'Risques pays', 'Géopolitique africaine', 'Certification vérifiable'];
 
 $pageTitle = '';
 $activeNav = 'home';
@@ -66,6 +71,7 @@ require APP_ROOT . '/includes/header.php';
         </div>
       </div>
       <div class="hero__hud reveal reveal--zoom" aria-hidden="true">
+        <div class="orbit orbit--1"><i></i></div><div class="orbit orbit--2"><i></i></div><div class="orbit orbit--3"><i></i></div>
         <div class="hero__emblem"><?= logo_svg('holo', 'hero-mark', true) ?></div>
         <div class="hero__readout hero__readout--tl">CLASSIFICATION <b>PUBLIQUE</b><br>PROTOCOLE <b>ÉTHIQUE-01</b></div>
         <div class="hero__readout hero__readout--br">DOMAINES <b><?= (int) $m['domains'] ?></b><br>FORMATIONS <b><?= (int) $m['courses'] ?></b></div>
@@ -74,11 +80,18 @@ require APP_ROOT . '/includes/header.php';
     <div class="hero__scroll" aria-hidden="true"><i></i>Défiler</div>
   </section>
 
+  <!-- ============================== BANDEAU DÉFILANT -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <?php for ($k = 0; $k < 2; $k++): foreach ($tickerItems as $t): ?><span><?= e($t) ?></span><i>◆</i><?php endforeach; endfor; ?>
+    </div>
+  </div>
+
   <!-- ============================== PRÉSENTATION -->
   <section class="section" id="institution" aria-labelledby="brief-title">
     <div class="container brief">
       <div class="reveal reveal--left">
-        <p class="eyebrow">01 // Dossier institutionnel</p>
+        <p class="eyebrow" data-decrypt>01 // Dossier institutionnel</p>
         <h2 id="brief-title" class="brief__statement">Une académie pour former les <em>analystes</em> dont l'Afrique a besoin — et non des espions de cinéma.</h2>
       </div>
       <div class="reveal">
@@ -97,7 +110,7 @@ require APP_ROOT . '/includes/header.php';
   <section class="section section--tight" id="expertise" aria-labelledby="cmd-title">
     <div class="container">
       <div class="section-head reveal">
-        <p class="eyebrow">02 // Domaines d'expertise</p>
+        <p class="eyebrow" data-decrypt>02 // Domaines d'expertise</p>
         <h2 id="cmd-title">Interactive Command Center</h2>
         <p>Sélectionnez un poste pour explorer chacun des cinq domaines d'expertise de l'Académie.</p>
       </div>
@@ -147,7 +160,7 @@ require APP_ROOT . '/includes/header.php';
   <section class="section scanner" id="carte" aria-labelledby="map-title">
     <div class="container">
       <div class="section-head reveal">
-        <p class="eyebrow">03 // Holographic Africa</p>
+        <p class="eyebrow" data-decrypt>03 // Holographic Africa</p>
         <h2 id="map-title">Un continent, des terrains d'étude</h2>
         <p>Chaque point lumineux ouvre une fiche pédagogique régionale reliée à nos formations. Déplacez le pointeur pour faire pivoter la carte.</p>
       </div>
@@ -176,7 +189,7 @@ require APP_ROOT . '/includes/header.php';
     <div class="container">
       <div class="section-head reveal flex between" style="max-width:none;align-items:flex-end">
         <div style="max-width:720px">
-          <p class="eyebrow">04 // Formations à la une</p>
+          <p class="eyebrow" data-decrypt>04 // Formations à la une</p>
           <h2 id="courses-title">Modules d'entraînement</h2>
           <p>Une sélection de parcours complets : leçons développées, briefings vidéo, supports PDF, exercices, études de cas, QCM et examen final certifiant.</p>
         </div>
@@ -188,12 +201,40 @@ require APP_ROOT . '/includes/header.php';
     </div>
   </section>
 
+  <!-- ============================== OFFRE -->
+  <section class="section section--tight offer-section" id="offre" aria-labelledby="offer-title" data-spotlight>
+    <div class="container offer">
+      <div class="reveal reveal--left">
+        <p class="eyebrow eyebrow--gold" data-decrypt>04B // <?= e(setting('promo_label', 'Offre de lancement')) ?></p>
+        <h2 id="offer-title">Accédez à une formation complète</h2>
+        <p class="lead">Chaque formation se règle une seule fois et reste accessible sans limite de durée : leçons, briefing vidéo, support PDF, exercices, études de cas, QCM, examen final et certificat vérifiable.</p>
+        <ul class="checklist" style="grid-template-columns:1fr">
+          <li>Paiement par Mobile Money, carte bancaire ou virement</li>
+          <li>Accès ouvert dès la confirmation du paiement</li>
+          <li>Reçu PDF disponible dans votre espace</li>
+        </ul>
+      </div>
+      <div class="offer-card reveal reveal--zoom" data-tilt>
+        <div class="offer-card__inner">
+          <p class="offer-card__tag mono">PRIX PAR FORMATION · FCFA</p>
+          <?php if ($offerPct): ?>
+          <p class="offer-card__old"><s data-strike><?= e(fmt_xof($offerList)) ?></s> <span class="price__badge">−<?= $offerPct ?> %</span></p>
+          <?php endif; ?>
+          <p class="offer-card__price"><span data-count="<?= $offerPrice ?>">0</span><small>FCFA</small></p>
+          <p class="offer-card__label"><?= e(setting('promo_label', 'Prix promotionnel')) ?> · au lieu de <?= e(fmt_xof($offerList)) ?></p>
+          <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>"><span class="mono">Fin de l'offre dans</span><b data-cd>—</b></div><?php endif; ?>
+          <a class="btn btn--primary btn--block" href="<?= e(url('academy.php')) ?>" data-magnetic>Choisir ma formation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================== CHIFFRES CLÉS -->
   <section class="section section--tight" aria-labelledby="metrics-title">
     <div class="container metrics">
       <div>
         <div class="section-head reveal" style="margin-bottom:28px">
-          <p class="eyebrow">05 // Indicateurs</p>
+          <p class="eyebrow" data-decrypt>05 // Indicateurs</p>
           <h2 id="metrics-title">L'Académie en chiffres</h2>
         </div>
         <div class="metrics__grid reveal">
@@ -220,7 +261,7 @@ require APP_ROOT . '/includes/header.php';
   <!-- ============================== MISSION & VISION -->
   <section class="section mission" aria-labelledby="mission-title">
     <div class="mission__bg" data-parallax="0.12" aria-hidden="true"></div>
-    <svg class="mission__topo" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+    <svg class="mission__topo" data-draw viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
       <?php for ($k = 0; $k < 9; $k++): ?>
       <path d="M0 <?= 120 + $k * 48 ?> C 200 <?= 60 + $k * 50 ?>, 400 <?= 200 + $k * 40 ?>, 600 <?= 130 + $k * 46 ?> S 1000 <?= 70 + $k * 52 ?>, 1200 <?= 150 + $k * 44 ?>" fill="none" stroke="<?= $k % 3 ? 'rgba(0,200,255,.18)' : 'rgba(213,179,106,.3)' ?>" stroke-width="1"/>
       <?php endfor; ?>
@@ -255,7 +296,7 @@ require APP_ROOT . '/includes/header.php';
       </div>
       <div class="reveal">
         <p class="eyebrow eyebrow--gold">07 // Certification</p>
-        <h2 id="cert-title">Une certification vérifiable</h2>
+        <h2 id="cert-title" data-decrypt>Une certification vérifiable</h2>
         <p>Chaque formation se conclut par un examen final chronométré, tiré au sort dans une banque de questions. En cas de réussite, un certificat PDF est généré automatiquement.</p>
         <ol class="steps">
           <li><span><strong>Suivre</strong> toutes les leçons et valider les évaluations de chapitre.</span></li>

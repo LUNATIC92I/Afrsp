@@ -7,7 +7,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS contact_messages, settings, login_attempts, password_resets,
+DROP TABLE IF EXISTS payments, contact_messages, settings, login_attempts, password_resets,
   audit_logs, media, announcement_reads, announcements, certificates,
   attempt_answers, exam_attempts, answers, questions, exams, lesson_progress,
   course_enrollments, lessons, chapters, courses, categories,
@@ -141,6 +141,8 @@ CREATE TABLE courses (
   prerequisites     TEXT NULL,
   level             ENUM('fondamental','intermediaire','avance') NOT NULL DEFAULT 'fondamental',
   duration_hours    SMALLINT UNSIGNED NOT NULL DEFAULT 10,
+  price_xof         INT UNSIGNED NOT NULL DEFAULT 900000,
+  promo_price_xof   INT UNSIGNED NULL DEFAULT 170000,
   cover_media_id    INT UNSIGNED NULL,
   cover_variant     TINYINT UNSIGNED NOT NULL DEFAULT 0,
   is_featured       TINYINT(1) NOT NULL DEFAULT 0,
@@ -385,3 +387,35 @@ CREATE TABLE contact_messages (
   PRIMARY KEY (id),
   KEY idx_contact_time (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------
+--  Paiements (accès payant aux formations, montants en FCFA / XOF)
+-- ---------------------------------------------------------------------
+CREATE TABLE payments (
+  id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  reference       VARCHAR(40)  NOT NULL,
+  user_id         INT UNSIGNED NOT NULL,
+  course_id       INT UNSIGNED NOT NULL,
+  amount_xof      INT UNSIGNED NOT NULL,
+  list_price_xof  INT UNSIGNED NOT NULL,
+  currency        CHAR(3)      NOT NULL DEFAULT 'XOF',
+  provider        ENUM('cinetpay','manual','sandbox') NOT NULL,
+  status          ENUM('pending','paid','failed','cancelled','refunded') NOT NULL DEFAULT 'pending',
+  provider_txn    VARCHAR(120) NULL,
+  payment_method  VARCHAR(60)  NULL,
+  payer_phone     VARCHAR(30)  NULL,
+  provider_data   TEXT NULL,
+  admin_note      VARCHAR(255) NULL,
+  validated_by    INT UNSIGNED NULL,
+  paid_at         DATETIME NULL,
+  created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_pay_ref (reference),
+  KEY idx_pay_user_course (user_id, course_id, status),
+  KEY idx_pay_status (status, created_at),
+  CONSTRAINT fk_pay_user   FOREIGN KEY (user_id)      REFERENCES users (id)   ON DELETE CASCADE,
+  CONSTRAINT fk_pay_course FOREIGN KEY (course_id)    REFERENCES courses (id) ON DELETE RESTRICT,
+  CONSTRAINT fk_pay_admin  FOREIGN KEY (validated_by) REFERENCES users (id)   ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
