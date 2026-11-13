@@ -7,6 +7,7 @@ const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N',
   // Base de développement : réinitialise les compteurs anti-abus liés à 127.0.0.1
   sql("DELETE FROM login_attempts WHERE ip_address IN ('127.0.0.1','::1')");
   sql("DELETE FROM audit_logs WHERE action = 'auth.register' AND ip_address IN ('127.0.0.1','::1')");
+  sql("DELETE FROM rate_limits");
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 1366, height: 860 } });
   await ctx.addInitScript(() => sessionStorage.setItem('afspy-intro', '1'));

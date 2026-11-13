@@ -36,6 +36,7 @@ if (is_file(APP_ROOT . '/vendor/autoload.php')) {
 }
 require APP_ROOT . '/config/database.php';
 require APP_ROOT . '/includes/functions.php';
+require APP_ROOT . '/includes/security.php';
 require APP_ROOT . '/includes/auth.php';
 
 // Installation non effectuée : redirection vers l'assistant (sauf CLI).

@@ -151,6 +151,8 @@ $settings = [
     'payment_manual_instructions' => "Virement bancaire ou dépôt Mobile Money au nom d'AFRICA'SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration › Paramètres.",
     'promo_label' => 'Offre de lancement',
     'promo_ends_at' => '',
+    'mfa_required_staff' => '0',
+    'security_contact' => '',
 ];
 $settingRows = array_map(static fn ($k, $v) => ['setting_key' => $k, 'setting_value' => $v], array_keys($settings), $settings);
 

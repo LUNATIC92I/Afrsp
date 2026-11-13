@@ -4,6 +4,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/payments.php';
 $u = require_login();
+rate_limit_or_fail('paystatus:user', (string) $u['id'], 120, 600);
 $p = q_one('SELECT * FROM payments WHERE reference = ? AND user_id = ?', [input('ref'), $u['id']]);
 if (!$p) json_response(['ok' => false], 404);
 if ($p['provider'] === 'cinetpay' && $p['status'] === 'pending' && payments_cinetpay_enabled()) {

@@ -269,3 +269,9 @@ body.app::before { opacity: .6; }
 .notes__state { font-size: .68rem; letter-spacing: .08em; text-transform: none; font-weight: 400; }
 .notes__text { border: 0; border-top: 1px solid var(--line); border-radius: 0 0 var(--r-md) var(--r-md); min-height: 160px; background: transparent; }
 @media (max-width: 560px) { .work__review { grid-template-columns: 1fr; } }
+
+/* Sécurité du compte */
+.recovery { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 14px; margin: 0 0 18px; border: 1px dashed var(--gold); border-radius: var(--r-sm); font-size: 1rem; color: var(--white); }
+.mfa-steps { padding-left: 1.2em; display: grid; gap: 12px; }
+.mfa-qr { width: 216px; margin: 12px 0 8px; padding: 8px; background: #fff; border-radius: 8px; }
+.mfa-qr img { width: 200px; height: 200px; image-rendering: pixelated; }

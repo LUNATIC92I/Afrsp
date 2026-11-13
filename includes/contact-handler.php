@@ -8,6 +8,10 @@ function handle_contact(array $in): array
         return [true, 'Message transmis.', []];
     }
     $data = array_map(static fn ($v) => is_string($v) ? trim($v) : '', $in);
+    $allowedSubjects = ['Information sur les formations', 'Inscription de groupe / organisation', 'Certificat et vérification', 'Assistance technique', 'Autre demande'];
+    if (!in_array($data['subject'] ?? '', $allowedSubjects, true)) {
+        $data['subject'] = 'Autre demande';
+    }
     $errors = validate($data, [
         'full_name' => 'required|min:2|max:160', 'email' => 'required|email|max:190',
         'subject' => 'required|max:190', 'message' => 'required|min:20|max:4000',

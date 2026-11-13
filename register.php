@@ -17,7 +17,7 @@ if (is_post() && $open) {
         'first_name' => 'required|name|max:80', 'last_name' => 'required|name|max:80', 'email' => 'required|email|max:190',
         'password' => 'required', 'password_confirm' => 'same:password',
     ], ['first_name' => 'Prénom', 'last_name' => 'Nom', 'email' => 'E-mail', 'password' => 'Mot de passe', 'password_confirm' => 'mot de passe']);
-    if (!isset($errors['password']) && ($p = password_policy_error($data['password']))) {
+    if (!isset($errors['password']) && ($p = password_policy_error_for($data['password'], [$data['email'], $data['first_name'], $data['last_name']]))) {
         $errors['password'] = $p;
     }
     if (empty($_POST['charter'])) {
@@ -33,7 +33,7 @@ if (is_post() && $open) {
         } else {
             $roleId = (int) q_val("SELECT id FROM roles WHERE slug = 'learner'");
             q('INSERT INTO users (role_id, first_name, last_name, email, password_hash) VALUES (?,?,?,?,?)',
-                [$roleId, $data['first_name'], $data['last_name'], $data['email'], password_hash($data['password'], PASSWORD_DEFAULT)]);
+                [$roleId, $data['first_name'], $data['last_name'], $data['email'], hash_password($data['password'])]);
             $uid = (int) db()->lastInsertId();
             login_user($uid);
             audit('auth.register', 'user', $uid);

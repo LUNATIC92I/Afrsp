@@ -7,6 +7,7 @@ require APP_ROOT . '/includes/catalog.php';
 if (!is_post()) json_response(['ok' => false, 'message' => 'Méthode non autorisée.'], 405);
 verify_csrf();
 $u = require_login();
+rate_limit_or_fail('note:user', (string) $u['id'], 240, 600);
 $lesson = q_one('SELECT l.id, ch.course_id FROM lessons l JOIN chapters ch ON ch.id = l.chapter_id WHERE l.id = ?', [input_int('lesson_id')]);
 if (!$lesson || !is_enrolled((int) $u['id'], (int) $lesson['course_id'])) {
     json_response(['ok' => false, 'message' => 'Leçon inaccessible.'], 403);

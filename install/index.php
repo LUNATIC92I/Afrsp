@@ -64,7 +64,7 @@ $guessUrl = (is_https() ? 'https' : 'http') . '://' . preg_replace('/[^a-z0-9.\-
         <div class="field"><label for="db_user">Utilisateur</label><input class="input" id="db_user" name="db_user" required value="<?= e(old('db_user')) ?>"></div>
       </div>
       <div class="field"><label for="db_pass">Mot de passe de la base</label><input class="input" type="password" id="db_pass" name="db_pass"></div>
-      <div class="field"><label for="base_url">URL publique du site</label><input class="input" id="base_url" name="base_url" value="<?= e(old('base_url', $guessUrl)) ?>"><span class="hint">Utilisée dans les QR codes de vérification des certificats.</span></div>
+      <div class="field"><label for="base_url">URL publique du site</label><input class="input" type="url" required id="base_url" name="base_url" value="<?= e(old('base_url', $guessUrl)) ?>"><span class="hint">Obligatoire : utilisée dans les liens envoyés par e-mail et les QR codes (jamais déduite de la requête, pour éviter l'empoisonnement des liens).</span></div>
       <hr>
       <h2 class="mono" style="font-size:.9rem;letter-spacing:.2em">COMPTE ADMINISTRATEUR INITIAL</h2>
       <div class="form-row">

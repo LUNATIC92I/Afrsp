@@ -7,6 +7,7 @@ require APP_ROOT . '/includes/catalog.php';
 if (!is_post()) json_response(['ok' => false, 'message' => 'Méthode non autorisée.'], 405);
 verify_csrf();
 $u = require_login();
+rate_limit_or_fail('submission:user', (string) $u['id'], 30, 3600, 'Trop de dépôts en peu de temps. Réessayez plus tard.');
 $lesson = q_one("SELECT l.id, l.title, l.type, ch.course_id FROM lessons l JOIN chapters ch ON ch.id = l.chapter_id WHERE l.id = ? AND l.type IN ('exercise','case_study')", [input_int('lesson_id')]);
 if (!$lesson || !is_enrolled((int) $u['id'], (int) $lesson['course_id'])) {
     json_response(['ok' => false, 'message' => 'Ce travail ne peut pas être déposé.'], 403);

@@ -15,6 +15,7 @@ const token = html => (html.match(/name="_csrf" value="([^"]+)"/) || [])[1];
   // Base de développement : réinitialise les compteurs anti-abus liés à 127.0.0.1
   sql("DELETE FROM login_attempts WHERE ip_address IN ('127.0.0.1','::1')");
   sql("DELETE FROM audit_logs WHERE action = 'auth.register' AND ip_address IN ('127.0.0.1','::1')");
+  sql("DELETE FROM rate_limits");
   // ---------- 1. CSRF : POST sans jeton refusé
   const anon = await request.newContext({ baseURL: B });
   let r = await anon.post('/login.php', { form: { email: 'admin@africaspy.test', password: 'x' }, maxRedirects: 0 });

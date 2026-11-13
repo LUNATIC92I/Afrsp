@@ -27,10 +27,10 @@ if (is_post()) {
             $errors['current_password'] = 'Mot de passe actuel incorrect.';
         } elseif ($new !== (string) ($_POST['password_confirm'] ?? '')) {
             $errors['password'] = 'La confirmation ne correspond pas.';
-        } elseif ($p = password_policy_error($new)) {
+        } elseif ($p = password_policy_error_for($new, [$u['email'], $u['first_name'], $u['last_name']])) {
             $errors['password'] = $p;
         } else {
-            q('UPDATE users SET password_hash = ? WHERE id = ?', [password_hash($new, PASSWORD_DEFAULT), $u['id']]);
+            q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($new), $u['id']]);
             login_user((int) $u['id']); // nouvelle empreinte : les autres sessions sont invalidées
             audit('profile.password', 'user', (int) $u['id']);
             flash('success', 'Mot de passe modifié. Vos autres sessions ont été fermées.');

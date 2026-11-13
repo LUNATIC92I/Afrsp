@@ -27,6 +27,7 @@ $ico = static function (string $n): string {
         'mail' => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
         'globe' => '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
         'check' => '<path d="M5 12l5 5 9-10"/>',
+        'shield' => '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
         'pen' => '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
         'wallet' => '<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/><path d="M6 6l9-3 1 3"/>',
     ][$n] ?? '';
@@ -71,6 +72,7 @@ if ($appArea === 'admin') {
             ['certificates', 'learner/certificates.php', 'Certificats', 'cert', null],
             ['payments', 'learner/payments.php', 'Paiements', 'wallet', null],
             ['profile', 'learner/profile.php', 'Profil', 'user', null],
+            ['security', 'learner/security.php', 'Sécurité du compte', 'shield', null],
         ]],
         ['Académie', [
             ['catalog', 'academy.php', 'Catalogue', 'globe', null],

@@ -29,6 +29,8 @@ require APP_ROOT . '/includes/header.php';
       <li><strong>Remboursement</strong> : toute demande est à adresser via la page Contact ; un remboursement entraîne la fermeture de l'accès à la formation concernée.</li>
       <li><strong>Usage</strong> : l'accès suppose le respect de la charte éthique ; un usage abusif peut entraîner la fermeture du compte.</li>
     </ul>
+    <h2 id="securite">Signalement de vulnérabilités</h2>
+    <p>Si vous découvrez une faille de sécurité, merci de nous la signaler de manière confidentielle via la page Contact (objet « Assistance technique ») ou l'adresse indiquée dans <code>/.well-known/security.txt</code>. Ne testez que dans le respect de la loi, sans accéder aux données d'autrui ni perturber le service ; nous nous engageons à répondre rapidement et à ne pas engager de poursuites contre un signalement de bonne foi.</p>
     <h2>Visuels</h2>
     <p>Les illustrations, cartes et vidéos de la plateforme sont des créations originales générées pour AFRICA'SPY à partir de données cartographiques du domaine public (Natural Earth). Les noms d'outils logiciels cités sont des marques de leurs détenteurs, mentionnées à titre pédagogique sans affiliation.</p>
   </div></section>

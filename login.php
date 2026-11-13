@@ -7,8 +7,12 @@ require_guest();
 $authError = null;
 if (is_post()) {
     verify_csrf();
+    rate_limit_or_fail('login:ip', client_ip(), 60, 900);
     $email = input('email');
     $err = ($email === '' || ($_POST['password'] ?? '') === '') ? 'Saisissez votre adresse e-mail et votre mot de passe.' : attempt_login($email, (string) $_POST['password']);
+    if ($err === MFA_REQUIRED) {
+        redirect('login-2fa.php');
+    }
     if ($err === null) {
         audit('auth.login');
         $intended = $_SESSION['intended'] ?? '';

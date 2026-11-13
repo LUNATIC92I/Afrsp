@@ -8,6 +8,7 @@ $sent = false;
 $authError = null;
 if (is_post()) {
     verify_csrf();
+    rate_limit_or_fail('reset_request:ip', client_ip(), 10, 3600, 'Trop de demandes de réinitialisation depuis votre connexion. Réessayez dans une heure.');
     $email = mb_strtolower(input('email'));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $authError = 'Adresse e-mail invalide.';

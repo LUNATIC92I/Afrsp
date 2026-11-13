@@ -4,6 +4,7 @@ declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 
 $token = input('token');
+rate_limit_or_fail('reset_token:ip', client_ip(), 30, 900);
 $row = preg_match('/^[a-f0-9]{64}$/', $token)
     ? q_one('SELECT pr.*, u.email FROM password_resets pr JOIN users u ON u.id = pr.user_id WHERE pr.token_hash = ? AND pr.used_at IS NULL AND pr.expires_at > UTC_TIMESTAMP()', [hash('sha256', $token)])
     : null;
@@ -13,10 +14,10 @@ if ($row && is_post()) {
     $pwd = (string) ($_POST['password'] ?? '');
     if ($pwd !== (string) ($_POST['password_confirm'] ?? '')) {
         $authError = 'Les deux mots de passe ne correspondent pas.';
-    } elseif ($e = password_policy_error($pwd)) {
+    } elseif ($e = password_policy_error_for($pwd, [$row['email']])) {
         $authError = $e;
     } else {
-        q('UPDATE users SET password_hash = ? WHERE id = ?', [password_hash($pwd, PASSWORD_DEFAULT), $row['user_id']]);
+        q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($pwd), $row['user_id']]);
         q('UPDATE password_resets SET used_at = UTC_TIMESTAMP() WHERE user_id = ? AND used_at IS NULL', [$row['user_id']]);
         q('DELETE FROM login_attempts WHERE email = ?', [$row['email']]);
         logout_user();

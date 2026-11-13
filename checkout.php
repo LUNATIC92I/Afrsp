@@ -25,6 +25,7 @@ $methods = payment_methods();
 $error = null;
 if (is_post()) {
     verify_csrf();
+    rate_limit_or_fail('checkout:user', (string) $u['id'], 20, 3600, 'Trop de tentatives de paiement. Réessayez dans une heure ou contactez l\'Académie.');
     $method = input('method');
     $phone = preg_replace('/[^\d+]/', '', input('phone'));
     if (!isset($methods[$method])) {

@@ -18,7 +18,7 @@ function current_user(bool $refresh = false): ?array
         return $user = null;
     }
     $row = q_one(
-        'SELECT u.id, u.role_id, u.first_name, u.last_name, u.email, u.country, u.organization, u.bio, u.status,
+        'SELECT u.id, u.role_id, u.first_name, u.last_name, u.email, u.country, u.organization, u.bio, u.status, u.totp_enabled,
                 u.created_at, u.last_login_at, r.slug AS role_slug, r.name AS role_name
            FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = ?',
         [$id]
@@ -78,9 +78,20 @@ function require_login(): array
     return $u;
 }
 
+/** Le personnel doit activer la 2FA si l'option est imposée dans les paramètres. */
+function enforce_staff_mfa(array $u): void
+{
+    if (is_staff() && !(int) $u['totp_enabled'] && setting('mfa_required_staff', '0') === '1'
+        && !str_ends_with((string) ($_SERVER['SCRIPT_NAME'] ?? ''), '/learner/security.php')) {
+        flash('warning', 'La double authentification est obligatoire pour les comptes du personnel. Activez-la pour continuer.');
+        redirect('learner/security.php');
+    }
+}
+
 function require_permission(string $permission): array
 {
     $u = require_login();
+    enforce_staff_mfa($u);
     if (!can($permission)) {
         audit('access.denied', null, null, $permission . ' · ' . ($_SERVER['REQUEST_URI'] ?? ''));
         if (is_ajax()) {
@@ -102,18 +113,22 @@ function require_guest(): void
  *  Protection contre la force brute
  * ----------------------------------------------------------------*/
 
+/**
+ * Verrouillage anti force brute, conçu pour ne pas permettre à un tiers de bloquer un compte :
+ *  - par couple compte + IP (5 échecs / 15 min) : bloque l'attaquant, pas le titulaire ailleurs ;
+ *  - par IP (20 échecs / 15 min) : bloque le balayage de nombreux comptes ;
+ *  - par compte toutes IP (50 échecs / 15 min) : freine les attaques distribuées.
+ * Renvoie la durée de blocage en minutes, ou null.
+ */
 function login_locked(string $email): ?int
 {
     $win = (int) config('security.login_window_min', 15);
-    $byEmail = (int) q_val(
-        'SELECT COUNT(*) FROM login_attempts WHERE email = ? AND success = 0 AND attempted_at > (UTC_TIMESTAMP() - INTERVAL ? MINUTE)',
-        [$email, $win]
-    );
-    $byIp = (int) q_val(
-        'SELECT COUNT(*) FROM login_attempts WHERE ip_address = ? AND success = 0 AND attempted_at > (UTC_TIMESTAMP() - INTERVAL ? MINUTE)',
-        [client_ip(), $win]
-    );
-    if ($byEmail >= (int) config('security.login_max_per_email', 5) || $byIp >= (int) config('security.login_max_per_ip', 20)) {
+    $ip = client_ip();
+    $count = static fn (string $where, array $p) => (int) q_val(
+        "SELECT COUNT(*) FROM login_attempts WHERE $where AND success = 0 AND attempted_at > (UTC_TIMESTAMP() - INTERVAL ? MINUTE)", array_merge($p, [$win]));
+    if ($count('email = ? AND ip_address = ?', [$email, $ip]) >= (int) config('security.login_max_per_email', 5)
+        || $count('ip_address = ?', [$ip]) >= (int) config('security.login_max_per_ip', 20)
+        || $count('email = ?', [$email]) >= (int) config('security.login_max_global', 50)) {
         return $win;
     }
     return null;
@@ -123,8 +138,8 @@ function record_login_attempt(string $email, bool $success): void
 {
     q('INSERT INTO login_attempts (email, ip_address, success, attempted_at) VALUES (?,?,?,UTC_TIMESTAMP())', [$email, client_ip(), $success ? 1 : 0]);
     if ($success) {
-        // Un succès efface les échecs récents de ce compte
-        q('DELETE FROM login_attempts WHERE email = ? AND success = 0', [$email]);
+        // Un succès efface les échecs récents de ce compte depuis cette IP
+        q('DELETE FROM login_attempts WHERE email = ? AND ip_address = ? AND success = 0', [$email, client_ip()]);
     }
     if (random_int(1, 50) === 1) {
         q('DELETE FROM login_attempts WHERE attempted_at < (UTC_TIMESTAMP() - INTERVAL 7 DAY)');
@@ -134,13 +149,16 @@ function record_login_attempt(string $email, bool $success): void
 /**
  * Tente une connexion. Renvoie null en cas de succès, sinon un message d'erreur générique.
  */
+const MFA_REQUIRED = '__mfa__';
+
 function attempt_login(string $email, string $password): ?string
 {
     $email = mb_strtolower(trim($email));
     if ($minutes = login_locked($email)) {
+        audit('auth.locked', null, null, mb_substr($email, 0, 190));
         return "Trop de tentatives infructueuses. Par mesure de sécurité, l'accès est temporairement suspendu ($minutes minutes).";
     }
-    $user = q_one('SELECT id, password_hash, status, role_id FROM users WHERE email = ?', [$email]);
+    $user = q_one('SELECT id, password_hash, status, role_id, totp_enabled FROM users WHERE email = ?', [$email]);
     // Vérification à temps constant même si le compte n'existe pas
     $hash = $user['password_hash'] ?? '$2y$10$894BRSesx9x6nbleA6MFGOSHDyAbiGkCxBRB63ZX403IoqnQfj6iq';
     $valid = password_verify($password, $hash);
@@ -152,10 +170,17 @@ function attempt_login(string $email, string $password): ?string
         record_login_attempt($email, false);
         return 'Ce compte est suspendu. Contactez l\'administration de l\'Académie.';
     }
-    if (password_needs_rehash($user['password_hash'], PASSWORD_DEFAULT)) {
-        q('UPDATE users SET password_hash = ? WHERE id = ?', [password_hash($password, PASSWORD_DEFAULT), $user['id']]);
+    if (password_needs_upgrade($user['password_hash'])) {
+        // Mise à niveau transparente vers Argon2id lors de la connexion
+        q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($password), $user['id']]);
     }
     record_login_attempt($email, true);
+    if ((int) $user['totp_enabled'] === 1) {
+        // Seconde étape : le compte n'est ouvert qu'après le code TOTP
+        session_regenerate_id(true);
+        $_SESSION['mfa_pending'] = ['uid' => (int) $user['id'], 'at' => time(), 'tries' => 0];
+        return MFA_REQUIRED;
+    }
     login_user((int) $user['id']);
     return null;
 }
@@ -165,6 +190,8 @@ function login_user(int $userId): void
     session_regenerate_id(true);
     $_SESSION['uid'] = $userId;
     $_SESSION['upw'] = session_fingerprint($userId);
+    $_SESSION['_auth_at'] = time();
+    unset($_SESSION['mfa_pending']);
     $_SESSION['_csrf'] = bin2hex(random_bytes(32));
     unset($_SESSION['perms']);
     q('UPDATE users SET last_login_at = UTC_TIMESTAMP() WHERE id = ?', [$userId]);

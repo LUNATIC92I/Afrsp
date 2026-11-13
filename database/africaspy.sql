@@ -1,6 +1,6 @@
 -- =====================================================================
 --  AFRICA'SPY — base de données complète (schéma + données initiales)
---  Généré le 2026-11-13 06:35 UTC par database/build-sql.php
+--  Généré le 2026-11-13 06:47 UTC par database/build-sql.php
 --  Le compte administrateur n'est PAS inclus : il est créé de manière
 --  sécurisée par l'installateur (install/ ou php install/cli.php).
 -- =====================================================================
@@ -14,7 +14,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
+DROP TABLE IF EXISTS rate_limits, lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
   audit_logs, media, announcement_reads, announcements, certificates,
   attempt_answers, exam_attempts, answers, questions, exams, lesson_progress,
   course_enrollments, lessons, chapters, courses, categories,
@@ -60,6 +60,10 @@ CREATE TABLE users (
   last_name       VARCHAR(80)  NOT NULL,
   email           VARCHAR(190) NOT NULL,
   password_hash   VARCHAR(255) NOT NULL,
+  totp_secret     VARCHAR(255) NULL,
+  totp_enabled    TINYINT(1) NOT NULL DEFAULT 0,
+  totp_last_step  BIGINT UNSIGNED NULL,
+  totp_recovery   TEXT NULL,
   country         VARCHAR(80)  NULL,
   organization    VARCHAR(150) NULL,
   bio             VARCHAR(600) NULL,
@@ -462,6 +466,18 @@ CREATE TABLE lesson_notes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- ---------------------------------------------------------------------
+--  Limitation de débit (anti-abus)
+-- ---------------------------------------------------------------------
+CREATE TABLE rate_limits (
+  bucket        VARCHAR(160) NOT NULL,
+  hits          INT UNSIGNED NOT NULL DEFAULT 0,
+  window_start  DATETIME NOT NULL,
+  PRIMARY KEY (bucket),
+  KEY idx_rl_window (window_start)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 
 -- ------------------------------ Données initiales
 
@@ -523,7 +539,9 @@ INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 ('payment_manual_enabled','1'),
 ('payment_manual_instructions','Virement bancaire ou dépôt Mobile Money au nom d''AFRICA''SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration › Paramètres.'),
 ('promo_label','Offre de lancement'),
-('promo_ends_at','');
+('promo_ends_at',''),
+('mfa_required_staff','0'),
+('security_contact','');
 
 INSERT INTO `categories` (`id`,`code`,`slug`,`name`,`description`,`accent`,`sort_order`) VALUES
 (1,'A','fondements-du-renseignement','Fondements du renseignement','Le socle commun : cycle du renseignement, histoire des services, disciplines de collecte et méthodes d''analyse.','#00C8FF',1),

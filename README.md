@@ -111,6 +111,7 @@ php install/cli.php --db-host=127.0.0.1 --db-name=africaspy --db-user=USER --db-
   L'URL de notification à déclarer chez CinetPay est `https://votre-domaine/payment-notify.php`. Sans clés CinetPay, seul le virement / dépôt est proposé (instructions et coordonnées à saisir dans *Administration › Paramètres*). Le prix de chaque formation se règle dans *Administration › Formations*.
 - **Enrichissement des contenus sur une base existante** : `php database/enrich-apply.php` ajoute les leçons d'approfondissement, le chapitre « Mise en situation » de chaque formation, les questions QCM supplémentaires, les glossaires et les bibliographies, et porte les examens à 15 questions / 35 min s'ils ont gardé leurs réglages d'origine (idempotent : relançable sans doublon) et recalcule la progression des apprenants.
 - **Travaux et notes (installation existante)** : `mysql africaspy < database/migrations/2026_11_13_submissions_notes.sql` (tables `submissions`, `lesson_notes`, permission `submissions.review` accordée aux administrateurs et responsables pédagogiques).
+- **Sécurité (installation existante)** : `mysql africaspy < database/migrations/2026_11_14_security.sql` (limitation de débit, colonnes 2FA). Derrière un proxy/CDN, ajoutez `'trusted_proxies' => ['IP du proxy']` dans `config/config.local.php`.
 - **Mise à jour d'une installation existante** : `mysql africaspy < database/migrations/2026_11_13_payments.sql` (ajoute les prix, la table `payments` et la permission `payments.manage` ; les inscriptions existantes conservent leur accès).
 - **E-mails** : par défaut (`transport = log`), les e-mails (liens de réinitialisation) sont écrits dans `storage/logs/mail.log`. Configurez `smtp` ou `mail` en production.
 - Les variables d'environnement `AFRICASPY_DB_HOST`, `AFRICASPY_DB_NAME`, `AFRICASPY_DB_USER`, `AFRICASPY_DB_PASS`, `AFRICASPY_APP_KEY`, `AFRICASPY_BASE_URL` peuvent remplacer le fichier.
@@ -156,6 +157,9 @@ server {
 
 ## 7. Sécurité mise en œuvre
 
+> Rapport d'audit complet, constats corrigés et recommandations d'exploitation : **[SECURITY.md](SECURITY.md)**.
+> Nouveautés : double authentification TOTP (obligatoire au choix pour le personnel), Argon2id, verrouillage ciblé compte + IP, limitation de débit généralisée, réencodage des images, `security.txt`.
+
 - **Injections SQL** : PDO, requêtes préparées natives (`ATTR_EMULATE_PREPARES = false`) partout ; noms de colonnes jamais issus de l'entrée utilisateur
 - **XSS** : échappement systématique (`e()`), nettoyage HTML par liste blanche (`sanitize_html`) pour les contenus de cours, CSP stricte sans script inline (`script-src 'self'`)
 - **CSRF** : jeton par session sur tous les formulaires et requêtes AJAX (`X-CSRF-Token`) ; déconnexion en POST uniquement
@@ -180,6 +184,7 @@ php -S 127.0.0.1:8080 resources/dev-router.php
 npm i -D playwright && npx playwright install chromium   # une fois
 node tests/learner.e2e.js     # inscription → formation → leçons → QCM → examen → certificat PDF → vérification
 ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/security.e2e.js
+ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/hardening.e2e.js     # 26 contrôles : verrouillage, débit, Host, Argon2id, 2FA, images
 ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/submissions.e2e.js   # 19 contrôles : notes, dépôt, reprise, correction, sécurité
 # 44 contrôles (dont 9 sur le paiement) : CSRF, force brute, contrôle d'accès, IDOR, injection SQL, XSS, en-têtes,
 # cookie de session, téléversement frauduleux, parcours admin complet, révocation et

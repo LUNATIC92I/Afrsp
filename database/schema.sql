@@ -7,7 +7,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
+DROP TABLE IF EXISTS rate_limits, lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
   audit_logs, media, announcement_reads, announcements, certificates,
   attempt_answers, exam_attempts, answers, questions, exams, lesson_progress,
   course_enrollments, lessons, chapters, courses, categories,
@@ -53,6 +53,10 @@ CREATE TABLE users (
   last_name       VARCHAR(80)  NOT NULL,
   email           VARCHAR(190) NOT NULL,
   password_hash   VARCHAR(255) NOT NULL,
+  totp_secret     VARCHAR(255) NULL,
+  totp_enabled    TINYINT(1) NOT NULL DEFAULT 0,
+  totp_last_step  BIGINT UNSIGNED NULL,
+  totp_recovery   TEXT NULL,
   country         VARCHAR(80)  NULL,
   organization    VARCHAR(150) NULL,
   bio             VARCHAR(600) NULL,
@@ -452,5 +456,17 @@ CREATE TABLE lesson_notes (
   KEY idx_notes_lesson (lesson_id),
   CONSTRAINT fk_notes_user   FOREIGN KEY (user_id)   REFERENCES users (id)   ON DELETE CASCADE,
   CONSTRAINT fk_notes_lesson FOREIGN KEY (lesson_id) REFERENCES lessons (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- ---------------------------------------------------------------------
+--  Limitation de débit (anti-abus)
+-- ---------------------------------------------------------------------
+CREATE TABLE rate_limits (
+  bucket        VARCHAR(160) NOT NULL,
+  hits          INT UNSIGNED NOT NULL DEFAULT 0,
+  window_start  DATETIME NOT NULL,
+  PRIMARY KEY (bucket),
+  KEY idx_rl_window (window_start)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

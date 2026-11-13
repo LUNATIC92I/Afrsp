@@ -10,6 +10,7 @@ $keys = [
     'contact_phone' => ['Téléphone', 'text', 60], 'contact_address' => ['Adresse', 'textarea', 400], 'footer_tagline' => ['Texte de présentation (pied de page)', 'textarea', 400],
     'payment_manual_instructions' => ['Instructions de virement / dépôt (coordonnées bancaires, numéros Mobile Money marchands)', 'textarea', 1500],
     'promo_label' => ['Libellé de la promotion', 'text', 60], 'promo_ends_at' => ['Fin de la promotion (AAAA-MM-JJ HH:MM, UTC — vide = sans échéance)', 'text', 20],
+    'security_contact' => ['E-mail de signalement des vulnérabilités (security.txt)', 'email', 190],
     'certificate_signatory_name' => ['Signataire affiché sur les certificats', 'text', 120], 'certificate_signatory_title' => ['Qualité du signataire', 'text', 160],
 ];
 if (is_post()) {
@@ -24,6 +25,7 @@ if (is_post()) {
     if ($err) { flash('error', implode(' ', $err)); back(); }
     foreach ($keys as $k => $_) set_setting($k, input($k));
     set_setting('signature_is_fictitious', isset($_POST['signature_is_fictitious']) ? '1' : '0');
+    set_setting('mfa_required_staff', isset($_POST['mfa_required_staff']) ? '1' : '0');
     set_setting('payment_manual_enabled', isset($_POST['payment_manual_enabled']) ? '1' : '0');
     set_setting('registration_open', isset($_POST['registration_open']) ? '1' : '0');
     audit('settings.update', 'settings', null, implode(',', array_keys($keys)));
@@ -40,6 +42,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
     <?= csrf_field() ?>
     <?php foreach ($keys as $k => [$label, $type, $max]): ?><?= fld($k, $label, setting($k), $type, ['maxlength' => $max] + ($type === 'textarea' ? ['rows' => 3] : [])) ?><?php endforeach; ?>
     <label class="check full"><input type="checkbox" name="signature_is_fictitious" value="1" <?= setting('signature_is_fictitious', '1') === '1' ? 'checked' : '' ?>> Signature institutionnelle <strong>fictive</strong> (mention explicite sur les certificats — à décocher uniquement si un signataire réel et habilité est désigné)</label>
+    <label class="check full"><input type="checkbox" name="mfa_required_staff" value="1" <?= setting('mfa_required_staff', '0') === '1' ? 'checked' : '' ?>> <strong>Double authentification obligatoire</strong> pour les administrateurs et responsables pédagogiques (recommandé ; activez d'abord la vôtre dans « Sécurité du compte »)</label>
     <label class="check full"><input type="checkbox" name="payment_manual_enabled" value="1" <?= setting('payment_manual_enabled', '1') === '1' ? 'checked' : '' ?>> Proposer le paiement par virement / dépôt (validation manuelle dans Administration › Paiements)</label>
     <label class="check full"><input type="checkbox" name="registration_open" value="1" <?= setting('registration_open', '1') === '1' ? 'checked' : '' ?>> Inscriptions publiques ouvertes</label>
     <div class="full"><button class="btn btn--primary" type="submit">Enregistrer</button></div>

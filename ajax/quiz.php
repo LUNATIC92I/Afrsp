@@ -7,6 +7,7 @@ require APP_ROOT . '/includes/catalog.php';
 if (!is_post()) json_response(['ok' => false, 'message' => 'Méthode non autorisée.'], 405);
 verify_csrf();
 $u = require_login();
+rate_limit_or_fail('quiz:user', (string) $u['id'], 120, 600);
 $ch = q_one('SELECT id, course_id FROM chapters WHERE id = ?', [input_int('chapter_id')]);
 if (!$ch || (!is_enrolled((int) $u['id'], (int) $ch['course_id']) && !can('courses.manage'))) {
     json_response(['ok' => false, 'message' => 'Évaluation inaccessible.'], 403);

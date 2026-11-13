@@ -47,11 +47,11 @@ function installer_run(array $d): ?string
     if (!filter_var($d['email'], FILTER_VALIDATE_EMAIL)) {
         return 'Adresse e-mail administrateur invalide.';
     }
-    if ($err = password_policy_error((string) $d['password'])) {
+    if ($err = password_policy_error_for((string) $d['password'], [$d['email'], $d['first_name'], $d['last_name']])) {
         return $err;
     }
-    if (!empty($d['base_url']) && !filter_var($d['base_url'], FILTER_VALIDATE_URL)) {
-        return 'URL de base invalide.';
+    if (empty($d['base_url']) || !filter_var($d['base_url'], FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $d['base_url'])) {
+        return 'URL publique du site requise et valide (ex. https://academy.example.org) : elle sécurise les liens envoyés par e-mail et les QR codes.';
     }
     try {
         $pdo = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $d['db_host'], (int) ($d['db_port'] ?: 3306), $d['db_name']),
@@ -71,7 +71,7 @@ function installer_run(array $d): ?string
             }
         }
         $pdo->prepare('INSERT INTO users (role_id, first_name, last_name, email, password_hash) VALUES (1, ?, ?, ?, ?)')
-            ->execute([trim($d['first_name']), trim($d['last_name']), mb_strtolower(trim($d['email'])), password_hash((string) $d['password'], PASSWORD_DEFAULT)]);
+            ->execute([trim($d['first_name']), trim($d['last_name']), mb_strtolower(trim($d['email'])), hash_password((string) $d['password'])]);
         $pdo->prepare('INSERT INTO audit_logs (user_id, action, details) VALUES (LAST_INSERT_ID(), ?, ?)')->execute(['install', 'Installation initiale de la plateforme']);
         if (!empty($d['contact_email'])) {
             $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'contact_email'")->execute([$d['contact_email']]);

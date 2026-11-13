@@ -7,13 +7,15 @@ AddDefaultCharset UTF-8
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    # security.txt (RFC 9116), seule exception aux fichiers cachés
+    RewriteRule ^\.well-known/security\.txt$ security-txt.php [L]
     # Fichiers cachés (.git, .env, .htaccess…)
     RewriteRule (^|/)\. - [F,L]
     # Répertoires et fichiers sensibles : jamais servis directement
     RewriteRule ^(config|includes|database|vendor|storage|resources|certificates)(/|$) - [F,L]
     RewriteRule ^uploads/(documents|videos)(/|$) - [F,L]
     RewriteRule ^install/(installer\.php|cli\.php|install\.lock)$ - [F,L]
-    RewriteRule ^(composer\.(json|lock)|README\.md|\.gitignore)$ - [F,L]
+    RewriteRule ^(composer\.(json|lock)|README\.md|SECURITY\.md|\.gitignore)$ - [F,L]
     # Forcer HTTPS en production (décommenter une fois le certificat TLS installé)
     # RewriteCond %{HTTPS} !=on
     # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]

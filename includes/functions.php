@@ -46,12 +46,15 @@ function url(string $path = '', array $query = []): string
 function absolute_url(string $path = '', array $query = []): string
 {
     $cfg = rtrim((string) config('base_url'), '/');
-    if ($cfg !== '') {
-        $origin = preg_replace('#^(https?://[^/]+).*$#', '$1', $cfg);
+    if ($cfg !== '' && preg_match('#^https?://[^/\s]+#i', $cfg, $m)) {
+        $origin = $m[0];
+    } elseif (config('env') === 'development') {
+        // Développement uniquement : l'hôte de la requête est accepté s'il est local
+        $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $origin = (is_https() ? 'https' : 'http') . '://' . (preg_match('/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/', $host) ? $host : 'localhost');
     } else {
-        $scheme = is_https() ? 'https' : 'http';
-        $host   = preg_replace('/[^a-z0-9.\-:\[\]]/i', '', $_SERVER['HTTP_HOST'] ?? 'localhost');
-        $origin = $scheme . '://' . $host;
+        // En production, l'en-tête Host n'est jamais utilisé (empoisonnement des liens envoyés par e-mail)
+        throw new RuntimeException('base_url doit être définie dans config/config.local.php pour générer des liens absolus.');
     }
     return $origin . url($path, $query);
 }
@@ -68,7 +71,7 @@ function is_https(): bool
 {
     return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
         || (($_SERVER['SERVER_PORT'] ?? null) == 443)
-        || (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' && config('trust_proxy', false));
+        || (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' && request_from_trusted_proxy());
 }
 
 function redirect(string $path, array $query = []): never
@@ -98,9 +101,24 @@ function json_response(array $data, int $status = 200): never
     exit;
 }
 
+/** La requête provient-elle d'un proxy inverse déclaré (config 'trusted_proxies') ? */
+function request_from_trusted_proxy(): bool
+{
+    $proxies = (array) config('trusted_proxies', []);
+    return $proxies && in_array($_SERVER['REMOTE_ADDR'] ?? '', $proxies, true);
+}
+
+/** Adresse IP du client ; X-Forwarded-For n'est lu que derrière un proxy de confiance. */
 function client_ip(): string
 {
     $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    if (request_from_trusted_proxy() && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $chain = array_map('trim', explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR']));
+        // On remonte la chaîne depuis la droite en ignorant les proxys de confiance
+        for ($i = count($chain) - 1; $i >= 0; $i--) {
+            if (!in_array($chain[$i], (array) config('trusted_proxies', []), true)) { $ip = $chain[$i]; break; }
+        }
+    }
     return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
 }
 
@@ -122,7 +140,7 @@ function send_security_headers(): void
     header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
         . "img-src 'self' data: blob:; font-src 'self'; media-src 'self' blob:; connect-src 'self'; "
         . "frame-src https://www.youtube-nocookie.com https://player.vimeo.com; object-src 'none'; "
-        . "base-uri 'self'; form-action 'self'; frame-ancestors 'self'");
+        . "base-uri 'self'; form-action 'self'; frame-ancestors 'self'" . (is_https() ? '; upgrade-insecure-requests' : ''));
     if (is_https()) {
         header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
     }
@@ -139,7 +157,8 @@ function start_secure_session(): void
     ini_set('session.cookie_httponly', '1');
     ini_set('session.sid_length', '48');
     ini_set('session.sid_bits_per_character', '6');
-    session_name((string) config('session_name', 'AFSPY_SESS'));
+    // En HTTPS à la racine du domaine, le préfixe __Host- interdit tout cookie de session forgé par un sous-domaine
+    session_name((is_https() && base_path() === '' ? '__Host-' : '') . (string) config('session_name', 'AFSPY_SESS'));
     session_set_cookie_params([
         'lifetime' => 0,
         'path'     => (base_path() ?: '') . '/',
@@ -155,6 +174,12 @@ function start_secure_session(): void
         $_SESSION = [];
         session_regenerate_id(true);
         $_SESSION['_flash'][] = ['type' => 'info', 'msg' => 'Votre session a expiré après une période d\'inactivité. Veuillez vous reconnecter.'];
+    }
+    // Durée de vie absolue d'une session authentifiée (12 h par défaut)
+    if (isset($_SESSION['_auth_at']) && ($now - (int) $_SESSION['_auth_at']) > (int) config('session_absolute', 43200)) {
+        $_SESSION = [];
+        session_regenerate_id(true);
+        $_SESSION['_flash'][] = ['type' => 'info', 'msg' => 'Pour votre sécurité, veuillez vous reconnecter.'];
     }
     $_SESSION['_last_seen'] = $now;
     // Rotation périodique de l'identifiant de session
@@ -359,7 +384,7 @@ function sanitize_html(?string $html): string
                 }
                 if ($an === 'href') {
                     $href = trim($attr->value);
-                    if (!preg_match('#^(https?://|mailto:|/|\#)#i', $href)) {
+                    if (!preg_match('#^(https?://|mailto:|/(?![/\\\\])|\#)#i', $href) || str_contains($href, '\\')) {
                         $child->removeAttribute('href');
                     } else {
                         $child->setAttribute('rel', 'noopener noreferrer');
@@ -598,6 +623,9 @@ function handle_upload(array $file, string $kind, string $title = '', ?string $a
     if ($kind === 'image' && @getimagesize($file['tmp_name']) === false) {
         return 'L\'image est corrompue ou illisible.';
     }
+    if ($kind === 'image' && !reencode_image($file['tmp_name'], $mime)) {
+        return 'L\'image n\'a pas pu être traitée. Essayez un autre fichier JPG, PNG ou WebP.';
+    }
     $stored = bin2hex(random_bytes(16)) . '.' . $cfg['mimes'][$mime];
     $dest = APP_ROOT . '/' . $cfg['dir'] . '/' . $stored;
     if (!move_uploaded_file($file['tmp_name'], $dest)) {
@@ -612,6 +640,32 @@ function handle_upload(array $file, string $kind, string $title = '', ?string $a
     $id = (int) db()->lastInsertId();
     audit('media.upload', 'media', $id, $kind . ' · ' . $original);
     return ['id' => $id, 'stored' => $stored];
+}
+
+/**
+ * Réencode une image avec GD : supprime métadonnées (EXIF, GPS) et toute charge
+ * dissimulée (fichiers « polyglottes »). Limite aussi les dimensions extrêmes.
+ */
+function reencode_image(string $path, string $mime): bool
+{
+    if (!function_exists('imagecreatefromstring')) {
+        return true;
+    }
+    $info = @getimagesize($path);
+    if (!$info || $info[0] < 1 || $info[1] < 1 || $info[0] * $info[1] > 40_000_000) {
+        return false;
+    }
+    $img = @imagecreatefromstring((string) file_get_contents($path));
+    if (!$img) {
+        return false;
+    }
+    $ok = match ($mime) {
+        'image/png'  => (imagesavealpha($img, true) && imagepng($img, $path, 6)),
+        'image/webp' => imagewebp($img, $path, 85),
+        default      => imagejpeg($img, $path, 88),
+    };
+    imagedestroy($img);
+    return (bool) $ok;
 }
 
 function media_path(array $m): string

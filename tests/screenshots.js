@@ -27,6 +27,7 @@ async function shot(p, name, sel, opts = {}) {
 (async () => {
   sql("DELETE FROM login_attempts WHERE ip_address IN ('127.0.0.1','::1')");
   sql("DELETE FROM audit_logs WHERE action = 'auth.register' AND ip_address IN ('127.0.0.1','::1')");
+  sql("DELETE FROM rate_limits");
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
   await ctx.addInitScript(() => sessionStorage.setItem('afspy-intro', '1'));

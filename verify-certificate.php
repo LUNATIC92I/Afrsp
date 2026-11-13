@@ -8,7 +8,7 @@ $result = null;
 if ($code !== '') {
     // Limitation simple : 30 vérifications / 10 min par session
     $_SESSION['verify_hits'] = array_values(array_filter($_SESSION['verify_hits'] ?? [], static fn ($t) => $t > time() - 600));
-    if (count($_SESSION['verify_hits']) >= 30) {
+    if (count($_SESSION['verify_hits']) >= 30 || !rate_limit('verify:ip', client_ip(), 60, 600)) {
         $result = ['state' => 'throttled'];
     } else {
         $_SESSION['verify_hits'][] = time();
