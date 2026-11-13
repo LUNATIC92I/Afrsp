@@ -16,3 +16,6 @@
 !/uploads/documents/seed-*.pdf
 .DS_Store
 *.swp
+__pycache__/
+*.pyc
+node_modules/
