@@ -5,10 +5,13 @@
 /storage/fonts/*
 !/storage/**/.gitkeep
 /certificates/generated/*
+!/certificates/.htaccess
 !/certificates/generated/.gitkeep
 /uploads/**/*
 !/uploads/**/
 !/uploads/**/.gitkeep
+!/uploads/.htaccess
+!/uploads/**/.htaccess
 !/uploads/videos/seed-*.mp4
 !/uploads/documents/seed-*.pdf
 .DS_Store

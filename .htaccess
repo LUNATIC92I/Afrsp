@@ -1,0 +1,35 @@
+# =====================================================================
+#  AFRICA'SPY — configuration Apache (racine)
+# =====================================================================
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Fichiers cachés (.git, .env, .htaccess…)
+    RewriteRule (^|/)\. - [F,L]
+    # Répertoires et fichiers sensibles : jamais servis directement
+    RewriteRule ^(config|includes|database|vendor|storage|resources|certificates)(/|$) - [F,L]
+    RewriteRule ^uploads/(documents|videos)(/|$) - [F,L]
+    RewriteRule ^install/(installer\.php|cli\.php|install\.lock)$ - [F,L]
+    RewriteRule ^(composer\.(json|lock)|README\.md|\.gitignore)$ - [F,L]
+    # Forcer HTTPS en production (décommenter une fois le certificat TLS installé)
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    <FilesMatch "\.(css|js|woff2|webp|svg|png|jpg)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+ErrorDocument 403 "Accès refusé."
+ErrorDocument 404 "Ressource introuvable."

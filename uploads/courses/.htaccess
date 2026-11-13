@@ -1,0 +1,5 @@
+# Seules les images publiques de couverture sont servies
+Require all denied
+<FilesMatch "\.(?i:jpe?g|png|webp)$">
+    Require all granted
+</FilesMatch>
