@@ -45,6 +45,7 @@ $defaults = [
         'login_max_per_ip'    => 20,          // échecs tolérés par adresse IP
         'login_window_min'    => 15,          // fenêtre de comptage (minutes)
         'reset_ttl_min'       => 60,          // validité d'un lien de réinitialisation
+        'register_max_per_ip' => 5,           // créations de compte par IP et par heure
     ],
 ];
 

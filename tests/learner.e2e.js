@@ -4,6 +4,9 @@ const B = process.env.BASE_URL || 'http://127.0.0.1:8080';
 const OUT = process.env.OUT_DIR || require('os').tmpdir();
 const sql = q => execFileSync('mysql', ['-N', 'africaspy', '-e', q]).toString().trim();
 (async () => {
+  // Base de développement : réinitialise les compteurs anti-abus liés à 127.0.0.1
+  sql("DELETE FROM login_attempts WHERE ip_address IN ('127.0.0.1','::1')");
+  sql("DELETE FROM audit_logs WHERE action = 'auth.register' AND ip_address IN ('127.0.0.1','::1')");
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 1366, height: 860 } });
   await ctx.addInitScript(() => sessionStorage.setItem('afspy-intro', '1'));

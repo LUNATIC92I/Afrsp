@@ -79,7 +79,8 @@
 .js .reveal--zoom { transform: scale(.94); }
 .js .reveal--clip { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); transition: clip-path 1.2s var(--ease-io); }
 .js .reveal--depth { transform: perspective(800px) translateZ(-120px) rotateX(8deg); transform-origin: 50% 100%; }
-.js .reveal.is-visible { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+.js .reveal--clip.is-visible { clip-path: inset(0 0 0 0); }
 .js [data-stagger] > * { opacity: 0; transform: translateY(20px); transition: opacity .7s var(--ease), transform .8s var(--ease); }
 .js [data-stagger].is-visible > * { opacity: 1; transform: none; }
 

@@ -23,8 +23,8 @@ if (is_post() && $open) {
     if (empty($_POST['charter'])) {
         $errors['charter'] = 'Vous devez accepter la charte éthique de l\'Académie.';
     }
-    // Limitation : 5 créations de compte par IP et par heure
-    if (!$errors && (int) q_val("SELECT COUNT(*) FROM audit_logs WHERE action = 'auth.register' AND ip_address = ? AND created_at > (UTC_TIMESTAMP() - INTERVAL 1 HOUR)", [client_ip()]) >= 5) {
+    // Limitation : N créations de compte par IP et par heure (security.register_max_per_ip)
+    if (!$errors && (int) q_val("SELECT COUNT(*) FROM audit_logs WHERE action = 'auth.register' AND ip_address = ? AND created_at > (UTC_TIMESTAMP() - INTERVAL 1 HOUR)", [client_ip()]) >= (int) config('security.register_max_per_ip', 5)) {
         $authError = 'Trop d\'inscriptions depuis cette connexion. Réessayez plus tard.';
     }
     if (!$errors && !$authError) {

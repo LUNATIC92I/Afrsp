@@ -1,6 +1,6 @@
 -- =====================================================================
 --  AFRICA'SPY — base de données complète (schéma + données initiales)
---  Généré le 2026-11-12 23:38 UTC par database/build-sql.php
+--  Généré le 2026-11-13 00:07 UTC par database/build-sql.php
 --  Le compte administrateur n'est PAS inclus : il est créé de manière
 --  sécurisée par l'installateur (install/ ou php install/cli.php).
 -- =====================================================================
@@ -457,27 +457,27 @@ INSERT INTO `categories` (`id`,`code`,`slug`,`name`,`description`,`accent`,`sort
 
 INSERT INTO `media` (`id`,`kind`,`title`,`original_name`,`stored_name`,`mime_type`,`size_bytes`,`attribution`) VALUES
 (1,'video','Briefing vidéo — Fondements du renseignement','seed-afs-a101.mp4','seed-afs-a101.mp4','video/mp4',408166,'Production AFRICA''SPY (visuels originaux)'),
-(2,'document','Support de cours — Fondements du renseignement','AFRICASPY-AFS-A101-support.pdf','seed-afs-a101.pdf','application/pdf',71666,NULL),
+(2,'document','Support de cours — Fondements du renseignement','AFRICASPY-AFS-A101-support.pdf','seed-afs-a101.pdf','application/pdf',71542,NULL),
 (3,'video','Briefing vidéo — Disciplines de collecte : HUMINT, OSINT, SIGINT, GEOINT','seed-afs-a201.mp4','seed-afs-a201.mp4','video/mp4',411151,'Production AFRICA''SPY (visuels originaux)'),
-(4,'document','Support de cours — Disciplines de collecte : HUMINT, OSINT, SIGINT, GEOINT','AFRICASPY-AFS-A201-support.pdf','seed-afs-a201.pdf','application/pdf',66818,NULL),
+(4,'document','Support de cours — Disciplines de collecte : HUMINT, OSINT, SIGINT, GEOINT','AFRICASPY-AFS-A201-support.pdf','seed-afs-a201.pdf','application/pdf',66692,NULL),
 (5,'video','Briefing vidéo — Renseignement humain : principes et éthique','seed-afs-b101.mp4','seed-afs-b101.mp4','video/mp4',378312,'Production AFRICA''SPY (visuels originaux)'),
-(6,'document','Support de cours — Renseignement humain : principes et éthique','AFRICASPY-AFS-B101-support.pdf','seed-afs-b101.pdf','application/pdf',67879,NULL),
+(6,'document','Support de cours — Renseignement humain : principes et éthique','AFRICASPY-AFS-B101-support.pdf','seed-afs-b101.pdf','application/pdf',67754,NULL),
 (7,'video','Briefing vidéo — Protection des sources, analyse comportementale et rédaction','seed-afs-b201.mp4','seed-afs-b201.mp4','video/mp4',321900,'Production AFRICA''SPY (visuels originaux)'),
-(8,'document','Support de cours — Protection des sources, analyse comportementale et rédaction','AFRICASPY-AFS-B201-support.pdf','seed-afs-b201.pdf','application/pdf',59551,NULL),
+(8,'document','Support de cours — Protection des sources, analyse comportementale et rédaction','AFRICASPY-AFS-B201-support.pdf','seed-afs-b201.pdf','application/pdf',59426,NULL),
 (9,'video','Briefing vidéo — Contre-espionnage : menaces et protection de l''information','seed-afs-c101.mp4','seed-afs-c101.mp4','video/mp4',385120,'Production AFRICA''SPY (visuels originaux)'),
-(10,'document','Support de cours — Contre-espionnage : menaces et protection de l''information','AFRICASPY-AFS-C101-support.pdf','seed-afs-c101.pdf','application/pdf',65162,NULL),
+(10,'document','Support de cours — Contre-espionnage : menaces et protection de l''information','AFRICASPY-AFS-C101-support.pdf','seed-afs-c101.pdf','application/pdf',65037,NULL),
 (11,'video','Briefing vidéo — Sécurité organisationnelle et contre-mesures défensives','seed-afs-c201.mp4','seed-afs-c201.mp4','video/mp4',360364,'Production AFRICA''SPY (visuels originaux)'),
-(12,'document','Support de cours — Sécurité organisationnelle et contre-mesures défensives','AFRICASPY-AFS-C201-support.pdf','seed-afs-c201.pdf','application/pdf',60046,NULL),
+(12,'document','Support de cours — Sécurité organisationnelle et contre-mesures défensives','AFRICASPY-AFS-C201-support.pdf','seed-afs-c201.pdf','application/pdf',59920,NULL),
 (13,'video','Briefing vidéo — Renseignement numérique et OSINT avancé','seed-afs-d101.mp4','seed-afs-d101.mp4','video/mp4',362991,'Production AFRICA''SPY (visuels originaux)'),
-(14,'document','Support de cours — Renseignement numérique et OSINT avancé','AFRICASPY-AFS-D101-support.pdf','seed-afs-d101.pdf','application/pdf',64119,NULL),
+(14,'document','Support de cours — Renseignement numérique et OSINT avancé','AFRICASPY-AFS-D101-support.pdf','seed-afs-d101.pdf','application/pdf',63992,NULL),
 (15,'video','Briefing vidéo — Cyber Threat Intelligence et défense des communications','seed-afs-d201.mp4','seed-afs-d201.mp4','video/mp4',368737,'Production AFRICA''SPY (visuels originaux)'),
-(16,'document','Support de cours — Cyber Threat Intelligence et défense des communications','AFRICASPY-AFS-D201-support.pdf','seed-afs-d201.pdf','application/pdf',62839,NULL),
+(16,'document','Support de cours — Cyber Threat Intelligence et défense des communications','AFRICASPY-AFS-D201-support.pdf','seed-afs-d201.pdf','application/pdf',62715,NULL),
 (17,'video','Briefing vidéo — Outils du renseignement : usages légitimes','seed-afs-e101.mp4','seed-afs-e101.mp4','video/mp4',385296,'Production AFRICA''SPY (visuels originaux)'),
-(18,'document','Support de cours — Outils du renseignement : usages légitimes','AFRICASPY-AFS-E101-support.pdf','seed-afs-e101.pdf','application/pdf',61169,NULL),
+(18,'document','Support de cours — Outils du renseignement : usages légitimes','AFRICASPY-AFS-E101-support.pdf','seed-afs-e101.pdf','application/pdf',61044,NULL),
 (19,'video','Briefing vidéo — Intelligence économique et veille stratégique','seed-afs-f101.mp4','seed-afs-f101.mp4','video/mp4',367835,'Production AFRICA''SPY (visuels originaux)'),
-(20,'document','Support de cours — Intelligence économique et veille stratégique','AFRICASPY-AFS-F101-support.pdf','seed-afs-f101.pdf','application/pdf',57219,NULL),
+(20,'document','Support de cours — Intelligence économique et veille stratégique','AFRICASPY-AFS-F101-support.pdf','seed-afs-f101.pdf','application/pdf',57097,NULL),
 (21,'video','Briefing vidéo — Géopolitique africaine, conflits et risques pays','seed-afs-f201.mp4','seed-afs-f201.mp4','video/mp4',304098,'Production AFRICA''SPY (visuels originaux)'),
-(22,'document','Support de cours — Géopolitique africaine, conflits et risques pays','AFRICASPY-AFS-F201-support.pdf','seed-afs-f201.pdf','application/pdf',56826,NULL);
+(22,'document','Support de cours — Géopolitique africaine, conflits et risques pays','AFRICASPY-AFS-F201-support.pdf','seed-afs-f201.pdf','application/pdf',56702,NULL);
 
 INSERT INTO `courses` (`id`,`category_id`,`code`,`slug`,`title`,`subtitle`,`summary`,`description`,`objectives`,`skills`,`prerequisites`,`level`,`duration_hours`,`is_featured`,`status`,`sort_order`) VALUES
 (1,1,'AFS-A101','fondements-du-renseignement','Fondements du renseignement','Cycle, histoire et méthodes d''analyse : le socle commun de tous les métiers de l''intelligence.','Comprendre ce qu''est le renseignement, d''où il vient, comment il se produit et comment l''information brute devient un produit d''aide à la décision fiable, sourcé et éthique.','<p>Cette formation pose les bases indispensables à tout parcours AFRICA''SPY. Elle distingue <strong>l''information</strong> (donnée brute), <strong>le renseignement</strong> (information évaluée, recoupée et mise en perspective pour un décideur) et <strong>la connaissance</strong> (savoir durable accumulé par une organisation).</p><p>Vous étudierez le cycle du renseignement, les grandes étapes de l''histoire des services — en accordant une place réelle aux expériences africaines —, la typologie des disciplines de collecte et les méthodes structurées d''analyse qui permettent de lutter contre les biais cognitifs.</p><p>Tout au long du parcours, le cadre légal et éthique est traité comme une compétence professionnelle à part entière, et non comme une contrainte annexe.</p>','Définir le renseignement et le distinguer de l''information et de la connaissance\nDécrire chaque phase du cycle du renseignement et ses points de défaillance\nSituer les grandes évolutions historiques des services, dont les trajectoires africaines\nIdentifier les principales disciplines de collecte et leurs limites\nAppliquer deux méthodes d''analyse structurée à un problème simple','Formuler un besoin en renseignement précis\nÉvaluer une information selon sa source et sa crédibilité\nRédiger une synthèse analytique courte et sourcée\nReconnaître les biais cognitifs courants\nRaisonner en hypothèses concurrentes','Aucun prérequis technique\nBonne maîtrise du français écrit\nCuriosité pour l''actualité internationale et africaine','fondamental',14,1,'published',1),

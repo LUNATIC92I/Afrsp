@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /learner/
+Disallow: /install/
+Disallow: /ajax/
+Disallow: /download.php
+Allow: /

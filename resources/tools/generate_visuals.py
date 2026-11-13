@@ -185,7 +185,6 @@ def hero():
             dp.rectangle((bx + 12, by + 16 + k * 18, bx + 12 + ln, by + 22 + k * 18), fill=(0, 70 + k * 6, 100))
     text_rows(dp, 368, 488, ['SECTOR 07 // SAHEL', 'LAT 13.5127  LON 2.1128', 'FEED: OPEN SOURCE', 'STATUS: ANALYSIS'], (0, 170, 210), 15)
     text_rows(dp, 1306, 168 + 140, [], (0, 0, 0))
-    dp.rectangle((1310, 580, 1560, 590), fill=(213, 179, 106))
     c.add(P, gain=0.8)
     # Sol en perspective
     F = c.layer(); df = ImageDraw.Draw(F)
