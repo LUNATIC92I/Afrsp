@@ -683,39 +683,7 @@ function course_cover_url(array $course): string
     return url('assets/images/covers/' . e($course['category_code'] ?? 'A') . '.svg');
 }
 
-/* =====================================================================
- *  Courriel
- * ===================================================================*/
-
-function send_mail(string $to, string $subject, string $text): bool
-{
-    $cfg = config('mail');
-    if (($cfg['transport'] ?? 'log') === 'log' || !class_exists(\PHPMailer\PHPMailer\PHPMailer::class)) {
-        $line = sprintf("[%s] TO:%s | %s\n%s\n-----\n", gmdate('c'), $to, $subject, $text);
-        return (bool) file_put_contents(APP_ROOT . '/storage/logs/mail.log', $line, FILE_APPEND | LOCK_EX);
-    }
-    try {
-        $m = new \PHPMailer\PHPMailer\PHPMailer(true);
-        $m->CharSet = 'UTF-8';
-        if ($cfg['transport'] === 'smtp') {
-            $m->isSMTP();
-            $m->Host = $cfg['smtp_host'];
-            $m->Port = (int) $cfg['smtp_port'];
-            $m->SMTPAuth = $cfg['smtp_user'] !== '';
-            $m->Username = $cfg['smtp_user'];
-            $m->Password = $cfg['smtp_pass'];
-            $m->SMTPSecure = $cfg['smtp_secure'] ?: '';
-        }
-        $m->setFrom($cfg['from'], $cfg['from_name']);
-        $m->addAddress($to);
-        $m->Subject = $subject;
-        $m->Body = $text;
-        return $m->send();
-    } catch (Throwable $e) {
-        error_log('[AFRICASPY mail] ' . $e->getMessage());
-        return false;
-    }
-}
+/* Le courriel est géré par includes/mailer.php (send_mail, gabarits, pièces jointes). */
 
 /* =====================================================================
  *  Pages d'erreur

@@ -149,11 +149,12 @@ function mark_payment_paid(int $paymentId, array $info = [], ?int $validatedBy =
     }
     recompute_progress((int) $p['user_id'], (int) $p['course_id']);
     audit('payment.paid', 'payment', (int) $p['id'], $p['reference'] . ' · ' . $p['amount_xof'] . ' XOF' . ($validatedBy ? ' · validé manuellement' : ''));
-    $u = q_one('SELECT email, first_name FROM users WHERE id = ?', [$p['user_id']]);
-    $c = q_one('SELECT title FROM courses WHERE id = ?', [$p['course_id']]);
-    if ($u) {
-        send_mail($u['email'], "AFRICA'SPY — Paiement confirmé ({$p['reference']})",
-            "Bonjour {$u['first_name']},\n\nVotre paiement de " . number_format((int) $p['amount_xof'], 0, ',', ' ') . " FCFA pour la formation « {$c['title']} » est confirmé.\nRéférence : {$p['reference']}\n\nVotre accès est ouvert : " . absolute_url('learner/courses.php') . "\n\nAFRICA'SPY — Intelligence Academy");
+    // Facture PDF numérotée + e-mail de confirmation (n'interrompt jamais la validation du paiement)
+    try {
+        require_once APP_ROOT . '/includes/invoices.php';
+        mail_payment_confirmed((int) $p['id']);
+    } catch (Throwable $e) {
+        error_log('[AFRICASPY invoice] ' . $e->getMessage());
     }
     return true;
 }

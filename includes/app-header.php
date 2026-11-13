@@ -29,6 +29,7 @@ $ico = static function (string $n): string {
         'check' => '<path d="M5 12l5 5 9-10"/>',
         'shield' => '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
         'pen' => '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+        'invoice' => '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
         'wallet' => '<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/><path d="M6 6l9-3 1 3"/>',
     ][$n] ?? '';
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $p . '</svg>';
@@ -52,6 +53,7 @@ if ($appArea === 'admin') {
             ['users', 'admin/users.php', 'Utilisateurs', 'users', 'users.manage'],
             ['submissions', 'admin/submissions.php', 'Travaux à corriger', 'pen', 'submissions.review'],
             ['payments', 'admin/payments.php', 'Paiements', 'wallet', 'payments.manage'],
+            ['invoices', 'admin/invoices.php', 'Factures', 'invoice', 'payments.manage'],
             ['results', 'admin/results.php', 'Résultats', 'check', 'results.view'],
             ['certificates', 'admin/certificates.php', 'Certificats', 'cert', 'certificates.manage'],
         ]],

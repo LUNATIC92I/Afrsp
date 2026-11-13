@@ -5,7 +5,7 @@ Audit réalisé le 13 novembre 2026 sur l'ensemble du code applicatif (PHP, Java
 **Méthode**
 - Relecture systématique des sorties HTML, des requêtes SQL, des redirections, des téléversements et des contrôles d'accès.
 - Audit des dépendances avec `composer audit`.
-- Tests d'attaque automatisés : 101 contrôles répartis en 4 suites Playwright (voir plus bas).
+- Tests d'attaque automatisés : 137 contrôles répartis en 5 suites Playwright (voir plus bas).
 
 Pour signaler une vulnérabilité, consultez `/.well-known/security.txt` (RFC 9116) ou la section « Signalement de vulnérabilités » des mentions légales.
 
@@ -84,11 +84,11 @@ Pour signaler une vulnérabilité, consultez `/.well-known/security.txt` (RFC 91
 
 1. **HTTPS obligatoire.** Décommentez la redirection dans `.htaccess` et renseignez `base_url` en `https://`.
 2. **Activez la 2FA** sur votre compte, puis cochez « 2FA obligatoire pour le personnel » (*Administration › Paramètres*).
-3. **SMTP.** Configurez un vrai transport : le mode `log` écrit les liens de réinitialisation dans `storage/logs/mail.log`, ce qui ne convient qu'au développement.
+3. **SMTP.** Configurez un vrai transport (*Paramètres › Messagerie*) : le mode `log` écrit les e-mails, dont les liens de réinitialisation, dans `storage/mail/` et `storage/logs/mail.log`, ce qui ne convient qu'au développement. Le mot de passe SMTP est chiffré en base (libsodium) et jamais réaffiché.
 4. **Proxy ou CDN** (Cloudflare, répartiteur de charge) : déclarez leurs adresses dans `trusted_proxies`.
 5. **Utilisateur MySQL dédié**, avec uniquement les droits `SELECT, INSERT, UPDATE, DELETE` sur la base `africaspy` une fois l'installation terminée.
 6. **PHP en production** : `expose_php = Off`, `display_errors = Off`, `session.cookie_secure = 1`, `upload_max_filesize` adapté.
-7. **Sauvegardes chiffrées** régulières de la base, de `uploads/` et de `certificates/generated/`, avec un test de restauration.
+7. **Sauvegardes chiffrées** régulières de la base, de `uploads/`, de `certificates/generated/` et de `storage/invoices/`, avec un test de restauration.
 8. **Mises à jour** : `composer audit` et `composer update` chaque mois ; PHP et MariaDB/MySQL à jour.
 9. **Surveillance** : consultez régulièrement le journal d'audit (événements `auth.locked`, `security.rate_limited`, `access.denied`).
 10. Ne changez jamais `app_key` après la mise en service : cela invaliderait les signatures des certificats et les secrets 2FA.
@@ -106,6 +106,7 @@ php -S 127.0.0.1:8080 resources/dev-router.php      # reproduit les règles .hta
 node tests/security.e2e.js      # 44 contrôles : CSRF, force brute, accès, IDOR, injections, XSS, en-têtes, paiement
 node tests/hardening.e2e.js     # 26 contrôles : verrouillage ciblé, débit, Host, Argon2id, 2FA, réencodage, security.txt
 node tests/submissions.e2e.js   # 19 contrôles : travaux et notes (accès, CSRF, échappement)
+node tests/mail_invoice.e2e.js  # 36 contrôles : e-mails, factures, avoirs (IDOR, CSRF, injection CSV, secret SMTP)
 node tests/learner.e2e.js       # parcours complet
 ```
 Ces tests utilisent une base de **développement** : ils remettent à zéro les compteurs anti-abus liés à 127.0.0.1. Ne les lancez jamais contre la production.

@@ -5,7 +5,7 @@ require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/payments.php';
 
 $u = require_login();
-$rows = q_all('SELECT p.*, c.title, c.code, c.slug FROM payments p JOIN courses c ON c.id = p.course_id WHERE p.user_id = ? ORDER BY p.created_at DESC', [$u['id']]);
+$rows = q_all('SELECT p.*, c.title, c.code, c.slug, (SELECT invoice_no FROM invoices i WHERE i.payment_id = p.id AND i.doc_type = \'invoice\') AS invoice_no, (SELECT invoice_no FROM invoices i WHERE i.payment_id = p.id AND i.doc_type = \'credit_note\') AS credit_no FROM payments p JOIN courses c ON c.id = p.course_id WHERE p.user_id = ? ORDER BY p.created_at DESC', [$u['id']]);
 $total = array_sum(array_map(static fn ($r) => $r['status'] === 'paid' ? (int) $r['amount_xof'] : 0, $rows));
 $pageTitle = 'Mes paiements';
 $appArea = 'learner';
@@ -31,7 +31,9 @@ require APP_ROOT . '/includes/app-header.php'; ?>
         <td class="num"><?= e(fmt_xof((int) $r['amount_xof'])) ?></td>
         <td><?= payment_status_pill($r['status']) ?></td>
         <td><div class="actions">
-          <?php if ($r['status'] === 'paid'): ?><a class="btn btn--sm btn--gold" href="<?= e(url('learner/receipt.php', ['ref' => $r['reference']])) ?>" data-no-transition>Reçu PDF</a>
+          <?php if ($r['invoice_no']): ?><a class="btn btn--sm btn--gold" href="<?= e(url('learner/invoice.php', ['no' => $r['invoice_no']])) ?>" data-no-transition>Facture PDF</a><?php endif; ?>
+          <?php if ($r['credit_no']): ?><a class="btn btn--sm" href="<?= e(url('learner/invoice.php', ['no' => $r['credit_no']])) ?>" data-no-transition>Avoir PDF</a><?php endif; ?>
+          <?php if ($r['status'] === 'paid'): ?><a class="btn btn--sm" href="<?= e(url('learner/receipt.php', ['ref' => $r['reference']])) ?>" data-no-transition>Reçu</a>
           <?php elseif ($r['status'] === 'pending'): ?><a class="btn btn--sm" href="<?= e(url($r['provider'] === 'sandbox' ? 'payment-sandbox.php' : 'payment-return.php', ['ref' => $r['reference']])) ?>"><?= $r['provider'] === 'manual' ? 'Instructions' : 'Finaliser' ?></a>
           <?php else: ?><a class="btn btn--sm" href="<?= e(url('checkout.php', ['course' => $r['slug']])) ?>">Réessayer</a><?php endif; ?>
         </div></td>

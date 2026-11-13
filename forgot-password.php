@@ -20,8 +20,7 @@ if (is_post()) {
             q('INSERT INTO password_resets (user_id, token_hash, expires_at, created_at) VALUES (?, ?, UTC_TIMESTAMP() + INTERVAL ? MINUTE, UTC_TIMESTAMP())',
                 [$user['id'], hash('sha256', $token), (int) config('security.reset_ttl_min', 60)]);
             $link = absolute_url('reset-password.php', ['token' => $token]);
-            send_mail($email, "AFRICA'SPY — Réinitialisation de votre mot de passe",
-                "Bonjour {$user['first_name']},\n\nUne demande de réinitialisation de mot de passe a été effectuée pour votre compte.\nCe lien est valable " . (int) config('security.reset_ttl_min', 60) . " minutes et ne peut servir qu'une fois :\n\n$link\n\nSi vous n'êtes pas à l'origine de cette demande, ignorez ce message : votre mot de passe reste inchangé.\n\nAFRICA'SPY — Intelligence Academy");
+            mail_password_reset(['first_name' => $user['first_name'], 'email' => $email], $link, (int) config('security.reset_ttl_min', 60));
             audit('auth.reset_request', 'user', (int) $user['id']);
         }
         $sent = true;

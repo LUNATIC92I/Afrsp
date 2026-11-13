@@ -4,6 +4,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
 require APP_ROOT . '/includes/payments.php';
+require APP_ROOT . '/includes/invoices.php';
 $me = require_permission('payments.manage');
 
 if (is_post()) {
@@ -34,6 +35,7 @@ if (is_post()) {
                     q('DELETE FROM course_enrollments WHERE user_id = ? AND course_id = ?', [$p['user_id'], $p['course_id']]);
                 }
                 audit('payment.refunded', 'payment', (int) $p['id'], $p['reference'] . ' · ' . ($note ?? ''));
+                try { issue_credit_note((int) $p['id'], $note ?? 'Remboursement'); mail_credit_note((int) $p['id']); } catch (Throwable $e) { error_log('[AFRICASPY credit note] ' . $e->getMessage()); }
                 flash('success', 'Paiement marqué remboursé' . ($cert ? ' (certificat déjà délivré : accès conservé, révoquez le certificat si nécessaire).' : ' : l\'accès à la formation a été retiré.'));
                 break;
         }
@@ -47,7 +49,7 @@ $par = [];
 if ($status !== '') { $where .= ' AND p.status = ?'; $par[] = $status; }
 if ($q !== '') { $where .= ' AND (p.reference LIKE ? OR u.email LIKE ? OR u.last_name LIKE ?)'; array_push($par, "%$q%", "%$q%", "%$q%"); }
 $pg = paginate((int) q_val("SELECT COUNT(*) FROM payments p JOIN users u ON u.id = p.user_id WHERE $where", $par), 30);
-$rows = q_all("SELECT p.*, u.first_name, u.last_name, u.email, c.code FROM payments p JOIN users u ON u.id = p.user_id JOIN courses c ON c.id = p.course_id WHERE $where ORDER BY p.created_at DESC LIMIT {$pg['per']} OFFSET {$pg['offset']}", $par);
+$rows = q_all("SELECT p.*, u.first_name, u.last_name, u.email, c.code, (SELECT invoice_no FROM invoices i WHERE i.payment_id = p.id AND i.doc_type = 'invoice') AS invoice_no FROM payments p JOIN users u ON u.id = p.user_id JOIN courses c ON c.id = p.course_id WHERE $where ORDER BY p.created_at DESC LIMIT {$pg['per']} OFFSET {$pg['offset']}", $par);
 $k = q_one("SELECT COALESCE(SUM(CASE WHEN status='paid' THEN amount_xof END),0) revenue, SUM(status='paid') paid, SUM(status='pending') pending,
                    COALESCE(SUM(CASE WHEN status='paid' AND paid_at >= UTC_TIMESTAMP() - INTERVAL 30 DAY THEN amount_xof END),0) rev30,
                    COALESCE(SUM(CASE WHEN status='paid' THEN list_price_xof - amount_xof END),0) discount FROM payments");
@@ -87,7 +89,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
         <?php if ($r['status'] === 'pending' && $r['provider'] !== 'cinetpay'): ?><?= action_btn('validate', ['id' => $r['id'], 'f_status' => $status], 'Valider la réception', 'btn--sm btn--primary', 'Confirmer avoir reçu ' . fmt_xof((int) $r['amount_xof']) . ' avec la référence ' . $r['reference'] . ' ? L\'accès sera ouvert immédiatement.') ?><?php endif; ?>
         <?php if ($r['status'] === 'pending' && $r['provider'] === 'cinetpay'): ?><?= action_btn('recheck', ['id' => $r['id'], 'f_status' => $status], 'Revérifier') ?><?php endif; ?>
         <?php if ($r['status'] === 'pending'): ?><?= action_btn('cancel', ['id' => $r['id'], 'f_status' => $status], 'Annuler', 'btn--sm', 'Annuler cette commande ?') ?><?php endif; ?>
-        <?php if ($r['status'] === 'paid'): ?><a class="btn btn--sm btn--gold" href="<?= e(url('learner/receipt.php', ['ref' => $r['reference']])) ?>" data-no-transition>Reçu</a><?= action_btn('refund', ['id' => $r['id'], 'f_status' => $status], 'Rembourser', 'btn--sm btn--danger', 'Marquer ce paiement comme remboursé ? L\'accès sera retiré si aucun certificat n\'a été délivré. (Le remboursement lui-même s\'effectue auprès de l\'opérateur.)') ?><?php endif; ?>
+        <?php if (in_array($r['status'], ['paid', 'refunded'], true) && $r['invoice_no']): ?><a class="btn btn--sm" href="<?= e(url('learner/invoice.php', ['no' => $r['invoice_no']])) ?>" data-no-transition>Facture</a><?php endif; ?><?php if ($r['status'] === 'paid'): ?><a class="btn btn--sm btn--gold" href="<?= e(url('learner/receipt.php', ['ref' => $r['reference']])) ?>" data-no-transition>Reçu</a><?= action_btn('refund', ['id' => $r['id'], 'f_status' => $status], 'Rembourser', 'btn--sm btn--danger', 'Marquer ce paiement comme remboursé ? L\'accès sera retiré si aucun certificat n\'a été délivré. (Le remboursement lui-même s\'effectue auprès de l\'opérateur.)') ?><?php endif; ?>
       </div></td>
     </tr>
   <?php endforeach; ?>

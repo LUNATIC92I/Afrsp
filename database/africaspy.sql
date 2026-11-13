@@ -1,6 +1,6 @@
 -- =====================================================================
 --  AFRICA'SPY — base de données complète (schéma + données initiales)
---  Généré le 2026-11-13 06:47 UTC par database/build-sql.php
+--  Généré le 2026-11-13 07:00 UTC par database/build-sql.php
 --  Le compte administrateur n'est PAS inclus : il est créé de manière
 --  sécurisée par l'installateur (install/ ou php install/cli.php).
 -- =====================================================================
@@ -14,7 +14,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS rate_limits, lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
+DROP TABLE IF EXISTS invoices, invoice_sequences, rate_limits, lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
   audit_logs, media, announcement_reads, announcements, certificates,
   attempt_answers, exam_attempts, answers, questions, exams, lesson_progress,
   course_enrollments, lessons, chapters, courses, categories,
@@ -478,6 +478,46 @@ CREATE TABLE rate_limits (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- ---------------------------------------------------------------------
+--  Facturation : factures et avoirs (numérotation continue par année)
+-- ---------------------------------------------------------------------
+CREATE TABLE invoice_sequences (
+  doc_type  ENUM('invoice','credit_note') NOT NULL,
+  year      SMALLINT UNSIGNED NOT NULL,
+  last_no   INT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (doc_type, year)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE invoices (
+  id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  doc_type        ENUM('invoice','credit_note') NOT NULL DEFAULT 'invoice',
+  invoice_no      VARCHAR(30)  NOT NULL,
+  payment_id      INT UNSIGNED NOT NULL,
+  related_id      INT UNSIGNED NULL,
+  user_id         INT UNSIGNED NULL,
+  issued_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  seller          TEXT NOT NULL,
+  buyer           TEXT NOT NULL,
+  label           VARCHAR(255) NOT NULL,
+  list_price_xof  INT NOT NULL,
+  discount_xof    INT NOT NULL DEFAULT 0,
+  amount_ht_xof   INT NOT NULL,
+  tax_rate        DECIMAL(5,2) NOT NULL DEFAULT 0,
+  tax_label       VARCHAR(60) NOT NULL,
+  tax_xof         INT NOT NULL DEFAULT 0,
+  amount_ttc_xof  INT NOT NULL,
+  file_name       VARCHAR(120) NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_invoice_no (invoice_no),
+  UNIQUE KEY uq_invoice_payment_type (payment_id, doc_type),
+  KEY idx_invoice_user (user_id),
+  KEY idx_invoice_date (issued_at),
+  CONSTRAINT fk_inv_payment FOREIGN KEY (payment_id) REFERENCES payments (id) ON DELETE RESTRICT,
+  CONSTRAINT fk_inv_related FOREIGN KEY (related_id) REFERENCES invoices (id) ON DELETE RESTRICT,
+  CONSTRAINT fk_inv_user    FOREIGN KEY (user_id)    REFERENCES users (id)    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 
 -- ------------------------------ Données initiales
 
@@ -541,7 +581,26 @@ INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 ('promo_label','Offre de lancement'),
 ('promo_ends_at',''),
 ('mfa_required_staff','0'),
-('security_contact','');
+('security_contact',''),
+('seller_legal_name','AFRICA''SPY — Intelligence Academy'),
+('seller_address',''),
+('seller_tax_id',''),
+('seller_registration',''),
+('seller_email',''),
+('tax_rate','0'),
+('tax_label','TVA'),
+('tax_exempt_mention','TVA non applicable — à adapter selon votre régime fiscal'),
+('invoice_footer','Facture acquittée. Formation en ligne à usage personnel, non cessible.'),
+('mail_transport',''),
+('mail_from',''),
+('mail_from_name','AFRICA''SPY Academy'),
+('mail_reply_to',''),
+('smtp_host',''),
+('smtp_port','587'),
+('smtp_secure','tls'),
+('smtp_user',''),
+('smtp_pass_enc',''),
+('welcome_mail_enabled','1');
 
 INSERT INTO `categories` (`id`,`code`,`slug`,`name`,`description`,`accent`,`sort_order`) VALUES
 (1,'A','fondements-du-renseignement','Fondements du renseignement','Le socle commun : cycle du renseignement, histoire des services, disciplines de collecte et méthodes d''analyse.','#00C8FF',1),

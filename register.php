@@ -37,6 +37,8 @@ if (is_post() && $open) {
             $uid = (int) db()->lastInsertId();
             login_user($uid);
             audit('auth.register', 'user', $uid);
+            // E-mail de bienvenue automatique (un échec d'envoi ne bloque jamais l'inscription)
+            mail_welcome(['first_name' => $data['first_name'], 'email' => $data['email']]);
             flash('success', 'Compte créé. Bienvenue à l\'Académie AFRICA\'SPY.');
             $slug = input('formation');
             if ($slug !== '' && ($cid = q_val("SELECT id FROM courses WHERE slug = ? AND status = 'published'", [$slug]))) {

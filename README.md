@@ -17,6 +17,7 @@ Plateforme web complète de formation aux métiers du renseignement, du contre-e
 | **Travaux & notes** | Dépôt des réponses aux simulations, exercices et études de cas (versions successives), correction par un formateur (note /20, commentaire ou demande de reprise, notification e-mail), page « Mes travaux » avec moyenne ; notes personnelles par leçon avec sauvegarde automatique |
 | **Administration** | Tableau de bord (statistiques d'inscription et de réussite), utilisateurs & rôles, formations, catégories, chapitres, leçons & médias, examens & QCM, résultats (réouverture de tentatives), certificats (révocation, régénération), médiathèque, annonces, messages, paramètres institutionnels, journal d'audit |
 | **Paiement** | Accès payant par formation (prix de référence **900 000 FCFA**, prix promotionnel **170 000 FCFA**, modifiables par formation), caisse en 3 étapes, Mobile Money / carte via **CinetPay** (statut toujours revérifié auprès de l'API), virement / dépôt validé par l'administration, reçus PDF, historique « Mes paiements », console *Paiements* (chiffre d'affaires, validation, annulation, remboursement avec retrait d'accès), compte à rebours optionnel de fin d'offre |
+| **E-mails & factures** | E-mail de bienvenue HTML automatique après inscription (désactivable), e-mail de confirmation de paiement avec **facture PDF jointe** (numérotation continue `FAC-AAAA-000001`, mentions vendeur NIF/RCCM, HT/taxe/TTC ou mention d'exonération, cachet « acquittée »), **avoir PDF** (`AV-AAAA-000001`) en cas de remboursement, factures téléchargeables dans « Mes paiements », registre *Factures* avec export CSV comptable, configuration SMTP et e-mail de test depuis *Paramètres* (mot de passe SMTP chiffré) |
 | **Rôles** | `admin` (tout), `instructor` / Responsable pédagogique (contenus, examens, médias, annonces, statistiques), `learner` — permissions fines en base (`roles`, `permissions`, `role_permissions`) |
 
 ## 2. Technologies
@@ -113,7 +114,9 @@ php install/cli.php --db-host=127.0.0.1 --db-name=africaspy --db-user=USER --db-
 - **Travaux et notes (installation existante)** : `mysql africaspy < database/migrations/2026_11_13_submissions_notes.sql` (tables `submissions`, `lesson_notes`, permission `submissions.review` accordée aux administrateurs et responsables pédagogiques).
 - **Sécurité (installation existante)** : `mysql africaspy < database/migrations/2026_11_14_security.sql` (limitation de débit, colonnes 2FA). Derrière un proxy/CDN, ajoutez `'trusted_proxies' => ['IP du proxy']` dans `config/config.local.php`.
 - **Mise à jour d'une installation existante** : `mysql africaspy < database/migrations/2026_11_13_payments.sql` (ajoute les prix, la table `payments` et la permission `payments.manage` ; les inscriptions existantes conservent leur accès).
-- **E-mails** : par défaut (`transport = log`), les e-mails (liens de réinitialisation) sont écrits dans `storage/logs/mail.log`. Configurez `smtp` ou `mail` en production.
+- **E-mails** : configurez la messagerie dans *Administration › Paramètres › Messagerie* (SMTP recommandé : serveur, port 587 STARTTLS ou 465 SSL, identifiant, mot de passe chiffré en base, adresse d'expédition), puis cliquez sur **Envoyer un e-mail de test**. Ces réglages remplacent la clé `mail` de `config.local.php`. En mode `log` (défaut de développement), aucun e-mail ne part : chaque message complet (HTML, pièces jointes) est enregistré en `.eml` dans `storage/mail/` et résumé dans `storage/logs/mail.log`. Pour la délivrabilité, publiez SPF, DKIM et DMARC pour le domaine d'expédition.
+- **Facturation** : renseignez raison sociale, adresse, NIF/IFU/NCC, RCCM et taux de taxe dans *Paramètres › Facturation* **avant** les premières ventes (les prix sont TTC ; la taxe est extraite du prix ; à 0 %, la mention d'exonération est imprimée). Les factures émises sont figées (copie des informations au moment de l'émission) et stockées dans `storage/invoices/` (à sauvegarder, hors web).
+- **Factures et e-mails (installation existante)** : `mysql africaspy < database/migrations/2026_11_15_invoices_mail.sql` puis `php database/invoices-backfill.php` (émet, dans l'ordre chronologique, les factures et avoirs des paiements déjà encaissés ou remboursés ; sans envoi d'e-mail).
 - Les variables d'environnement `AFRICASPY_DB_HOST`, `AFRICASPY_DB_NAME`, `AFRICASPY_DB_USER`, `AFRICASPY_DB_PASS`, `AFRICASPY_APP_KEY`, `AFRICASPY_BASE_URL` peuvent remplacer le fichier.
 - Paramètres institutionnels (coordonnées, signataire des certificats, ouverture des inscriptions) : *Administration › Paramètres*.
 
@@ -150,7 +153,8 @@ server {
 ### Checklist de mise en production
 - [ ] HTTPS actif (le cookie de session reçoit alors l'attribut `Secure` et HSTS est envoyé)
 - [ ] `env` = `production`, `base_url` renseignée (utilisée dans les QR Codes)
-- [ ] Transport e-mail SMTP configuré
+- [ ] Transport e-mail SMTP configuré et e-mail de test reçu (SPF/DKIM/DMARC publiés)
+- [ ] Informations de facturation (raison sociale, NIF, RCCM, taux de taxe) renseignées
 - [ ] `upload_max_filesize` / `post_max_size` ≥ 200M si vous hébergez des vidéos
 - [ ] Sauvegardes régulières de la base **et** de `uploads/` et `certificates/generated/`
 - [ ] Coordonnées et signataire mis à jour dans *Administration › Paramètres*
@@ -186,6 +190,7 @@ node tests/learner.e2e.js     # inscription → formation → leçons → QCM �
 ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/security.e2e.js
 ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/hardening.e2e.js     # 26 contrôles : verrouillage, débit, Host, Argon2id, 2FA, images
 ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/submissions.e2e.js   # 19 contrôles : notes, dépôt, reprise, correction, sécurité
+ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/mail_invoice.e2e.js  # 36 contrôles : bienvenue, facture PDF jointe, numérotation, TVA, avoir, CSV, SMTP réel (serveur de test local), accès
 # 44 contrôles (dont 9 sur le paiement) : CSRF, force brute, contrôle d'accès, IDOR, injection SQL, XSS, en-têtes,
 # cookie de session, téléversement frauduleux, parcours admin complet, révocation et
 # falsification de certificat, journal d'audit
@@ -193,7 +198,7 @@ ADMIN_EMAIL=… ADMIN_PASSWORD=… node tests/submissions.e2e.js   # 19 contrôl
 Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ; ils sont destinés à un environnement de développement, pas à la production.
 
 ### Captures d'écran
-26 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
+39 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
 
 ## 9. Contenus, visuels et régénération
 

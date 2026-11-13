@@ -153,6 +153,11 @@ $settings = [
     'promo_ends_at' => '',
     'mfa_required_staff' => '0',
     'security_contact' => '',
+    'seller_legal_name' => "AFRICA'SPY — Intelligence Academy", 'seller_address' => '', 'seller_tax_id' => '', 'seller_registration' => '', 'seller_email' => '',
+    'tax_rate' => '0', 'tax_label' => 'TVA', 'tax_exempt_mention' => 'TVA non applicable — à adapter selon votre régime fiscal',
+    'invoice_footer' => 'Facture acquittée. Formation en ligne à usage personnel, non cessible.',
+    'mail_transport' => '', 'mail_from' => '', 'mail_from_name' => "AFRICA'SPY Academy", 'mail_reply_to' => '',
+    'smtp_host' => '', 'smtp_port' => '587', 'smtp_secure' => 'tls', 'smtp_user' => '', 'smtp_pass_enc' => '', 'welcome_mail_enabled' => '1',
 ];
 $settingRows = array_map(static fn ($k, $v) => ['setting_key' => $k, 'setting_value' => $v], array_keys($settings), $settings);
 
