@@ -200,6 +200,9 @@ ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/mail_invoice.e2e.js  # 36 contrôl
 ```
 Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ; ils sont destinés à un environnement de développement, pas à la production.
 
+### Spot publicitaire
+`docs/promo/africaspy-spot-16x9.mp4` : vidéo de 53 secondes en 1920 x 1080 (H.264 et AAC), image de couverture `docs/promo/africaspy-spot-couverture.jpg`. Musique et animations originales, images issues de la plateforme. Pour modifier un texte (par exemple ajouter votre nom de domaine sur le carton final) : éditez `resources/promo/spot.html`, puis lancez `resources/promo/build.sh` (environ 3 minutes).
+
 ### Captures d'écran
 43 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
 

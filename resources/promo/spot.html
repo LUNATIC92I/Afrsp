@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Spot AFRICA'SPY</title>
+<style>
+@font-face{font-family:Orbitron;font-weight:500 900;src:url(img/orbitron-500.woff2)}
+@font-face{font-family:Rajdhani;font-weight:500;src:url(img/rajdhani-500.woff2)}
+@font-face{font-family:Rajdhani;font-weight:600;src:url(img/rajdhani-600.woff2)}
+@font-face{font-family:Rajdhani;font-weight:700;src:url(img/rajdhani-700.woff2)}
+@font-face{font-family:Inter;src:url(img/inter-400.woff2)}
+@font-face{font-family:Mono;src:url(img/share-tech-mono-400.woff2)}
+:root{--bg:#05070B;--cyan:#00C8FF;--blue:#087CFF;--turq:#00F0D0;--green:#1AFF9C;--silver:#AEBBC9;--gold:#D5B36A;--white:#E8F2FA;--violet:#865DFF;--red:#FF4057;--line:#293444}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--white);font-family:Inter,sans-serif}
+#stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(1200px 700px at 50% 40%,#0B1624 0%,#05070B 70%)}
+.grid{position:absolute;inset:-200px;background-image:linear-gradient(rgba(0,200,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,.06) 1px,transparent 1px);background-size:60px 60px}
+#particles{position:absolute;inset:0}
+.scene{position:absolute;inset:0;opacity:0}
+.c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center}
+.eyebrow{font:400 22px Mono;letter-spacing:.45em;color:var(--turq);text-transform:uppercase}
+.h1{font:900 92px Orbitron;letter-spacing:.08em}
+.h2{font:700 64px Rajdhani;letter-spacing:.02em;line-height:1.05}
+.lead{font:500 34px Rajdhani;color:var(--silver);letter-spacing:.02em}
+.gold{color:var(--gold)}.cyan{color:var(--cyan)}.turq{color:var(--turq)}
+.hud{position:absolute;inset:36px;pointer-events:none}
+.hud i{position:absolute;width:46px;height:46px;border:2px solid rgba(0,200,255,.55)}
+.hud i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}.hud i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.hud i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}.hud i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.hud b{position:absolute;font:400 16px Mono;letter-spacing:.3em;color:rgba(174,187,201,.7);font-weight:400}
+#scan{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--cyan),var(--turq),transparent);box-shadow:0 0 30px 6px rgba(0,200,255,.45);opacity:0}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;mix-blend-mode:overlay}
+/* Maquettes */
+.browser{position:absolute;border-radius:14px;overflow:hidden;background:#0A0F16;border:1px solid rgba(0,200,255,.35);box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 60px rgba(0,200,255,.18)}
+.browser .bar{height:44px;display:flex;align-items:center;gap:10px;padding:0 18px;background:#0D141E;border-bottom:1px solid var(--line)}
+.browser .bar u{width:12px;height:12px;border-radius:50%;background:#293444}
+.browser .bar span{margin-left:18px;flex:1;height:26px;border-radius:13px;background:#121B27;font:400 14px Mono;color:var(--silver);letter-spacing:.12em;display:flex;align-items:center;padding-left:16px}
+.browser .view{position:absolute;top:44px;left:0;right:0;bottom:0;overflow:hidden}
+.browser .view img{position:absolute;left:0;top:0;width:100%;transform-origin:0 0}
+.phone{position:absolute;width:390px;height:800px;border-radius:52px;background:#0A0F16;border:3px solid #2B3A4C;box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 70px rgba(0,240,208,.2);overflow:hidden}
+.phone .view{position:absolute;inset:14px;border-radius:40px;overflow:hidden}
+.phone .view img{position:absolute;left:0;top:0;width:100%}
+.caption{position:absolute;left:130px;width:640px}
+.caption .h2{margin:22px 0 22px}
+.tag{display:inline-block;padding:10px 18px;border:1px solid rgba(0,240,208,.45);border-radius:6px;font:600 22px Rajdhani;letter-spacing:.14em;text-transform:uppercase;color:var(--turq);margin:0 10px 12px 0}
+.tile{position:absolute;width:520px;height:150px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,rgba(13,20,30,.95),rgba(8,12,18,.9));padding:26px 30px;display:flex;gap:26px;align-items:center}
+.tile .code{font:900 64px Orbitron;width:70px;text-align:center}
+.tile .name{font:700 30px Rajdhani;line-height:1.15}
+.tile .bar2{position:absolute;left:0;bottom:0;height:3px}
+.stat{display:inline-block;margin:0 46px;text-align:center}
+.stat b{display:block;font:900 64px Orbitron;color:var(--white)}
+.stat small{font:500 24px Rajdhani;letter-spacing:.2em;color:var(--silver);text-transform:uppercase}
+.feat{display:flex;align-items:center;gap:22px;margin:0 0 30px;font:600 38px Rajdhani}
+.feat i{width:64px;height:64px;border-radius:14px;border:1px solid rgba(0,200,255,.5);display:grid;place-items:center;flex:none;background:rgba(0,200,255,.07)}
+.feat svg{width:34px;height:34px}
+.btn{display:inline-block;padding:22px 52px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--cyan));font:700 28px Rajdhani;letter-spacing:.24em;color:#031019;text-transform:uppercase;box-shadow:0 0 50px rgba(0,200,255,.4)}
+.small{font:400 18px Inter;color:rgba(174,187,201,.85);letter-spacing:.02em}
+</style></head>
+<body><div id="stage">
+  <div class="grid" id="grid"></div>
+  <canvas id="particles" width="1920" height="1080"></canvas>
+
+  <!-- 1. Ouverture -->
+  <section class="scene" id="s1">
+    <div class="c" style="top:44%">
+      <div id="logoWrap" style="width:300px;height:300px;margin:0 auto;position:relative">
+        <div id="ring" style="position:absolute;inset:-40px;border-radius:50%;border:2px solid rgba(0,200,255,.25);border-top-color:var(--cyan);border-right-color:var(--turq)"></div>
+        <div id="ring2" style="position:absolute;inset:-70px;border-radius:50%;border:1px dashed rgba(213,179,106,.35)"></div>
+        <div id="logo" style="width:300px;height:300px"></div>
+      </div>
+      <div class="h1" id="brand" style="margin-top:70px;font-size:110px;letter-spacing:.14em">AFRICA'SPY</div>
+      <div class="eyebrow" id="tagline" style="margin-top:18px;color:var(--gold)">Intelligence Academy</div>
+    </div>
+  </section>
+
+  <!-- 2. Manifeste -->
+  <section class="scene" id="s2">
+    <div class="c" style="width:1700px">
+      <div class="h1" style="font-size:118px;height:150px;position:relative">
+        <span id="w1" style="position:absolute;left:0;right:0">COMPRENDRE.</span>
+        <span id="w2" class="cyan" style="position:absolute;left:0;right:0">ANTICIPER.</span>
+        <span id="w3" class="gold" style="position:absolute;left:0;right:0">PROTÉGER.</span>
+      </div>
+      <p class="lead" id="manif" style="margin-top:60px;font-size:42px">Former les analystes dont l'Afrique a besoin,<br>et non des espions de cinéma.</p>
+    </div>
+  </section>
+
+  <!-- 3. Plateforme -->
+  <section class="scene" id="s3">
+    <div class="caption" id="cap3" style="top:300px">
+      <div class="eyebrow">Académie en ligne</div>
+      <div class="h2">Le renseignement,<br>enseigné avec<br><span class="cyan">méthode</span> et <span class="gold">éthique</span>.</div>
+      <p class="lead">Une plateforme africaine de formation : analyse, contre-espionnage, intelligence stratégique.</p>
+    </div>
+    <div class="browser" id="br3" style="left:820px;top:170px;width:1000px;height:670px">
+      <div class="bar"><u></u><u></u><u></u><span>AFRICA'SPY / ACCUEIL</span></div>
+      <div class="view"><img id="im3" src="img/01-accueil-hero.jpg" alt=""></div>
+    </div>
+  </section>
+
+  <!-- 4. Domaines -->
+  <section class="scene" id="s4">
+    <div class="c" style="top:150px;transform:translateX(-50%)"><div class="eyebrow" id="e4">6 domaines d'expertise</div></div>
+    <div id="tiles"></div>
+    <div class="c" id="stats" style="top:870px;transform:translateX(-50%);white-space:nowrap">
+      <div class="stat"><b data-n="11">0</b><small>formations</small></div>
+      <div class="stat"><b data-n="183">0</b><small>leçons</small></div>
+      <div class="stat"><b data-n="232">0</b><small>questions de QCM</small></div>
+    </div>
+  </section>
+
+  <!-- 5. Cours -->
+  <section class="scene" id="s5">
+    <div class="browser" id="br5a" style="left:110px;top:140px;width:1060px;height:680px">
+      <div class="bar"><u></u><u></u><u></u><span>MES FORMATIONS / LEÇON</span></div>
+      <div class="view"><img src="img/11-lecteur-de-cours.jpg" alt=""></div>
+    </div>
+    <div class="browser" id="br5b" style="left:840px;top:290px;width:960px;height:570px">
+      <div class="bar"><u></u><u></u><u></u><span>QCM CORRIGÉ</span></div>
+      <div class="view"><img id="im5b" src="img/12-qcm-corrige.jpg" alt=""></div>
+    </div>
+    <div id="cap5" style="position:absolute;left:110px;top:905px;width:1700px">
+      <div class="h2" style="font-size:54px">Des cours complets : <span class="cyan">leçons</span>, <span class="turq">études de cas</span>, <span class="gold">QCM corrigés</span>.</div>
+    </div>
+  </section>
+
+  <!-- 6. Examen -->
+  <section class="scene" id="s6">
+    <div class="caption" id="cap6" style="top:290px">
+      <div class="eyebrow">Évaluation</div>
+      <div class="h2">Examen final<br><span class="cyan">chronométré</span>.</div>
+      <p class="lead">15 questions tirées au sort, 35 minutes, correction immédiate.</p>
+      <div id="timer" style="margin-top:40px;font:900 96px Orbitron;color:var(--gold);letter-spacing:.06em">35:00</div>
+    </div>
+    <div class="browser" id="br6" style="left:820px;top:170px;width:1000px;height:670px">
+      <div class="bar"><u></u><u></u><u></u><span>EXAMEN FINAL</span></div>
+      <div class="view"><img src="img/13-examen-chronometre.jpg" alt=""><img id="im6b" src="img/14-resultat-examen.jpg" alt="" style="clip-path:inset(0 0 0 100%)"></div>
+    </div>
+  </section>
+
+  <!-- 7. Certificat -->
+  <section class="scene" id="s7">
+    <div id="cert" style="position:absolute;left:180px;top:170px;width:960px;perspective:1600px">
+      <img id="certImg" src="img/17-certificat.jpg" alt="" style="width:960px;border-radius:6px;box-shadow:0 30px 120px rgba(0,0,0,.8),0 0 80px rgba(213,179,106,.28)">
+    </div>
+    <div class="caption" id="cap7" style="left:1230px;width:560px;top:300px">
+      <div class="eyebrow" style="color:var(--gold)">Certification</div>
+      <div class="h2">Un certificat<br><span class="gold">vérifiable</span><br>par QR Code.</div>
+      <p class="lead">Numéro unique, signature numérique, vérification publique en ligne.</p>
+      <p class="small" style="margin-top:26px">Certificat d'établissement privé, non assimilé à un diplôme d'État.</p>
+    </div>
+  </section>
+
+  <!-- 8. Mobile & confiance -->
+  <section class="scene" id="s8">
+    <div class="phone" id="ph" style="left:250px;top:140px"><div class="view"><img id="im8" src="img/mobile-long.jpg" alt=""></div></div>
+    <div id="feats" style="position:absolute;left:820px;top:280px">
+      <div class="eyebrow" style="margin-bottom:40px">Simple et sécurisé</div>
+      <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="#00C8FF" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></i>Paiement Mobile Money, carte ou virement</div>
+      <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="#D5B36A" stroke-width="1.8"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></i>Facture PDF envoyée par e-mail</div>
+      <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1AFF9C" stroke-width="1.8"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></i>Compte protégé par double authentification</div>
+      <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="#865DFF" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i>Accès illimité, à votre rythme</div>
+    </div>
+  </section>
+
+  <!-- 9. Offre -->
+  <section class="scene" id="s9">
+    <div class="c" style="width:1500px">
+      <div class="eyebrow" id="e9" style="color:var(--gold);font-size:28px">Offre de lancement</div>
+      <div id="old" style="position:relative;display:inline-block;margin-top:44px;font:700 70px Orbitron;color:var(--silver)">900 000 FCFA<span id="strike" style="position:absolute;left:-10px;top:50%;height:6px;background:var(--red);width:0;box-shadow:0 0 18px var(--red)"></span></div>
+      <div id="new" style="margin-top:26px;font:900 190px Orbitron;color:var(--gold);text-shadow:0 0 60px rgba(213,179,106,.45);line-height:1">170 000<span style="font-size:70px;margin-left:24px">FCFA</span></div>
+      <div id="badge" style="display:inline-block;margin-top:34px;padding:10px 26px;background:var(--red);border-radius:6px;font:700 34px Rajdhani;letter-spacing:.12em;color:#fff">-81 %</div>
+      <p class="lead" id="per" style="margin-top:30px">par formation complète | leçons, supports PDF, QCM, examen et certificat</p>
+    </div>
+  </section>
+
+  <!-- 10. Fin -->
+  <section class="scene" id="s10">
+    <div class="c" style="top:47%">
+      <div id="logo2" style="width:190px;height:190px;margin:0 auto"></div>
+      <div class="h1" style="margin-top:36px;font-size:96px;letter-spacing:.14em">AFRICA'SPY</div>
+      <div class="eyebrow" style="margin-top:14px;color:var(--gold)">Intelligence Academy</div>
+      <p class="lead" id="cta" style="margin-top:46px;font-size:44px;color:var(--white)">Inscrivez-vous et commencez dès aujourd'hui.</p>
+      <div id="btn" class="btn" style="margin-top:38px">Inscription en ligne</div>
+      <p class="small" id="disc" style="margin-top:44px">Organisme de formation privé | Formations conformes au droit et à l'éthique</p>
+    </div>
+  </section>
+
+  <div class="hud" id="hud"><i></i><i></i><i></i><i></i>
+    <b style="left:70px;top:8px">AFSPY // TRANSMISSION</b><b id="tc" style="right:70px;top:8px">00:00:00</b>
+    <b style="left:70px;bottom:6px">CANAL SÉCURISÉ</b><b style="right:70px;bottom:6px">FORMATION | ANALYSE | ÉTHIQUE</b>
+  </div>
+  <div id="scan"></div><div id="flash"></div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+
+
+// ---------- Temps forts (secondes)
+const S = [ ['s1',0,5], ['s2',5,9.6], ['s3',9.6,15.2], ['s4',15.2,20.8], ['s5',20.8,26.4], ['s6',26.4,31.8], ['s7',31.8,37.2], ['s8',37.2,42.4], ['s9',42.4,47.6], ['s10',47.6,53] ];
+const DURATION = 53;
+const clamp = (v,a=0,b=1) => Math.max(a,Math.min(b,v));
+const lin = (t,a,b) => clamp((t-a)/(b-a));
+const eo = x => 1-Math.pow(1-x,3), eio = x => x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2, back = x => {const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2);};
+const mix = (a,b,p) => a+(b-a)*p;
+function set(el, o){ if(typeof el==='string') el=$(el); if(!el) return; for(const k in o){ if(k==='o') el.style.opacity=o[k]; else if(k==='tf') el.style.transform=o[k]; else el.style[k]=o[k]; } }
+// Entrée standard : apparition + glissement
+function enter(el,t,t0,d=.7,dx=0,dy=40,extra=''){ const p=eo(lin(t,t0,t0+d)); set(el,{o:p,tf:`translate(${(1-p)*dx}px,${(1-p)*dy}px) ${extra}`}); return p; }
+
+// ---------- Domaines (données réelles du catalogue)
+const doms = [['A','Fondements du renseignement','#00C8FF'],['B','Espionnage et renseignement humain','#D5B36A'],['C','Contre-espionnage','#FF4057'],['D','Cyberespionnage et renseignement numérique','#865DFF'],['E','Outils du renseignement','#00F0D0'],['F','Intelligence stratégique et géopolitique','#1AFF9C']];
+doms.forEach((d,i)=>{ const el=document.createElement('div'); el.className='tile'; el.style.left=(150+(i%3)*560)+'px'; el.style.top=(300+Math.floor(i/3)*190)+'px';
+  el.innerHTML=`<div class="code" style="color:${d[2]};text-shadow:0 0 30px ${d[2]}88">${d[0]}</div><div class="name">${d[1]}</div><div class="bar2" style="background:${d[2]}"></div>`; $('#tiles').appendChild(el); });
+
+// ---------- Particules déterministes
+const cv=$('#particles'), cx=cv.getContext('2d');
+let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
+const P=[...Array(110)].map(()=>({x:rnd()*1920,y:rnd()*1080,vx:(rnd()-.5)*18,vy:(rnd()-.5)*12,r:rnd()*1.8+.6,c:rnd()<.8?'0,200,255':'213,179,106'}));
+function particles(t){ cx.clearRect(0,0,1920,1080); const pts=P.map(p=>({x:((p.x+p.vx*t)%1920+1920)%1920,y:((p.y+p.vy*t)%1080+1080)%1080,r:p.r,c:p.c}));
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=dx*dx+dy*dy;if(d<140*140){cx.strokeStyle=`rgba(0,200,255,${.12*(1-Math.sqrt(d)/140)})`;cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.stroke();}}
+  for(const p of pts){cx.fillStyle=`rgba(${p.c},.75)`;cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill();} }
+
+// Texte « décodé » : caractères aléatoires qui se résolvent (déterministe)
+const GL='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#/<>';
+function decode(el,text,t,t0,d){ const p=lin(t,t0,t0+d); let s=''; for(let i=0;i<text.length;i++){ const ci=i/text.length; if(p>=ci*.8+.2||text[i]===' '||text[i]==="'") s+=text[i]; else if(p>ci-.05) s+=GL[Math.floor((t*30*7+i*13))%GL.length]; else s+=' '; } el.textContent=s; }
+
+// ---------- Rendu d'une image à l'instant t
+function render(t){
+  $('#tc').textContent = '00:' + String(Math.floor(t)).padStart(2,'0') + ':' + String(Math.floor((t%1)*30)).padStart(2,'0');
+  set('#grid',{tf:`translate(${(t*12)%60}px,${(t*7)%60}px)`});
+  particles(t);
+  // Visibilité des scènes (fondu enchaîné 0,5 s)
+  for(const [id,a,b] of S){ const o = id==='s1' ? 1-lin(t,b-.5,b) : Math.min(lin(t,a-.25,a+.35), 1-lin(t,b-.4,b+.1)); $('#'+id).style.opacity = id==='s10' ? lin(t,a-.25,a+.35) : o; $('#'+id).style.visibility = (t>a-.3 && t<b+.2) || (id==='s10'&&t>a-.3) ? 'visible':'hidden'; }
+  // Balayage lumineux à chaque transition
+  let sc=0, sy=0; for(const [,a] of S.slice(1)){ const p=lin(t,a-.35,a+.25); if(p>0&&p<1){ sc=Math.sin(p*Math.PI); sy=p*1080; } }
+  set('#scan',{o:sc,top:sy+'px'});
+  set('#hud',{o:Math.min(lin(t,.8,1.6),1-lin(t,52,53))*.9});
+  // Flashs sur les temps forts
+  const fl = Math.max(1-lin(t,1.05,1.6), 0)*(t>1.05?1:0) * .5 + (t>44.3&&t<45? (1-lin(t,44.3,45))*.55:0);
+  set('#flash',{o:fl});
+
+  // 1. Ouverture
+  { const p=eo(lin(t,.2,1.4)); set('#logo',{o:p,tf:`scale(${mix(.55,1,back(lin(t,.2,1.4)))})`,filter:`drop-shadow(0 0 ${30*p}px rgba(0,200,255,.6))`});
+    set('#ring',{o:p,tf:`rotate(${t*90}deg) scale(${mix(1.4,1,p)})`}); set('#ring2',{o:p*.8,tf:`rotate(${-t*40}deg)`});
+    decode($('#brand'),"AFRICA'SPY",t,1.3,1.6); set('#brand',{textShadow:'0 0 40px rgba(0,200,255,.35)'});
+    const q=eo(lin(t,2.6,3.5)); set('#tagline',{o:q,letterSpacing:mix(1.2,.45,q)+'em'});
+    set('#s1 .c',{tf:`translate(-50%,-50%) scale(${1+lin(t,0,5)*.05})`}); }
+  // 2. Manifeste
+  { const w=[['#w1',5.2],['#w2',6.4],['#w3',7.6]]; w.forEach(([s,t0],i)=>{ const pin=eo(lin(t,t0,t0+.35)), pout= i<2 ? eio(lin(t,t0+1.0,t0+1.2)) : 0;
+      const jit = (t>t0&&t<t0+.18)? (Math.sin(t*300)*12):0; set(s,{o:pin*(1-pout),tf:`translate(${jit}px,0) scale(${mix(1.35,1,pin)*(1+pout*.2)})`,filter:`blur(${(1-pin)*14+pout*10}px)`}); });
+    enter('#manif',t,8.1,.8); }
+  // 3. Plateforme
+  { enter('#cap3',t,10,.8,-60,0); const p=eo(lin(t,9.8,10.9)); set('#br3',{o:p,tf:`translateX(${(1-p)*220}px) perspective(1800px) rotateY(${mix(-14,-7,p)}deg)`});
+    set('#im3',{tf:`scale(${1+lin(t,10,15.2)*.12}) translate(${-lin(t,10,15.2)*30}px,${-lin(t,10,15.2)*18}px)`}); }
+  // 4. Domaines
+  { enter('#e4',t,15.4,.6,0,20); document.querySelectorAll('.tile').forEach((el,i)=>{ const t0=15.7+i*.22; const p=eo(lin(t,t0,t0+.6)); set(el,{o:p,tf:`translateY(${(1-p)*50}px) scale(${mix(.92,1,p)})`}); set(el.querySelector('.bar2'),{width:(lin(t,t0+.3,t0+1.1)*100)+'%'}); });
+    enter('#stats',t,17.6,.6,0,30,''); $('#stats').style.transform += ' translateX(-50%)';
+    document.querySelectorAll('#stats b').forEach(b=>{ b.textContent=Math.round(+b.dataset.n*eo(lin(t,17.7,19.4))); }); }
+  // 5. Cours
+  { const p=eo(lin(t,20.9,21.9)); set('#br5a',{o:p,tf:`translateX(${(1-p)*-160 - lin(t,21,26.4)*30}px) perspective(1800px) rotateY(${mix(10,6,p)}deg)`});
+    const q=eo(lin(t,22.2,23.2)); set('#br5b',{o:q,tf:`translate(${(1-q)*200 + lin(t,22,26.4)*20}px,${(1-q)*60}px) perspective(1800px) rotateY(-8deg)`});
+    set('#im5b',{tf:`translateY(${-lin(t,23.3,26.2)*120}px)`}); enter('#cap5',t,23.4,.7,0,30); }
+  // 6. Examen
+  { enter('#cap6',t,26.6,.8,-60,0); const p=eo(lin(t,26.5,27.5)); set('#br6',{o:p,tf:`translateX(${(1-p)*220}px) perspective(1800px) rotateY(${mix(-14,-7,p)}deg)`});
+    const sec = 35*60 - Math.floor(lin(t,27.2,31.8)*47); $('#timer').textContent = String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+    set('#timer',{o:lin(t,27.2,27.7)}); const w=eio(lin(t,29.4,30.3)); set('#im6b',{clipPath:`inset(0 0 0 ${(1-w)*100}%)`}); }
+  // 7. Certificat
+  { const p=eo(lin(t,31.9,33.1)); set('#certImg',{o:p,tf:`rotateY(${mix(28,8,p) - lin(t,33,37.2)*6}deg) rotateX(${mix(10,3,p)}deg) scale(${mix(.86,1,p)})`});
+    set('#certImg',{boxShadow:`0 30px 120px rgba(0,0,0,.8),0 0 ${60+30*Math.sin(t*3)}px rgba(213,179,106,.32)`}); enter('#cap7',t,32.6,.8,60,0); }
+  // 8. Mobile et confiance
+  { const p=eo(lin(t,37.3,38.3)); set('#ph',{o:p,tf:`translateY(${(1-p)*120}px) rotate(${mix(-8,-3,p)}deg)`});
+    set('#im8',{tf:`translateY(${-eio(lin(t,38.3,42.2))*575}px)`});
+    enter('#feats .eyebrow',t,37.7,.5,0,20); document.querySelectorAll('#feats .feat').forEach((el,i)=>enter(el,t,38.2+i*.55,.6,60,0)); }
+  // 9. Offre
+  { enter('#e9',t,42.6,.5,0,20); enter('#old',t,42.9,.5,0,20); set('#strike',{width:(eio(lin(t,43.5,44.1))*110)+'%'});
+    const p=lin(t,44.3,44.9); set('#new',{o:eo(p),tf:`scale(${mix(1.6,1,back(p))})`,filter:`blur(${(1-eo(p))*12}px)`});
+    const b=eo(lin(t,45,45.4)); set('#badge',{o:b,tf:`scale(${mix(.4,1,back(lin(t,45,45.4)))}) rotate(-4deg)`}); enter('#per',t,45.4,.6,0,20);
+    set('#s9 .c',{tf:`translate(-50%,-50%) scale(${1+lin(t,42.4,47.6)*.04})`}); }
+  // 10. Fin
+  { const p=eo(lin(t,47.7,48.8)); set('#logo2',{o:p,tf:`scale(${mix(.6,1,back(lin(t,47.7,48.8)))})`,filter:'drop-shadow(0 0 30px rgba(0,200,255,.55))'});
+    enter('#cta',t,48.8,.7); const q=eo(lin(t,49.5,50.1)); set('#btn',{o:q,tf:`scale(${mix(.85,1,q)})`,boxShadow:`0 0 ${40+25*Math.sin(t*4)}px rgba(0,200,255,.45)`}); enter('#disc',t,50.3,.7,0,10);
+    set('#stage',{filter:`brightness(${1-lin(t,52,53)})`}); }
+}
+// Logos (SVG inline)
+fetch('img/logo.svg').then(r=>r.text()).then(s=>{ $('#logo').innerHTML=s; $('#logo2').innerHTML=s.replace(/id="afl1/g,'id="afl2').replace(/#afl1/g,'#afl2');
+  document.querySelectorAll('#logo svg,#logo2 svg').forEach(e=>{e.style.width='100%';e.style.height='100%';}); window.READY=true; render(0); });
+window.render = render; window.DURATION = DURATION;
+</script></body></html>
