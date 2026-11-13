@@ -1,5 +1,5 @@
 <?php
-/** Espace apprenant — examens finaux : liste, passage chronométré, résultats, historique. */
+/** Espace apprenant : examens finaux : liste, passage chronométré, résultats, historique. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/learning.php';
@@ -66,7 +66,7 @@ if ($aid = input_int('attempt')) {
     }
     $questions = attempt_questions($attempt);
     $pageTitle = $attempt['title'];
-    $crumb = $attempt['code'] . ' · Examen en cours';
+    $crumb = $attempt['code'] . ' | Examen en cours';
     require APP_ROOT . '/includes/app-header.php'; ?>
 <form method="post" action="<?= e(url('learner/exams.php')) ?>" data-exam data-remaining="<?= max(0, $remaining) ?>">
   <?= csrf_field() ?><input type="hidden" name="action" value="submit"><input type="hidden" name="attempt_id" value="<?= (int) $attempt['id'] ?>">
@@ -101,10 +101,10 @@ if ($rid = input_int('result')) {
     $crumb = $a['code'];
     require APP_ROOT . '/includes/app-header.php'; ?>
 <section class="box result-hero <?= $a['passed'] ? 'result-hero--pass' : 'result-hero--fail' ?> reveal">
-  <p class="mono dim"><?= e($a['code']) ?> · <?= e(fmt_datetime($a['submitted_at'])) ?></p>
+  <p class="mono dim"><?= e($a['code']) ?> | <?= e(fmt_datetime($a['submitted_at'])) ?></p>
   <div class="result-hero__score"><span data-count="<?= (int) round((float) $a['score']) ?>">0</span>%</div>
   <h2 style="margin-top:14px"><?= $a['passed'] ? 'EXAMEN RÉUSSI' : 'EXAMEN NON VALIDÉ' ?></h2>
-  <p><?= (int) $a['correct_count'] ?> bonne<?= $a['correct_count'] > 1 ? 's' : '' ?> réponse<?= $a['correct_count'] > 1 ? 's' : '' ?> sur <?= (int) $a['total_count'] ?> · seuil <?= (int) $a['pass_mark'] ?> %</p>
+  <p><?= (int) $a['correct_count'] ?> bonne<?= $a['correct_count'] > 1 ? 's' : '' ?> réponse<?= $a['correct_count'] > 1 ? 's' : '' ?> sur <?= (int) $a['total_count'] ?> | seuil <?= (int) $a['pass_mark'] ?> %</p>
   <div class="flex" style="justify-content:center;margin-top:20px">
     <?php if ($cert): ?><a class="btn btn--gold" href="<?= e(url('learner/certificate.php', ['no' => $cert['certificate_no']])) ?>" data-no-transition>Télécharger mon certificat</a><?php endif; ?>
     <a class="btn btn--ghost" href="<?= e(url('learner/exams.php', ['course' => $a['course_id']])) ?>">Retour à l'examen</a>
@@ -115,7 +115,7 @@ if ($rid = input_int('result')) {
   <div class="box__head"><h2>Analyse de la tentative</h2><span class="mono">Les bonnes réponses ne sont pas affichées afin de préserver la banque de questions</span></div>
   <ul class="feed">
     <?php foreach ($review as $i => $r): ?>
-    <li><span><span class="mono" style="color:var(--gold)">Q<?= sprintf('%02d', $i + 1) ?></span> <?= e($r['prompt']) ?></span><time class="<?= $r['is_correct'] ? 'score--pass' : 'score--fail' ?>"><?= $r['is_correct'] ? '✓ Correct' : ($r['answer_id'] ? '✗ Incorrect' : '— Sans réponse') ?></time></li>
+    <li><span><span class="mono" style="color:var(--gold)">Q<?= sprintf('%02d', $i + 1) ?></span> <?= e($r['prompt']) ?></span><time class="<?= $r['is_correct'] ? 'score--pass' : 'score--fail' ?>"><?= $r['is_correct'] ? 'Correct' : ($r['answer_id'] ? 'Incorrect' : 'Sans réponse') ?></time></li>
     <?php endforeach; ?>
   </ul>
 </section>
@@ -147,7 +147,7 @@ if ($cid = input_int('course')) {
         <dt>Durée</dt><dd><?= (int) $exam['time_limit_min'] ?> minutes</dd>
         <dt>Seuil de réussite</dt><dd><?= (int) $exam['pass_mark'] ?> %</dd>
         <dt>Tentatives</dt><dd><?= (int) $st['used'] ?> utilisée(s) sur <?= (int) $exam['max_attempts'] ?></dd>
-        <dt>Meilleur score</dt><dd><?= $st['best'] !== null ? e(number_format($st['best'], 0)) . ' %' : '—' ?></dd>
+        <dt>Meilleur score</dt><dd><?= $st['best'] !== null ? e(number_format($st['best'], 0)) . ' %' : '-' ?></dd>
       </dl>
       <div class="mt-2">
         <?php if ($st['passed']): $cert = q_one("SELECT certificate_no FROM certificates WHERE user_id = ? AND course_id = ? AND status = 'valid'", [$uid, $cid]); ?>
@@ -202,8 +202,8 @@ require APP_ROOT . '/includes/app-header.php'; ?>
         <td><span class="mono cyan" style="font-size:.72rem"><?= e($c['code']) ?></span><br><?= e($c['title']) ?></td>
         <td><?= (int) $c['progress'] ?> %</td>
         <td><?= (int) $c['used'] ?> / <?= (int) $c['max_attempts'] ?></td>
-        <td class="num"><?= $c['best'] !== null ? e(number_format((float) $c['best'], 0)) . ' %' : '—' ?></td>
-        <td><?= $c['passed'] ? '<span class="status-pill status-pill--on">● Réussi</span>' : ((int) $c['progress'] >= 100 ? '<span class="status-pill status-pill--warn">● Disponible</span>' : '<span class="status-pill status-pill--off">● Verrouillé</span>') ?></td>
+        <td class="num"><?= $c['best'] !== null ? e(number_format((float) $c['best'], 0)) . ' %' : '-' ?></td>
+        <td><?= $c['passed'] ? '<span class="status-pill status-pill--on">Réussi</span>' : ((int) $c['progress'] >= 100 ? '<span class="status-pill status-pill--warn">Disponible</span>' : '<span class="status-pill status-pill--off">Verrouillé</span>') ?></td>
         <td><a class="btn btn--sm" href="<?= e(url('learner/exams.php', ['course' => $c['id']])) ?>">Ouvrir</a></td>
       </tr>
     <?php endforeach; ?>
@@ -217,7 +217,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
     <tbody>
     <?php if (!$history): ?><tr><td colspan="5" class="dim">Aucun examen soumis.</td></tr><?php endif; ?>
     <?php foreach ($history as $h): ?>
-      <tr><td><?= e(fmt_datetime($h['submitted_at'])) ?></td><td><?= e($h['code']) ?> · <?= e($h['title']) ?></td><td class="num"><?= (int) $h['correct_count'] ?> / <?= (int) $h['total_count'] ?></td><td class="num"><span class="score <?= $h['passed'] ? 'score--pass' : 'score--fail' ?>"><?= e(number_format((float) $h['score'], 0)) ?> %</span></td><td><a class="link-arrow" href="<?= e(url('learner/exams.php', ['result' => $h['id']])) ?>">Détail</a></td></tr>
+      <tr><td><?= e(fmt_datetime($h['submitted_at'])) ?></td><td><?= e($h['code']) ?> | <?= e($h['title']) ?></td><td class="num"><?= (int) $h['correct_count'] ?> / <?= (int) $h['total_count'] ?></td><td class="num"><span class="score <?= $h['passed'] ? 'score--pass' : 'score--fail' ?>"><?= e(number_format((float) $h['score'], 0)) ?> %</span></td><td><a class="link-arrow" href="<?= e(url('learner/exams.php', ['result' => $h['id']])) ?>">Détail</a></td></tr>
     <?php endforeach; ?>
     </tbody>
   </table></div>

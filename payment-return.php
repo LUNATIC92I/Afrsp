@@ -36,12 +36,12 @@ require APP_ROOT . '/includes/header.php';
     </section>
     <?php elseif ($st === 'pending' && $p['provider'] === 'manual'): ?>
     <section class="panel corners" style="padding:clamp(22px,4vw,40px)">
-      <p class="eyebrow eyebrow--gold">Virement / dépôt · en attente de réception</p>
+      <p class="eyebrow eyebrow--gold">Virement / dépôt | en attente de réception</p>
       <h1 style="font-size:clamp(1.5rem,3vw,2.2rem)">Instructions de paiement</h1>
       <dl class="kv mt-2">
         <dt>Référence à indiquer</dt><dd><strong class="mono gold" style="font-size:1.3rem;letter-spacing:.1em"><?= e($p['reference']) ?></strong></dd>
         <dt>Montant exact</dt><dd><strong><?= e(fmt_xof((int) $p['amount_xof'])) ?></strong></dd>
-        <dt>Formation</dt><dd><?= e($p['code']) ?> · <?= e($p['title']) ?></dd>
+        <dt>Formation</dt><dd><?= e($p['code']) ?> | <?= e($p['title']) ?></dd>
       </dl>
       <div class="charter mt-2"><span class="charter__stamp">COORDONNÉES</span><p class="mb-0" style="white-space:pre-line"><?= e(setting('payment_manual_instructions')) ?></p></div>
       <p class="dim mt-2">Dès réception, l'administration valide le paiement : vous recevez un e-mail et la formation apparaît dans votre espace. Vous pouvez suivre l'état depuis <a href="<?= e(url('learner/payments.php')) ?>">Mes paiements</a>.</p>
@@ -49,7 +49,7 @@ require APP_ROOT . '/includes/header.php';
     <?php elseif ($st === 'pending'): ?>
     <section class="panel corners center" style="padding:40px" data-pay-poll="<?= e($p['reference']) ?>">
       <span class="loader" aria-hidden="true"></span>
-      <h1 style="font-size:1.6rem;margin-top:16px">Confirmation en cours…</h1>
+      <h1 style="font-size:1.6rem;margin-top:16px">Confirmation en cours...</h1>
       <p class="dim">Nous attendons la confirmation de l'opérateur. Cette page se met à jour automatiquement.</p>
     </section>
     <?php else: ?>

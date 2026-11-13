@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — construit database/africaspy.sql (schéma + données initiales)
+ * AFRICA'SPY : construit database/africaspy.sql (schéma + données initiales)
  * à partir de database/schema.sql et du catalogue database/seed/catalog.php.
  * Génère également les supports PDF de chaque formation (uploads/documents/seed-*.pdf).
  *
@@ -96,7 +96,7 @@ foreach ($catalog['courses'] as $sort => $c) {
     $videoMid = null;
     if (is_file(APP_ROOT . '/uploads/videos/' . $videoFile)) {
         $videoMid = ++$mid;
-        $media[] = ['id' => $mid, 'kind' => 'video', 'title' => 'Briefing vidéo — ' . $c['title'], 'original_name' => $videoFile, 'stored_name' => $videoFile,
+        $media[] = ['id' => $mid, 'kind' => 'video', 'title' => 'Briefing vidéo : ' . $c['title'], 'original_name' => $videoFile, 'stored_name' => $videoFile,
             'mime_type' => 'video/mp4', 'size_bytes' => filesize(APP_ROOT . '/uploads/videos/' . $videoFile), 'attribution' => 'Production AFRICA\'SPY (visuels originaux)'];
     } else {
         fwrite(STDERR, "! vidéo manquante : $videoFile\n");
@@ -109,10 +109,10 @@ foreach ($catalog['courses'] as $sort => $c) {
         fwrite(STDOUT, "PDF  $pdfFile " . round(filesize($pdfPath) / 1024) . " Ko\n");
     }
     $pdfMid = ++$mid;
-    $media[] = ['id' => $mid, 'kind' => 'document', 'title' => 'Support de cours — ' . $c['title'], 'original_name' => 'AFRICASPY-' . $c['code'] . '-support.pdf', 'stored_name' => $pdfFile,
+    $media[] = ['id' => $mid, 'kind' => 'document', 'title' => 'Support de cours : ' . $c['title'], 'original_name' => 'AFRICASPY-' . $c['code'] . '-support.pdf', 'stored_name' => $pdfFile,
         'mime_type' => 'application/pdf', 'size_bytes' => is_file($pdfPath) ? filesize($pdfPath) : 0, 'attribution' => null];
 
-    $exams[] = ['id' => $cid, 'course_id' => $cid, 'title' => 'Examen final — ' . $c['title'],
+    $exams[] = ['id' => $cid, 'course_id' => $cid, 'title' => 'Examen final : ' . $c['title'],
         'instructions' => "Questionnaire à choix multiples tiré au sort dans la banque de questions de la formation. Une seule bonne réponse par question. Le chronomètre démarre à l'ouverture de l'examen ; à expiration, les réponses saisies sont automatiquement soumises.",
         'pass_mark' => $c['exam']['pass'], 'max_attempts' => $c['exam']['attempts'], 'question_count' => $c['exam']['count'], 'time_limit_min' => $c['exam']['time'],
         'require_completion' => 1, 'is_active' => 1];
@@ -138,23 +138,23 @@ foreach ($catalog['courses'] as $sort => $c) {
 }
 
 $settings = [
-    'institution_name' => "AFRICA'SPY — Intelligence Academy",
+    'institution_name' => "AFRICA'SPY Intelligence Academy",
     'contact_email' => 'contact@africaspy.example',
     'contact_phone' => '',
-    'contact_address' => 'Adresse à compléter dans Administration › Paramètres',
-    'footer_tagline' => "Académie africaine de formation aux métiers du renseignement, du contre-espionnage et de l'intelligence stratégique — dans le strict respect du droit et des libertés.",
+    'contact_address' => 'Adresse à compléter dans Administration / Paramètres',
+    'footer_tagline' => "Académie africaine de formation aux métiers du renseignement, du contre-espionnage et de l'intelligence stratégique, dans le strict respect du droit et des libertés.",
     'certificate_signatory_name' => 'Direction académique',
     'certificate_signatory_title' => "Direction académique AFRICA'SPY",
     'signature_is_fictitious' => '1',
     'registration_open' => '1',
     'payment_manual_enabled' => '1',
-    'payment_manual_instructions' => "Virement bancaire ou dépôt Mobile Money au nom d'AFRICA'SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration › Paramètres.",
+    'payment_manual_instructions' => "Virement bancaire ou dépôt Mobile Money au nom d'AFRICA'SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration / Paramètres.",
     'promo_label' => 'Offre de lancement',
     'promo_ends_at' => '',
     'mfa_required_staff' => '0',
     'security_contact' => '',
-    'seller_legal_name' => "AFRICA'SPY — Intelligence Academy", 'seller_address' => '', 'seller_tax_id' => '', 'seller_registration' => '', 'seller_email' => '',
-    'tax_rate' => '0', 'tax_label' => 'TVA', 'tax_exempt_mention' => 'TVA non applicable — à adapter selon votre régime fiscal',
+    'seller_legal_name' => "AFRICA'SPY Intelligence Academy", 'seller_address' => '', 'seller_tax_id' => '', 'seller_registration' => '', 'seller_email' => '',
+    'tax_rate' => '0', 'tax_label' => 'TVA', 'tax_exempt_mention' => 'TVA non applicable (à adapter selon votre régime fiscal)',
     'invoice_footer' => 'Facture acquittée. Formation en ligne à usage personnel, non cessible.',
     'mail_transport' => '', 'mail_from' => '', 'mail_from_name' => "AFRICA'SPY Academy", 'mail_reply_to' => '',
     'smtp_host' => '', 'smtp_port' => '587', 'smtp_secure' => 'tls', 'smtp_user' => '', 'smtp_pass_enc' => '', 'welcome_mail_enabled' => '1',
@@ -164,7 +164,7 @@ $settingRows = array_map(static fn ($k, $v) => ['setting_key' => $k, 'setting_va
 $ann = [['id' => 1, 'title' => 'Bienvenue à l\'Académie', 'body' => "Votre espace est opérationnel. Commencez par la formation « Fondements du renseignement », socle commun de tous les parcours. Chaque chapitre se valide par une courte évaluation QCM ; l'examen final s'ouvre lorsque toutes les leçons sont terminées.", 'level' => 'info', 'audience' => 'learners', 'is_published' => 1]];
 
 $sql = "-- =====================================================================\n"
-     . "--  AFRICA'SPY — base de données complète (schéma + données initiales)\n"
+     . "--  AFRICA'SPY : base de données complète (schéma + données initiales)\n"
      . "--  Généré le " . gmdate('Y-m-d H:i') . " UTC par database/build-sql.php\n"
      . "--  Le compte administrateur n'est PAS inclus : il est créé de manière\n"
      . "--  sécurisée par l'installateur (install/ ou php install/cli.php).\n"

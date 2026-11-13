@@ -1,5 +1,5 @@
 <?php
-/** Espace apprenant — profil personnel et sécurité du compte. */
+/** Espace apprenant : profil personnel et sécurité du compte. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 
@@ -50,8 +50,8 @@ $err = static fn ($k) => isset($errors[$k]) ? '<span class="err">' . e($errors[$
   <div class="avatar-xl"><?= e(initials($u['first_name'], $u['last_name'])) ?></div>
   <div>
     <h2 style="margin:0;font-size:1.4rem"><?= e($u['first_name'] . ' ' . $u['last_name']) ?></h2>
-    <p class="mono dim" style="margin:4px 0 0;font-size:.75rem"><?= e($u['email']) ?> · <?= e($u['role_name']) ?> · membre depuis <?= e(fmt_date($u['created_at'])) ?></p>
-    <p class="mono" style="margin:6px 0 0;font-size:.75rem;color:var(--turq)"><?= (int) $stats['enr'] ?> formation(s) · <?= (int) $stats['certs'] ?> certificat(s) · dernière connexion <?= e(fmt_datetime($u['last_login_at'])) ?></p>
+    <p class="mono dim" style="margin:4px 0 0;font-size:.75rem"><?= e($u['email']) ?> | <?= e($u['role_name']) ?> | membre depuis <?= e(fmt_date($u['created_at'])) ?></p>
+    <p class="mono" style="margin:6px 0 0;font-size:.75rem;color:var(--turq)"><?= (int) $stats['enr'] ?> formation(s) | <?= (int) $stats['certs'] ?> certificat(s) | dernière connexion <?= e(fmt_datetime($u['last_login_at'])) ?></p>
   </div>
 </div></section>
 <div class="grid-2 grid-2--even">

@@ -1,5 +1,5 @@
 /* =====================================================================
-   AFRICA'SPY — main.js
+   AFRICA'SPY : main.js
    Socle : transitions de pages, en-tête, révélations, compteurs,
    particules (Canvas), parallaxe, séquence d'ouverture, utilitaires AJAX.
    ===================================================================== */
@@ -268,7 +268,7 @@
   }
 
   /* ------------------------------------------------------------------
-     Particules numériques (Canvas) — réseau réactif au curseur
+     Particules numériques (Canvas) : réseau réactif au curseur
      ------------------------------------------------------------------ */
   function particles(canvas) {
     var ctx = canvas.getContext('2d');

@@ -1,5 +1,5 @@
 <?php
-/** AFRICA'SPY — Contact (envoi AJAX, repli formulaire classique). */
+/** AFRICA'SPY : Contact (envoi AJAX, repli formulaire classique). */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/contact-handler.php';
@@ -23,7 +23,7 @@ require APP_ROOT . '/includes/header.php';
     <div class="page-hero__bg" style="background-image:url('<?= e(url('assets/images/geo-table.webp')) ?>')"></div>
     <div class="container">
       <nav class="crumbs" aria-label="Fil d'Ariane"><a href="<?= e(url('index.php')) ?>">Accueil</a><span aria-hidden="true">/</span><span>Contact</span></nav>
-      <p class="eyebrow">Canal sécurisé · réponse sous 72 h ouvrées</p>
+      <p class="eyebrow">Canal sécurisé | réponse sous 72 h ouvrées</p>
       <h1 data-split>Contacter l'Académie</h1>
       <p class="reveal">Questions sur les formations, les certificats, les inscriptions de groupes ou les partenariats pédagogiques.</p>
     </div>

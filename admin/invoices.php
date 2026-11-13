@@ -1,5 +1,5 @@
 <?php
-/** Administration — registre des factures et avoirs, export comptable CSV. */
+/** Administration : registre des factures et avoirs, export comptable CSV. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -71,7 +71,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
   <?php if (!$rows): ?><tr><td colspan="8" class="dim">Aucune pièce comptable. Les factures sont émises automatiquement à la confirmation de chaque paiement.</td></tr><?php endif; ?>
   <?php foreach ($rows as $r): ?>
     <tr>
-      <td class="mono" style="font-size:.8rem;white-space:nowrap"><?= e($r['invoice_no']) ?><br><small class="dim"><?= $r['doc_type'] === 'invoice' ? 'Facture' : 'Avoir · ' . e((string) $r['related_no']) ?></small></td>
+      <td class="mono" style="font-size:.8rem;white-space:nowrap"><?= e($r['invoice_no']) ?><br><small class="dim"><?= $r['doc_type'] === 'invoice' ? 'Facture' : 'Avoir | ' . e((string) $r['related_no']) ?></small></td>
       <td style="white-space:nowrap"><small><?= e(fmt_datetime($r['issued_at'])) ?></small></td>
       <td><?= e($r['first_name'] . ' ' . $r['last_name']) ?><br><small class="dim"><?= e($r['email']) ?></small></td>
       <td><small><?= e($r['label']) ?><br><span class="dim mono"><?= e($r['reference']) ?></span></small></td>

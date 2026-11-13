@@ -1,7 +1,7 @@
 <?php
 /**
  * Glossaires et bibliographies par formation.
- * 'g' : [terme, définition] · 'b' : [référence, intérêt pédagogique]
+ * 'g' : [terme, définition] | 'b' : [référence, intérêt pédagogique]
  */
 $common = [
     ['Nations unies, Conseil des droits de l\'homme, <em>Compilation de bonnes pratiques relatives aux cadres juridiques et institutionnels des services de renseignement</em>, A/HRC/14/46, 2010.', 'Référence internationale sur le contrôle démocratique des services.'],
@@ -22,12 +22,12 @@ return [
   'b' => array_merge([
     ['Silverman, Craig (dir.), <em>Verification Handbook</em>, European Journalism Centre, 2014 (accès libre).', 'Méthodes de vérification de contenus en ligne.'],
     ['Higgins, Eliot, <em>We Are Bellingcat</em>, Bloomsbury, 2021.', 'Récit et méthodes de l\'enquête en sources ouvertes.'],
-    ['Programme européen Copernicus — données Sentinel (accès libre).', 'Imagerie satellitaire gratuite pour l\'entraînement.'],
+    ['Programme européen Copernicus : données Sentinel (accès libre).', 'Imagerie satellitaire gratuite pour l\'entraînement.'],
     ['Lowenthal, Mark M., <em>Intelligence: From Secrets to Policy</em>, CQ Press.', 'Chapitres consacrés aux disciplines de collecte.'],
   ], $common),
 ],
 'AFS-B101' => [
-  'g' => [['Consentement éclairé', 'Accord donné en connaissant l\'identité de l\'interlocuteur et la finalité de l\'échange.'], ['Besoin d\'en connaître', 'Principe limitant la collecte et le partage au strict nécessaire.'], ['Entretien cognitif', 'Méthode d\'entretien améliorant la qualité des témoignages.'], ['Écoute active', 'Attention, reformulation et relances neutres.'], ['Question suggestive', 'Question qui oriente la réponse ; à proscrire.'], ['Code de l\'Amirauté', 'Cotation séparée de la source (A–F) et de l\'information (1–6).'], ['Rapport circulaire', 'Plusieurs sources apparentes issues d\'une même origine.'], ['Désinformation', 'Information fausse diffusée intentionnellement.'], ['Mésinformation', 'Information fausse diffusée de bonne foi.']],
+  'g' => [['Consentement éclairé', 'Accord donné en connaissant l\'identité de l\'interlocuteur et la finalité de l\'échange.'], ['Besoin d\'en connaître', 'Principe limitant la collecte et le partage au strict nécessaire.'], ['Entretien cognitif', 'Méthode d\'entretien améliorant la qualité des témoignages.'], ['Écoute active', 'Attention, reformulation et relances neutres.'], ['Question suggestive', 'Question qui oriente la réponse ; à proscrire.'], ['Code de l\'Amirauté', 'Cotation séparée de la source (A à F) et de l\'information (1 à 6).'], ['Rapport circulaire', 'Plusieurs sources apparentes issues d\'une même origine.'], ['Désinformation', 'Information fausse diffusée intentionnellement.'], ['Mésinformation', 'Information fausse diffusée de bonne foi.']],
   'b' => array_merge([
     ['Fisher, Ronald P. et Geiselman, R. Edward, <em>Memory-Enhancing Techniques for Investigative Interviewing: The Cognitive Interview</em>, Charles C. Thomas, 1992.', 'Ouvrage de référence sur l\'entretien cognitif.'],
     ['Vrij, Aldert, <em>Detecting Lies and Deceit</em>, Wiley, 2e éd. 2008.', 'Synthèse de la recherche sur la détection du mensonge.'],
@@ -35,7 +35,7 @@ return [
   ], $common),
 ],
 'AFS-B201' => [
-  'g' => [['Pseudonymisation', 'Remplacement de l\'identité par un code, avec table de correspondance séparée.'], ['Cloisonnement', 'Limitation de la connaissance d\'une information aux seules personnes concernées.'], ['Recoupement d\'identification', 'Identification indirecte d\'une personne par des détails contextuels.'], ['Effet de halo', 'Une impression globale qui colore tout le jugement.'], ['BLUF', 'Bottom Line Up Front : la conclusion en tête.'], ['Résumé exécutif', 'Synthèse lisible seule, destinée au décideur.'], ['Vocabulaire de probabilité', 'Échelle normalisée (presque certain, probable, possible…).']],
+  'g' => [['Pseudonymisation', 'Remplacement de l\'identité par un code, avec table de correspondance séparée.'], ['Cloisonnement', 'Limitation de la connaissance d\'une information aux seules personnes concernées.'], ['Recoupement d\'identification', 'Identification indirecte d\'une personne par des détails contextuels.'], ['Effet de halo', 'Une impression globale qui colore tout le jugement.'], ['BLUF', 'Bottom Line Up Front : la conclusion en tête.'], ['Résumé exécutif', 'Synthèse lisible seule, destinée au décideur.'], ['Vocabulaire de probabilité', 'Échelle normalisée (presque certain, probable, possible...).']],
   'b' => array_merge([
     ['Bond, Charles F. et DePaulo, Bella M., « Accuracy of Deception Judgments », <em>Personality and Social Psychology Review</em>, 10(3), 2006.', 'Méta-analyse montrant une précision proche du hasard.'],
     ['Commission africaine des droits de l\'homme et des peuples, <em>Déclaration de principes sur la liberté d\'expression et l\'accès à l\'information en Afrique</em>, 2019.', 'Protection des sources journalistiques.'],
@@ -52,24 +52,24 @@ return [
   ], [$common[1]]),
 ],
 'AFS-C201' => [
-  'g' => [['Duty of care', 'Devoir de protection de l\'employeur envers ses collaborateurs.'], ['Matrice de risques', 'Croisement probabilité × impact pour prioriser.'], ['Nœud papillon', 'Représentation causes – événement – conséquences avec barrières.'], ['Défense en profondeur', 'Superposition de couches de protection.'], ['RTO', 'Durée maximale d\'interruption acceptable.'], ['RPO', 'Perte de données maximale acceptable.'], ['Exercice sur table', 'Simulation de crise par étapes (injects).'], ['RETEX', 'Retour d\'expérience transformé en actions correctives.']],
+  'g' => [['Duty of care', 'Devoir de protection de l\'employeur envers ses collaborateurs.'], ['Matrice de risques', 'Croisement probabilité × impact pour prioriser.'], ['Nœud papillon', 'Représentation causes, événement, conséquences avec barrières.'], ['Défense en profondeur', 'Superposition de couches de protection.'], ['RTO', 'Durée maximale d\'interruption acceptable.'], ['RPO', 'Perte de données maximale acceptable.'], ['Exercice sur table', 'Simulation de crise par étapes (injects).'], ['RETEX', 'Retour d\'expérience transformé en actions correctives.']],
   'b' => array_merge([
-    ['ISO 22301, Sécurité et résilience — Systèmes de management de la continuité d\'activité.', 'Référence de la continuité d\'activité.'],
-    ['ISO 31000, Management du risque — Lignes directrices.', 'Principes généraux de l\'analyse de risques.'],
+    ['ISO 22301, Sécurité et résilience : Systèmes de management de la continuité d\'activité.', 'Référence de la continuité d\'activité.'],
+    ['ISO 31000, Management du risque : Lignes directrices.', 'Principes généraux de l\'analyse de risques.'],
     ['ANSSI (France), <em>Guide d\'hygiène informatique</em> (accès libre).', 'Mesures défensives prioritaires et concrètes.'],
   ], [$common[1]]),
 ],
 'AFS-D101' => [
-  'g' => [['APT', 'Menace persistante avancée : groupe sophistiqué et durable.'], ['Chaîne d\'attaque', 'Étapes successives d\'une intrusion, de la reconnaissance à l\'exfiltration.'], ['Pivot', 'Passage d\'un indicateur à d\'autres indicateurs liés.'], ['Empreinte numérique', 'Ensemble des traces publiquement observables.'], ['Métadonnées', 'Données décrivant un fichier (auteur, date, appareil, GPS…).'], ['EXIF', 'Format de métadonnées des photographies.'], ['Empreinte cryptographique', 'Valeur (ex. SHA-256) garantissant l\'intégrité d\'un fichier.'], ['Chaîne de traçabilité', 'Documentation de toutes les manipulations d\'une preuve.'], ['security.txt', 'Fichier normalisé (RFC 9116) indiquant comment signaler une vulnérabilité.']],
+  'g' => [['APT', 'Menace persistante avancée : groupe sophistiqué et durable.'], ['Chaîne d\'attaque', 'Étapes successives d\'une intrusion, de la reconnaissance à l\'exfiltration.'], ['Pivot', 'Passage d\'un indicateur à d\'autres indicateurs liés.'], ['Empreinte numérique', 'Ensemble des traces publiquement observables.'], ['Métadonnées', 'Données décrivant un fichier (auteur, date, appareil, GPS...).'], ['EXIF', 'Format de métadonnées des photographies.'], ['Empreinte cryptographique', 'Valeur (ex. SHA-256) garantissant l\'intégrité d\'un fichier.'], ['Chaîne de traçabilité', 'Documentation de toutes les manipulations d\'une preuve.'], ['security.txt', 'Fichier normalisé (RFC 9116) indiquant comment signaler une vulnérabilité.']],
   'b' => array_merge([
     ['Haut-Commissariat des Nations unies aux droits de l\'homme et Human Rights Center (UC Berkeley), <em>Protocole de Berkeley sur les enquêtes numériques en sources ouvertes</em>, 2022 (accès libre).', 'Standards professionnels de l\'OSINT.'],
-    ['MITRE ATT&amp;CK — base de connaissances des tactiques et techniques (attack.mitre.org).', 'Langage commun de la défense.'],
+    ['MITRE ATT&amp;CK : base de connaissances des tactiques et techniques (attack.mitre.org).', 'Langage commun de la défense.'],
     ['Hutchins, Eric M., Cloppert, Michael J. et Amin, Rohan M., « Intelligence-Driven Computer Network Defense Informed by Analysis of Adversary Campaigns and Intrusion Kill Chains », Lockheed Martin, 2011.', 'Article fondateur de la chaîne d\'attaque.'],
     ['IETF, RFC 9116, <em>A File Format to Aid in Security Vulnerability Disclosure</em>, 2022.', 'Norme security.txt.'],
   ], [$common[1]]),
 ],
 'AFS-D201' => [
-  'g' => [['CTI', 'Cyber Threat Intelligence : renseignement sur les menaces cyber.'], ['IoC', 'Indicateur de compromission (adresse, domaine, empreinte…).'], ['TTP', 'Tactiques, techniques et procédures d\'un adversaire.'], ['Modèle en diamant', 'Adversaire, capacité, infrastructure, victime.'], ['STIX / TAXII', 'Format et protocole d\'échange de la CTI.'], ['Typosquattage', 'Enregistrement de domaines proches d\'une marque pour tromper.'], ['DMARC', 'Politique d\'authentification des e-mails d\'un domaine.'], ['MFA', 'Authentification multifacteur.'], ['Sigma', 'Format ouvert de règles de détection.']],
+  'g' => [['CTI', 'Cyber Threat Intelligence : renseignement sur les menaces cyber.'], ['IoC', 'Indicateur de compromission (adresse, domaine, empreinte...).'], ['TTP', 'Tactiques, techniques et procédures d\'un adversaire.'], ['Modèle en diamant', 'Adversaire, capacité, infrastructure, victime.'], ['STIX / TAXII', 'Format et protocole d\'échange de la CTI.'], ['Typosquattage', 'Enregistrement de domaines proches d\'une marque pour tromper.'], ['DMARC', 'Politique d\'authentification des e-mails d\'un domaine.'], ['MFA', 'Authentification multifacteur.'], ['Sigma', 'Format ouvert de règles de détection.']],
   'b' => array_merge([
     ['Caltagirone, Sergio, Pendergast, Andrew et Betz, Christopher, <em>The Diamond Model of Intrusion Analysis</em>, 2013.', 'Modèle d\'analyse des intrusions.'],
     ['Bianco, David J., « The Pyramid of Pain », 2013.', 'Hiérarchie des indicateurs selon le coût pour l\'adversaire.'],
@@ -83,7 +83,7 @@ return [
     ['Carrier, Brian, <em>File System Forensic Analysis</em>, Addison-Wesley, 2005.', 'Fondements de l\'investigation de supports (auteur de The Sleuth Kit / Autopsy).'],
     ['Ligh, Michael H., Case, Andrew, Levy, Jamie et Walters, Aaron, <em>The Art of Memory Forensics</em>, Wiley, 2014.', 'Référence de l\'analyse mémoire (Volatility).'],
     ['Documentation officielle de Wireshark (Wireshark User\'s Guide, en ligne).', 'Prise en main de l\'analyse de protocoles.'],
-    ['Citizen Lab, Université de Toronto — rapports publics sur la surveillance numérique.', 'Études de cas sur les abus de logiciels espions.'],
+    ['Citizen Lab, Université de Toronto : rapports publics sur la surveillance numérique.', 'Études de cas sur les abus de logiciels espions.'],
   ], $common),
 ],
 'AFS-F101' => [
@@ -93,7 +93,7 @@ return [
     ['Porter, Michael E., <em>Competitive Strategy</em>, Free Press, 1980.', 'Analyse concurrentielle et forces du marché.'],
     ['Godet, Michel, <em>Manuel de prospective stratégique</em>, Dunod (éditions successives).', 'Méthodes de prospective et de scénarios.'],
     ['Schwartz, Peter, <em>The Art of the Long View</em>, Doubleday, 1991.', 'La méthode des scénarios inspirée de l\'expérience Shell.'],
-    ['Secrétariat de la ZLECAf — textes de l\'Accord et documentation officielle (en ligne).', 'Règles du marché continental.'],
+    ['Secrétariat de la ZLECAf : textes de l\'Accord et documentation officielle (en ligne).', 'Règles du marché continental.'],
   ],
 ],
 'AFS-F201' => [
@@ -101,8 +101,8 @@ return [
   'b' => [
     ['Union africaine, <em>Protocole relatif à la création du Conseil de paix et de sécurité</em>, 2002.', 'Fondement juridique de l\'APSA.'],
     ['Union africaine, <em>Agenda 2063 : l\'Afrique que nous voulons</em>, 2015.', 'Vision stratégique continentale.'],
-    ['ACLED et UCDP — bases de données ouvertes sur les conflits (en ligne).', 'Données quantitatives documentées.'],
-    ['Institute for Security Studies (ISS Africa) et International Crisis Group — rapports publics.', 'Analyses régionales de référence.'],
+    ['ACLED et UCDP : bases de données ouvertes sur les conflits (en ligne).', 'Données quantitatives documentées.'],
+    ['Institute for Security Studies (ISS Africa) et International Crisis Group, rapports publics.', 'Analyses régionales de référence.'],
     ['Nations unies, <em>Principes directeurs relatifs aux entreprises et aux droits de l\'homme</em>, 2011.', 'Cadre de responsabilité des entreprises.'],
   ],
 ],

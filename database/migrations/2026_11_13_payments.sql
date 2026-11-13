@@ -1,5 +1,5 @@
 -- =====================================================================
---  AFRICA'SPY — migration : paiement obligatoire avant l'accès aux formations
+--  AFRICA'SPY : migration : paiement obligatoire avant l'accès aux formations
 --  À exécuter sur une base installée AVANT cette version :
 --    mysql africaspy < database/migrations/2026_11_13_payments.sql
 --  (les nouvelles installations l'intègrent déjà via database/africaspy.sql)
@@ -43,6 +43,6 @@ INSERT IGNORE INTO role_permissions (role_id, permission_id)
   SELECT r.id, p.id FROM roles r JOIN permissions p ON p.slug = 'payments.manage' WHERE r.slug = 'admin';
 INSERT IGNORE INTO settings (setting_key, setting_value) VALUES
   ('payment_manual_enabled', '1'),
-  ('payment_manual_instructions', "Virement bancaire ou dépôt Mobile Money au nom d'AFRICA'SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration › Paramètres."),
+  ('payment_manual_instructions', "Virement bancaire ou dépôt Mobile Money au nom d'AFRICA'SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration / Paramètres."),
   ('promo_label', 'Offre de lancement'),
   ('promo_ends_at', '');

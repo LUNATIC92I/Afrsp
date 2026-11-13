@@ -1,5 +1,5 @@
 <?php
-/** Enrichissements pédagogiques — modules C et D. */
+/** Enrichissements pédagogiques : modules C et D. */
 return [
 'AFS-C101' => [
   'chapters' => [
@@ -23,7 +23,7 @@ HTML]],
 <h3>Signaux liés au travail (à traiter avec discernement)</h3>
 <ul><li>Demandes d'accès sans lien avec la mission ;</li><li>Téléchargements massifs avant un départ ;</li><li>Contournement répété des procédures de sécurité ;</li><li>Conflit professionnel grave non résolu.</li></ul>
 <h3>La bonne réponse</h3>
-<p>Un signal appelle d'abord un <strong>échange managérial</strong> et, si nécessaire, une vérification encadrée par les procédures internes et le droit du travail — jamais une enquête clandestine ni une stigmatisation.</p>
+<p>Un signal appelle d'abord un <strong>échange managérial</strong> et, si nécessaire, une vérification encadrée par les procédures internes et le droit du travail, jamais une enquête clandestine ni une stigmatisation.</p>
 <div class="warning">Les critères liés à l'origine, à la religion, à l'opinion ou à la vie privée ne sont pas des indicateurs de risque : les utiliser serait discriminatoire et illégal.</div>
 <div class="keypoints"><strong>Points clés</strong><ul><li>Les signaux pertinents sont professionnels et objectifs.</li><li>La première réponse est managériale.</li><li>Toute vérification suit une procédure écrite et proportionnée.</li></ul></div>
 HTML]],
@@ -85,7 +85,7 @@ HTML]],
     1 => [
       'lessons' => [['title' => 'Approfondissement : la méthode du nœud papillon', 'type' => 'text', 'minutes' => 15, 'content' => <<<'HTML'
 <p>Le <strong>nœud papillon</strong> (bow-tie) représente un événement redouté au centre, ses <em>causes</em> à gauche et ses <em>conséquences</em> à droite. Les mesures de prévention s'insèrent entre causes et événement ; les mesures de protection entre événement et conséquences.</p>
-<pre><code>Causes ─► [Prévention] ─► ÉVÉNEMENT ─► [Protection] ─► Conséquences
+<pre><code>Causes -> [Prévention] -> ÉVÉNEMENT -> [Protection] -> Conséquences
 Hameçonnage   MFA, formation    Compromission    Sauvegardes,      Arrêt d'activité
 Mot de passe                    de messagerie    cellule de crise  Fuite de données</code></pre>
 <p>Cette visualisation, utilisée dans l'industrie et la sûreté, aide les décideurs à voir où investir et à vérifier qu'aucune cause majeure n'est sans barrière.</p>
@@ -208,9 +208,9 @@ HTML]],
       'lessons' => [['title' => 'Approfondissement : typosquattage et domaines trompeurs', 'type' => 'text', 'minutes' => 15, 'content' => <<<'HTML'
 <p>Le <strong>typosquattage</strong> consiste à enregistrer des noms de domaine proches d'une marque (lettre inversée, tiret ajouté, extension différente, caractères visuellement similaires) pour tromper les utilisateurs.</p>
 <h3>Exemples de variantes (fictives)</h3>
-<pre><code>banque-exemple.com   →  banque-exernple.com  (rn au lieu de m)
-                     →  banqueexemple-ci.com
-                     →  banque-exemple.co</code></pre>
+<pre><code>banque-exemple.com   ->  banque-exernple.com  (rn au lieu de m)
+                     ->  banqueexemple-ci.com
+                     ->  banque-exemple.co</code></pre>
 <h3>Défense</h3>
 <ul><li>Surveiller les nouveaux enregistrements de domaines proches de sa marque (services de veille, journaux de transparence des certificats) ;</li><li>Enregistrer préventivement les variantes les plus évidentes ;</li><li>Signaler les domaines frauduleux au registrar et au CERT national ;</li><li>Mettre en place SPF, DKIM et DMARC pour limiter l'usurpation de ses adresses e-mail.</li></ul>
 <div class="keypoints"><strong>Points clés</strong><ul><li>Les domaines proches sont un vecteur majeur d'hameçonnage.</li><li>La surveillance est passive et légale.</li><li>DMARC protège la réputation de sa messagerie.</li></ul></div>

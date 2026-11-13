@@ -1,5 +1,5 @@
 <?php
-/** Administration — messages reçus via le formulaire de contact. */
+/** Administration : messages reçus via le formulaire de contact. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -23,7 +23,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
 <article class="box reveal" style="<?= $r['is_read'] ? '' : 'border-color:rgba(0,200,255,.45)' ?>">
   <div class="box__head"><h2 style="letter-spacing:.06em;text-transform:none"><?= e($r['subject']) ?></h2><span class="mono"><?= e(fmt_datetime($r['created_at'])) ?></span></div>
   <div class="box__body">
-    <p class="mono dim" style="font-size:.78rem"><?= e($r['full_name']) ?> · <a href="mailto:<?= e($r['email']) ?>"><?= e($r['email']) ?></a></p>
+    <p class="mono dim" style="font-size:.78rem"><?= e($r['full_name']) ?> | <a href="mailto:<?= e($r['email']) ?>"><?= e($r['email']) ?></a></p>
     <p style="white-space:pre-line"><?= e($r['message']) ?></p>
     <div class="flex"><a class="btn btn--sm btn--primary" href="mailto:<?= e($r['email']) ?>?subject=<?= rawurlencode('Re: ' . $r['subject']) ?>">Répondre</a><?= action_btn('read', ['id' => $r['id']], $r['is_read'] ? 'Marquer non lu' : 'Marquer lu') ?><?= action_btn('delete', ['id' => $r['id']], 'Supprimer', 'btn--sm btn--danger', 'Supprimer ce message ?') ?></div>
   </div>

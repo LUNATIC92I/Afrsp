@@ -1,5 +1,5 @@
 <?php
-/** Administration — résultats d'examens et réouverture de tentatives. */
+/** Administration : résultats d'examens et réouverture de tentatives. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -43,7 +43,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
 <section class="stats">
   <div class="stat"><div class="stat__label">Examens soumis</div><div class="stat__value"><?= (int) $agg['n'] ?></div></div>
   <div class="stat"><div class="stat__label">Réussites</div><div class="stat__value"><?= (int) $agg['ok'] ?><small><?= $agg['n'] ? round($agg['ok'] * 100 / $agg['n']) . ' %' : '' ?></small></div></div>
-  <div class="stat"><div class="stat__label">Score moyen</div><div class="stat__value"><?= $agg['avg'] !== null ? (int) $agg['avg'] . '<small>%</small>' : '—' ?></div></div>
+  <div class="stat"><div class="stat__label">Score moyen</div><div class="stat__value"><?= $agg['avg'] !== null ? (int) $agg['avg'] . '<small>%</small>' : '-' ?></div></div>
 </section>
 <section class="box reveal"><div class="table-wrap"><table class="table">
   <thead><tr><th>Date</th><th>Apprenant</th><th>Formation</th><th class="num">Bonnes rép.</th><th class="num">Durée</th><th class="num">Score</th><th></th></tr></thead>

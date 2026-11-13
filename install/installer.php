@@ -1,13 +1,13 @@
 <?php
 /**
- * AFRICA'SPY — logique d'installation partagée (assistant web et CLI).
+ * AFRICA'SPY : logique d'installation partagée (assistant web et CLI).
  */
 declare(strict_types=1);
 
 function installer_requirements(): array
 {
     $checks = [
-        'PHP ≥ 8.1'                => version_compare(PHP_VERSION, '8.1.0', '>='),
+        'PHP 8.1 ou plus récent'                => version_compare(PHP_VERSION, '8.1.0', '>='),
         'Extension PDO MySQL'      => extension_loaded('pdo_mysql'),
         'Extension mbstring'       => extension_loaded('mbstring'),
         'Extension GD (QR Code)'   => extension_loaded('gd'),
@@ -85,7 +85,7 @@ function installer_run(array $d): ?string
         'app_key' => bin2hex(random_bytes(32)),
         'db' => ['host' => $d['db_host'], 'port' => (int) ($d['db_port'] ?: 3306), 'name' => $d['db_name'], 'user' => $d['db_user'], 'pass' => (string) $d['db_pass']],
     ];
-    $php = "<?php\n// Généré par l'installateur AFRICA'SPY le " . gmdate('c') . " — NE PAS VERSIONNER.\nreturn " . var_export($cfg, true) . ";\n";
+    $php = "<?php\n// Généré par l'installateur AFRICA'SPY le " . gmdate('c') . " : NE PAS VERSIONNER.\nreturn " . var_export($cfg, true) . ";\n";
     if (file_put_contents(APP_ROOT . '/config/config.local.php', $php, LOCK_EX) === false) {
         return 'Impossible d\'écrire config/config.local.php (droits d\'écriture).';
     }

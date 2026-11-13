@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — primitives de sécurité :
+ * AFRICA'SPY : primitives de sécurité :
  * limitation de débit, hachage des mots de passe, politique de mot de passe,
  * double authentification TOTP (RFC 6238) avec codes de secours.
  */
@@ -13,7 +13,7 @@ declare(strict_types=1);
 /**
  * Comptabilise un événement et indique s'il reste sous le seuil.
  * @param string $action identifiant de l'action (ex. 'reset:ip')
- * @param string $key    discriminant (adresse IP, e-mail, identifiant…)
+ * @param string $key    discriminant (adresse IP, e-mail, identifiant...)
  */
 function rate_limit(string $action, string $key, int $max, int $windowSeconds): bool
 {
@@ -141,7 +141,7 @@ function totp_code(string $secretB32, int $step): string
     return str_pad((string) ($v % 1000000), 6, '0', STR_PAD_LEFT);
 }
 
-/** Vérifie un code (tolérance ±1 pas) ; renvoie le pas utilisé, ou null. Refuse la réutilisation. */
+/** Vérifie un code (tolérance de 1 pas avant ou après) ; renvoie le pas utilisé, ou null. Refuse la réutilisation. */
 function totp_verify(string $secretB32, string $code, ?int $lastStep = null): ?int
 {
     $code = preg_replace('/\D/', '', $code);

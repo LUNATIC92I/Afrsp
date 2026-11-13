@@ -1,5 +1,5 @@
 <?php
-/** Administration — utilisateurs, rôles et statuts. */
+/** Administration : utilisateurs, rôles et statuts. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -25,11 +25,11 @@ if (is_post()) {
         if ($id) {
             q('UPDATE users SET first_name=?, last_name=?, email=?, role_id=?, status=? WHERE id=?', [$d['first_name'], $d['last_name'], $d['email'], (int) $d['role_id'], $d['status'], $id]);
             if ($d['password'] !== '') q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($d['password']), $id]);
-            audit('user.update', 'user', $id, $d['email'] . ' · rôle=' . $roles[(int) $d['role_id']] . ' · ' . $d['status'] . ($d['password'] !== '' ? ' · mot de passe réinitialisé' : ''));
+            audit('user.update', 'user', $id, $d['email'] . ' | rôle=' . $roles[(int) $d['role_id']] . ' | ' . $d['status'] . ($d['password'] !== '' ? ' | mot de passe réinitialisé' : ''));
         } else {
             q('INSERT INTO users (first_name, last_name, email, role_id, status, password_hash) VALUES (?,?,?,?,?,?)', [$d['first_name'], $d['last_name'], $d['email'], (int) $d['role_id'], $d['status'], hash_password($d['password'])]);
             $id = (int) db()->lastInsertId();
-            audit('user.create', 'user', $id, $d['email'] . ' · ' . $roles[(int) $d['role_id']]);
+            audit('user.create', 'user', $id, $d['email'] . ' | ' . $roles[(int) $d['role_id']]);
         }
         flash('success', 'Utilisateur enregistré.');
         back(['edit' => $id]);
@@ -90,11 +90,11 @@ if ($editId !== '') {
   </form>
   <?php if ($u): ?>
   <section class="box reveal"><div class="box__head"><h2>Activité</h2></div><div class="box__body">
-    <dl class="kv"><dt>Dernière connexion</dt><dd><?= e(fmt_datetime($u['last_login_at'])) ?></dd><dt>Pays</dt><dd><?= e($u['country'] ?: '—') ?></dd><dt>Organisation</dt><dd><?= e($u['organization'] ?: '—') ?></dd><dt>Double authentification</dt><dd><?= (int) $u['totp_enabled'] ? '<span class="status-pill status-pill--on">● Activée</span> ' . action_btn('reset_mfa', ['id' => $u['id']], 'Réinitialiser', 'btn--sm', 'Réinitialiser la 2FA de cet utilisateur (téléphone perdu) ? Vérifiez son identité avant de confirmer.') : '<span class="status-pill status-pill--off">● Non activée</span>' ?></dd><dt>Échecs récents</dt><dd><?= $fails ?><?php if ($fails): ?> <?= action_btn('unlock', ['id' => $u['id']], 'Déverrouiller') ?><?php endif; ?></dd></dl>
+    <dl class="kv"><dt>Dernière connexion</dt><dd><?= e(fmt_datetime($u['last_login_at'])) ?></dd><dt>Pays</dt><dd><?= e($u['country'] ?: '-') ?></dd><dt>Organisation</dt><dd><?= e($u['organization'] ?: '-') ?></dd><dt>Double authentification</dt><dd><?= (int) $u['totp_enabled'] ? '<span class="status-pill status-pill--on">Activée</span> ' . action_btn('reset_mfa', ['id' => $u['id']], 'Réinitialiser', 'btn--sm', 'Réinitialiser la 2FA de cet utilisateur (téléphone perdu) ? Vérifiez son identité avant de confirmer.') : '<span class="status-pill status-pill--off">Non activée</span>' ?></dd><dt>Échecs récents</dt><dd><?= $fails ?><?php if ($fails): ?> <?= action_btn('unlock', ['id' => $u['id']], 'Déverrouiller') ?><?php endif; ?></dd></dl>
     <h3 class="mt-2" style="font-size:1rem">Formations (<?= count($enr) ?>)</h3>
-    <ul class="feed"><?php foreach ($enr as $e): ?><li><span><?= e($e['code']) ?> · <?= e($e['title']) ?></span><time><?= (int) $e['progress'] ?> %<?= $e['status'] === 'completed' ? ' ✓' : '' ?></time></li><?php endforeach; ?></ul>
+    <ul class="feed"><?php foreach ($enr as $e): ?><li><span><?= e($e['code']) ?> | <?= e($e['title']) ?></span><time><?= (int) $e['progress'] ?> %<?= $e['status'] === 'completed' ? ', terminé' : '' ?></time></li><?php endforeach; ?></ul>
     <h3 class="mt-2" style="font-size:1rem">Tentatives d'examen</h3>
-    <ul class="feed"><?php foreach ($att as $a): ?><li><span><?= e($a['code']) ?> · <?= e(fmt_datetime($a['started_at'])) ?></span><time><?= $a['submitted_at'] ? e(number_format((float) $a['score'], 0)) . ' %' : 'en cours' ?></time></li><?php endforeach; ?></ul>
+    <ul class="feed"><?php foreach ($att as $a): ?><li><span><?= e($a['code']) ?> | <?= e(fmt_datetime($a['started_at'])) ?></span><time><?= $a['submitted_at'] ? e(number_format((float) $a['score'], 0)) . ' %' : 'en cours' ?></time></li><?php endforeach; ?></ul>
     <div class="mt-2"><?= action_btn('delete', ['id' => $u['id']], 'Supprimer le compte', 'btn--sm btn--danger', 'Supprimer définitivement ce compte et toutes ses données (inscriptions, résultats, certificats) ?') ?></div>
   </div></section>
   <?php endif; ?>
@@ -123,7 +123,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
   <thead><tr><th>Utilisateur</th><th>Rôle</th><th class="num">Formations</th><th class="num">Certificats</th><th>Inscription</th><th>Statut</th><th></th></tr></thead>
   <tbody><?php foreach ($rows as $r): ?>
     <tr><td><strong><?= e($r['first_name'] . ' ' . $r['last_name']) ?></strong><br><small class="dim"><?= e($r['email']) ?></small></td><td><?= e($r['role_name']) ?></td><td class="num"><?= (int) $r['enr'] ?></td><td class="num"><?= (int) $r['certs'] ?></td><td><?= e(fmt_date($r['created_at'], false)) ?></td>
-      <td><?= $r['status'] === 'active' ? '<span class="status-pill status-pill--on">● Actif</span>' : '<span class="status-pill status-pill--bad">● Suspendu</span>' ?></td>
+      <td><?= $r['status'] === 'active' ? '<span class="status-pill status-pill--on">Actif</span>' : '<span class="status-pill status-pill--bad">Suspendu</span>' ?></td>
       <td><div class="actions"><a class="btn btn--sm" href="<?= e(url('admin/users.php', ['edit' => $r['id']])) ?>">Gérer</a></div></td></tr>
   <?php endforeach; ?></tbody></table></div></section>
 <?= pagination_links($pg, ['q' => $q, 'role' => $role ?: null]) ?>

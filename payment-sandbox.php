@@ -1,5 +1,5 @@
 <?php
-/** Guichet de paiement SIMULÉ — développement et tests uniquement (désactivé en production). */
+/** Guichet de paiement SIMULÉ : développement et tests uniquement (désactivé en production). */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/payments.php';
@@ -27,10 +27,10 @@ require APP_ROOT . '/includes/header.php';
 ?>
 <main id="main" class="sandbox">
   <div class="sandbox__box panel corners reveal">
-    <p class="sandbox__flag">MODE TEST — AUCUN DÉBIT RÉEL</p>
-    <p class="mono dim">Guichet simulé · <?= e($p['reference']) ?></p>
+    <p class="sandbox__flag">MODE TEST : AUCUN DÉBIT RÉEL</p>
+    <p class="mono dim">Guichet simulé | <?= e($p['reference']) ?></p>
     <h1><?= e(fmt_xof((int) $p['amount_xof'])) ?></h1>
-    <p><?= e($p['code']) ?> · <?= e($p['title']) ?></p>
+    <p><?= e($p['code']) ?> | <?= e($p['title']) ?></p>
     <?php if ($p['status'] !== 'pending'): ?>
       <div class="alert">Cette commande est déjà traitée (<?= e($p['status']) ?>).</div>
       <a class="btn btn--ghost" href="<?= e(url('payment-return.php', ['ref' => $p['reference']])) ?>">Voir le statut</a>

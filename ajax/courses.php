@@ -1,5 +1,5 @@
 <?php
-/** AJAX — catalogue filtré (GET, lecture seule). */
+/** AJAX : catalogue filtré (GET, lecture seule). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/catalog.php';

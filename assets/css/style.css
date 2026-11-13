@@ -1,5 +1,5 @@
 /* =====================================================================
-   AFRICA'SPY — Futuristic Intelligence Academy
+   AFRICA'SPY : Futuristic Intelligence Academy
    Système de design principal : jetons, typographie, composants, pages publiques.
    ===================================================================== */
 @import url("../fonts/fonts.css");
@@ -146,7 +146,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .btn.is-loading::before { content: ""; width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; }
 .btn .ico { width: 18px; height: 18px; flex: none; }
 .link-arrow { display: inline-flex; align-items: center; gap: .5em; font: 600 .82rem var(--f-head); letter-spacing: .14em; text-transform: uppercase; }
-.link-arrow::after { content: "→"; transition: transform .25s var(--ease); }
+.link-arrow::after { content: ""; display: inline-block; width: .45em; height: .45em; margin-left: .35em; border: solid currentColor; border-width: 1.5px 1.5px 0 0; transform: rotate(45deg) translateY(-.08em); transition: transform .25s var(--ease); }
 .link-arrow:hover::after { transform: translateX(4px); }
 
 /* =====================================================================
@@ -666,7 +666,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .prose code { font-family: var(--f-mono); font-size: .9em; background: rgba(174, 187, 201, .1); padding: 1px 6px; border-radius: 3px; color: var(--turq); }
 .checklist { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 26px; }
 .checklist li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: .95rem; }
-.checklist li::before { content: "✓"; color: var(--green); font-weight: 700; }
+.checklist li::before { content: ""; display: inline-block; width: .35em; height: .7em; margin: 0 .2em .15em; border: solid var(--green); border-width: 0 2px 2px 0; transform: rotate(45deg); }
 @media (max-width: 640px) { .checklist { grid-template-columns: 1fr; } }
 .syllabus { border: 1px solid var(--line-strong); border-radius: var(--r-md); overflow: hidden; }
 .syllabus details { border-bottom: 1px solid var(--line); }
@@ -787,7 +787,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .checkout-steps li::before { content: counter(st); width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; font: .74rem var(--f-mono); }
 .checkout-steps li:not(:last-child)::after { content: ""; width: 34px; height: 1px; background: var(--line-strong); margin-left: 6px; }
 .checkout-steps .is-done { color: var(--green); }
-.checkout-steps .is-done::before { content: "✓"; border-color: var(--green); background: rgba(26, 255, 156, .1); }
+.checkout-steps .is-done::before { content: "OK"; border-color: var(--green); background: rgba(26, 255, 156, .1); }
 .checkout-steps .is-current { color: var(--white); }
 .checkout-steps .is-current::before { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 14px rgba(0, 200, 255, .5); }
 .checkout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
@@ -810,7 +810,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .order__body { padding: 22px 24px 26px; }
 .order__title { font: 700 1.3rem/1.25 var(--f-head); letter-spacing: .02em; margin: 6px 0 14px; }
 .order__incl { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 7px; font-size: .9rem; }
-.order__incl li::before { content: "◆ "; color: var(--turq); font-size: .7em; }
+.order__incl li::before { content: ""; display: inline-block; width: .4em; height: .4em; margin-right: .6em; vertical-align: .15em; background: var(--turq); transform: rotate(45deg); }
 .order__lines > div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px dashed var(--line-strong); font-size: .92rem; }
 .order__discount { color: var(--green); }
 .order__total { font: 700 1.25rem var(--f-display); color: var(--white); border-top: 1px solid var(--line-strong) !important; }
@@ -852,7 +852,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 /* Bandeau défilant */
 .ticker { position: relative; overflow: hidden; border-block: 1px solid var(--line); background: rgba(8, 12, 18, .8); padding: 14px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
 .ticker__track { display: flex; gap: 28px; width: max-content; animation: marquee 48s linear infinite; font: 600 .82rem var(--f-head); letter-spacing: .26em; text-transform: uppercase; color: var(--silver); white-space: nowrap; }
-.ticker__track i { font-style: normal; color: var(--gold); font-size: .6rem; align-self: center; }
+.ticker__track i { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); align-self: center; }
 .ticker:hover .ticker__track { animation-play-state: paused; }
 
 /* Satellites en orbite autour de l'emblème */

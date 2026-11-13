@@ -13,7 +13,7 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@africaspy.test';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin-Test-2026';
 const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N', 'africaspy', '-e', q]).toString().trim();
 let pass = 0, fail = 0;
-const check = (n, c, x = '') => { c ? pass++ : fail++; console.log((c ? '  PASS ' : '  FAIL ') + n + (x ? ' — ' + x : '')); };
+const check = (n, c, x = '') => { c ? pass++ : fail++; console.log((c ? '  PASS ' : '  FAIL ') + n + (x ? ' : ' + x : '')); };
 const token = h => (h.match(/name="_csrf" value="([^"]+)"/) || [])[1];
 const PWD = 'Factura-Kq83vz';
 
@@ -102,7 +102,7 @@ function smtpSink(port) {
   check('Bienvenue : contenu personnalisé et lien vers l\'espace', /Bonjour Awa/.test(html) && /learner\/dashboard\.php/.test(html) && !/<script/i.test(html));
   check('Bienvenue : aucun mot de passe dans le message', w[0] && !w[0].includes(PWD) && !html.includes(PWD));
 
-  // ---- 2. Paiement → facture PDF jointe, numérotation continue
+  // ---- 2. Paiement puis facture PDF jointe, numérotation continue
   const before = sql("SELECT COALESCE(MAX(CAST(SUBSTRING_INDEX(invoice_no, '-', -1) AS UNSIGNED)),0) FROM invoices WHERE doc_type='invoice' AND invoice_no LIKE CONCAT('FAC-', YEAR(UTC_DATE()), '-%')");
   const ref = await buy(ctx, slug);
   const inv = sql(`SELECT i.invoice_no, i.amount_ttc_xof, i.tax_xof FROM invoices i JOIN payments p ON p.id = i.payment_id WHERE p.reference = '${ref}' AND i.doc_type = 'invoice'`).split('\t');
@@ -199,7 +199,7 @@ function smtpSink(port) {
   check('SMTP : mot de passe conservé si le champ est laissé vide', sql("SELECT setting_value FROM settings WHERE setting_key='smtp_pass_enc'") === enc);
   const n = sink.received.length;
   await register(await request.newContext({ baseURL: B }), `nowelcome${stamp}@example.org`, 'Moussa');
-  check('Option : bienvenue désactivée → aucun envoi', sink.received.length === n);
+  check('Option : bienvenue désactivée, aucun envoi', sink.received.length === n);
 
   // Remise en état (mode journal)
   sql("UPDATE settings SET setting_value = '' WHERE setting_key IN ('mail_transport','smtp_host','smtp_pass_enc','mail_from','smtp_user')");

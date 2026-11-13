@@ -1,5 +1,5 @@
 <?php
-/** Administration — chapitres d'une formation (ajout, édition, ordre, suppression). */
+/** Administration : chapitres d'une formation (ajout, édition, ordre, suppression). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -55,14 +55,14 @@ require APP_ROOT . '/includes/app-header.php'; ?>
 <form class="toolbar reveal" method="get"><?= sel('course', 'Formation', $courses, $courseId, ['data-autosubmit' => true]) ?></form>
 <?php if ($course): ?>
 <div class="grid-2">
-  <section class="box reveal"><div class="box__head"><h2><?= e($course['code']) ?> · Programme</h2><span class="mono"><?= count($chapters) ?> chapitre(s)</span></div>
+  <section class="box reveal"><div class="box__head"><h2><?= e($course['code']) ?> | Programme</h2><span class="mono"><?= count($chapters) ?> chapitre(s)</span></div>
     <ol class="sortable-list">
     <?php if (!$chapters): ?><li><span></span><span class="dim">Aucun chapitre.</span><span></span></li><?php endif; ?>
     <?php foreach ($chapters as $i => $ch): ?>
       <li><span class="mono gold"><?= sprintf('%02d', $i + 1) ?></span>
-        <span><strong><?= e($ch['title']) ?></strong><br><small class="dim"><?= (int) $ch['n'] ?> leçon(s) · <?= (int) $ch['qn'] ?> question(s)</small></span>
+        <span><strong><?= e($ch['title']) ?></strong><br><small class="dim"><?= (int) $ch['n'] ?> leçon(s) | <?= (int) $ch['qn'] ?> question(s)</small></span>
         <span class="actions">
-          <?= action_btn('move', ['id' => $ch['id'], 'course_id' => $courseId, 'dir' => 'up'], '↑') ?><?= action_btn('move', ['id' => $ch['id'], 'course_id' => $courseId, 'dir' => 'down'], '↓') ?>
+          <?= action_btn('move', ['id' => $ch['id'], 'course_id' => $courseId, 'dir' => 'up'], 'Monter') ?><?= action_btn('move', ['id' => $ch['id'], 'course_id' => $courseId, 'dir' => 'down'], 'Descendre') ?>
           <a class="btn btn--sm" href="<?= e(url('admin/lessons.php', ['chapter' => $ch['id']])) ?>">Leçons</a>
           <a class="btn btn--sm" href="<?= e(url('admin/chapters.php', ['course' => $courseId, 'edit' => $ch['id']])) ?>">Modifier</a>
           <?= action_btn('delete', ['id' => $ch['id'], 'course_id' => $courseId], 'Supprimer', 'btn--sm btn--danger', 'Supprimer ce chapitre et toutes ses leçons ? Les questions associées seront détachées du chapitre.') ?>

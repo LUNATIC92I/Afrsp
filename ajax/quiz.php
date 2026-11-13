@@ -1,5 +1,5 @@
 <?php
-/** AJAX — correction d'une évaluation formative de chapitre. */
+/** AJAX : correction d'une évaluation formative de chapitre. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/catalog.php';
@@ -25,4 +25,4 @@ foreach ($qs as $q) {
 }
 $total = count($qs);
 json_response(['ok' => true, 'score' => $score, 'total' => $total, 'results' => $out,
-    'message' => $total ? "Résultat : $score / $total" . ($score === $total ? ' — parfait.' : ' — relisez les explications.') : 'Aucune question.']);
+    'message' => $total ? "Résultat : $score / $total" . ($score === $total ? '. Parfait.' : '. Relisez les explications.') : 'Aucune question.']);

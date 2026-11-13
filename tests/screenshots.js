@@ -21,7 +21,7 @@ async function shot(p, name, sel, opts = {}) {
   await settle(p, sel);
   if (sel && opts.element) await p.locator(sel).first().screenshot({ path: path.join(OUT, name + '.jpg'), type: 'jpeg', quality: 86 });
   else await p.screenshot({ path: path.join(OUT, name + '.jpg'), type: 'jpeg', quality: 86, fullPage: !!opts.full });
-  console.log('✓', name);
+  console.log('OK', name);
 }
 
 (async () => {
@@ -38,7 +38,7 @@ async function shot(p, name, sel, opts = {}) {
   const ictx = await b.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
   const ip = await ictx.newPage();
   await ip.goto(B + '/index.php'); await ip.waitForTimeout(2700);
-  await ip.screenshot({ path: path.join(OUT, '00-sequence-ouverture.jpg'), type: 'jpeg', quality: 86 }); console.log('✓ 00-sequence-ouverture');
+  await ip.screenshot({ path: path.join(OUT, '00-sequence-ouverture.jpg'), type: 'jpeg', quality: 86 }); console.log('00-sequence-ouverture');
   await ictx.close();
 
   // ---- Site public
@@ -57,7 +57,7 @@ async function shot(p, name, sel, opts = {}) {
   await shot(p, '07-fiche-formation-prix');
   await p.goto(B + '/tools.php'); await shot(p, '08-galerie-outils', '.gear-grid', {});
 
-  // ---- Parcours apprenant : inscription → paiement → cours → examen
+  // ---- Parcours apprenant : inscription puis paiement puis cours puis examen
   const email = 'awa.diallo.' + Date.now() + '@example.org';
   await p.goto(B + '/register.php?formation=renseignement-humain-principes-ethique');
   await p.fill('#first_name', 'Awa'); await p.fill('#last_name', 'Diallo'); await p.fill('#email', email);
@@ -99,13 +99,13 @@ async function shot(p, name, sel, opts = {}) {
   require('fs').writeFileSync(path.join(OUT, 'certificat.pdf'), await pdf.body());
   execFileSync('pdftoppm', ['-r', '160', '-jpeg', '-jpegopt', 'quality=88', '-singlefile', path.join(OUT, 'certificat.pdf'), path.join(OUT, '17-certificat')]);
   require('fs').unlinkSync(path.join(OUT, 'certificat.pdf'));
-  console.log('✓ 17-certificat');
+  console.log('17-certificat');
   const ref = sql("SELECT reference FROM payments p JOIN users u ON u.id=p.user_id WHERE u.email='" + email + "' AND p.status='paid'");
   const rc = await p.request.get(B + '/learner/receipt.php?ref=' + ref);
   require('fs').writeFileSync(path.join(OUT, 'recu.pdf'), await rc.body());
   execFileSync('pdftoppm', ['-r', '110', '-jpeg', '-jpegopt', 'quality=88', '-singlefile', '-f', '1', '-l', '1', path.join(OUT, 'recu.pdf'), path.join(OUT, '18-recu-de-paiement')]);
   require('fs').unlinkSync(path.join(OUT, 'recu.pdf'));
-  console.log('✓ 18-recu-de-paiement');
+  console.log('18-recu-de-paiement');
   await p.goto(B + '/verify-certificate.php?code=' + no); await shot(p, '19-verification-publique');
 
   // ---- Administration

@@ -12,7 +12,7 @@ $__catalog = [
         ['code' => 'C', 'slug' => 'contre-espionnage', 'name' => 'Contre-espionnage', 'accent' => '#FF4057',
          'description' => 'Protéger l\'information et les personnes : menaces internes, ingénierie sociale, analyse des menaces, contre-mesures défensives.'],
         ['code' => 'D', 'slug' => 'cyberespionnage-renseignement-numerique', 'name' => 'Cyberespionnage et renseignement numérique', 'accent' => '#865DFF',
-         'description' => 'Le terrain numérique : OSINT avancé, empreintes, métadonnées, Cyber Threat Intelligence, détection — sur données synthétiques.'],
+         'description' => 'Le terrain numérique : OSINT avancé, empreintes, métadonnées, Cyber Threat Intelligence, détection, sur données synthétiques.'],
         ['code' => 'E', 'slug' => 'outils-du-renseignement', 'name' => 'Outils du renseignement', 'accent' => '#00F0D0',
          'description' => 'Les outils logiciels et matériels de l\'analyste, présentés avec leurs usages légitimes et leur cadre légal.'],
         ['code' => 'F', 'slug' => 'intelligence-strategique-geopolitique', 'name' => 'Intelligence stratégique et géopolitique', 'accent' => '#1AFF9C',

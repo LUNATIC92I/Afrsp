@@ -1,11 +1,11 @@
 <?php
-/** MODULE D — CYBERESPIONNAGE ET RENSEIGNEMENT NUMÉRIQUE */
+/** MODULE D : CYBERESPIONNAGE ET RENSEIGNEMENT NUMÉRIQUE */
 return [
 [
   'code' => 'AFS-D101', 'category' => 'D', 'slug' => 'renseignement-numerique-osint-avance',
   'title' => 'Renseignement numérique et OSINT avancé',
   'subtitle' => 'Cyberespionnage, empreintes numériques et investigation sur métadonnées.',
-  'summary' => 'Comprendre les mécanismes du cyberespionnage, conduire des recherches OSINT avancées, analyser des empreintes numériques et exploiter les métadonnées — exclusivement sur données synthétiques et dans des scénarios autorisés.',
+  'summary' => 'Comprendre les mécanismes du cyberespionnage, conduire des recherches OSINT avancées, analyser des empreintes numériques et exploiter les métadonnées, exclusivement sur données synthétiques et dans des scénarios autorisés.',
   'level' => 'avance', 'hours' => 20, 'featured' => true,
   'description' => '<p>Le numérique est devenu le principal terrain de collecte et d\'affrontement informationnel. Cette formation donne aux analystes la culture technique nécessaire pour <strong>comprendre les menaces</strong> et <strong>mener des investigations ouvertes rigoureuses</strong>.</p><p><strong>Cadre pédagogique :</strong> tous les exercices utilisent des environnements isolés, des jeux de données synthétiques fournis par l\'Académie et des scénarios fictifs. Aucune technique d\'intrusion n\'est enseignée.</p>',
   'objectives' => "Expliquer les modes opératoires du cyberespionnage\nConduire une recherche OSINT avancée méthodique et légale\nAnalyser une empreinte numérique organisationnelle\nExtraire et interpréter des métadonnées de fichiers\nDocumenter une investigation de façon reproductible",
@@ -43,7 +43,7 @@ HTML],
 <table><thead><tr><th>Opérateur</th><th>Usage</th><th>Exemple</th></tr></thead><tbody>
 <tr><td><code>site:</code></td><td>Limiter à un domaine</td><td><code>site:gouv.sn rapport annuel</code></td></tr>
 <tr><td><code>filetype:</code></td><td>Type de document</td><td><code>filetype:pdf budget santé 2025</code></td></tr>
-<tr><td><code>"…"</code></td><td>Expression exacte</td><td><code>"appel d'offres" "fibre optique"</code></td></tr>
+<tr><td><code>"..."</code></td><td>Expression exacte</td><td><code>"appel d'offres" "fibre optique"</code></td></tr>
 <tr><td><code>-</code></td><td>Exclure un terme</td><td><code>jaguar -voiture</code></td></tr>
 </tbody></table>
 <h3>Le pivot</h3>
@@ -54,7 +54,7 @@ HTML],
       ],
       'quiz' => [
         ['Que permet l\'opérateur filetype: ?', ['Exclure un mot', 'Limiter la recherche à un type de fichier', 'Rechercher une image', 'Traduire une page'], 1, 'Ex. filetype:pdf.'],
-        ['Qu\'appelle-t-on « pivoter » en OSINT ?', ['Changer de moteur de recherche', 'Passer d\'un indicateur à d\'autres indicateurs liés', 'Tourner l\'écran', 'Abandonner une piste'], 1, 'Domaine → certificat → infrastructure, etc.'],
+        ['Qu\'appelle-t-on « pivoter » en OSINT ?', ['Changer de moteur de recherche', 'Passer d\'un indicateur à d\'autres indicateurs liés', 'Tourner l\'écran', 'Abandonner une piste'], 1, 'Domaine puis certificat puis infrastructure, etc.'],
         ['Quelle règle d\'hygiène est essentielle ?', ['Contacter la cible pour vérifier', 'Ne pas interagir avec les cibles', 'Utiliser son compte personnel', 'Collecter un maximum de données personnelles'], 1, 'L\'enquêteur observe sans interagir.'],
       ],
     ],
@@ -63,7 +63,7 @@ HTML],
       'summary' => 'Ce qu\'une organisation expose, et comment le réduire.',
       'lessons' => [
         ['title' => 'Empreinte numérique organisationnelle', 'type' => 'text', 'minutes' => 25, 'content' => <<<'HTML'
-<p>L'empreinte numérique d'une organisation est l'ensemble des traces publiquement observables : sites, sous-domaines, adresses e-mail, profils des employés, documents publiés, dépôts de code, offres d'emploi détaillant les technologies utilisées…</p>
+<p>L'empreinte numérique d'une organisation est l'ensemble des traces publiquement observables : sites, sous-domaines, adresses e-mail, profils des employés, documents publiés, dépôts de code, offres d'emploi détaillant les technologies utilisées...</p>
 <h3>Pourquoi l'analyser ?</h3>
 <p>Un attaquant commence par là. L'analyser <strong>pour sa propre organisation</strong> (ou pour un client qui l'a mandaté par écrit) permet de réduire la surface d'attaque.</p>
 <h3>Grille d'audit d'exposition</h3>
@@ -72,7 +72,7 @@ HTML],
 HTML],
       ],
       'quiz' => [
-        ['Qu\'est-ce que l\'empreinte numérique d\'une organisation ?', ['Son logo', 'L\'ensemble de ses traces publiquement observables', 'Son chiffre d\'affaires', 'Son adresse postale'], 1, 'Sites, documents, profils, sous-domaines…'],
+        ['Qu\'est-ce que l\'empreinte numérique d\'une organisation ?', ['Son logo', 'L\'ensemble de ses traces publiquement observables', 'Son chiffre d\'affaires', 'Son adresse postale'], 1, 'Sites, documents, profils, sous-domaines...'],
         ['Un audit d\'exposition sur une organisation tierce nécessite :', ['Rien du tout', 'Un mandat écrit', 'Un compte premium', 'L\'accord d\'un concurrent'], 1, 'Sans autorisation, la démarche est contestable.'],
         ['Pourquoi les offres d\'emploi peuvent-elles être sensibles ?', ['Elles révèlent parfois les technologies utilisées', 'Elles sont toujours fausses', 'Elles contiennent des mots de passe', 'Elles sont illégales'], 0, 'Elles informent un attaquant sur l\'environnement technique.'],
       ],

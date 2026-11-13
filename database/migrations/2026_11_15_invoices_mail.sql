@@ -1,5 +1,5 @@
 -- =====================================================================
---  AFRICA'SPY — migration : factures / avoirs PDF et messagerie configurable
+--  AFRICA'SPY : migration : factures / avoirs PDF et messagerie configurable
 --    mysql africaspy < database/migrations/2026_11_15_invoices_mail.sql
 --    php database/invoices-backfill.php   (factures des paiements déjà encaissés)
 -- =====================================================================
@@ -42,14 +42,14 @@ CREATE TABLE IF NOT EXISTS invoices (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT IGNORE INTO settings (setting_key, setting_value) VALUES
-  ('seller_legal_name', 'AFRICA''SPY — Intelligence Academy'),
+  ('seller_legal_name', 'AFRICA''SPY Intelligence Academy'),
   ('seller_address', ''),
   ('seller_tax_id', ''),
   ('seller_registration', ''),
   ('seller_email', ''),
   ('tax_rate', '0'),
   ('tax_label', 'TVA'),
-  ('tax_exempt_mention', 'TVA non applicable — à adapter selon votre régime fiscal'),
+  ('tax_exempt_mention', 'TVA non applicable (à adapter selon votre régime fiscal)'),
   ('invoice_footer', 'Facture acquittée. Formation en ligne à usage personnel, non cessible.'),
   ('mail_transport', ''),
   ('mail_from', ''),

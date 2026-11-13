@@ -1,5 +1,5 @@
 /* =====================================================================
-   AFRICA'SPY — effects.js
+   AFRICA'SPY : effects.js
    Animations complémentaires : déchiffrement de texte, boutons
    magnétiques, tracé SVG, barre de progression de lecture, projecteur,
    compte à rebours de l'offre, suivi automatique d'un paiement.

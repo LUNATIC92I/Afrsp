@@ -1,5 +1,5 @@
 <?php
-/** Administration — examens finaux et banque de questions QCM. */
+/** Administration : examens finaux et banque de questions QCM. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -92,7 +92,7 @@ if (!$exam && $cid && q_val('SELECT 1 FROM courses WHERE id = ?', [$cid])) {
     q('INSERT INTO exams (course_id, title) VALUES (?, ?)', [$cid, 'Examen final']);
     $exam = q_one('SELECT e.*, c.code, c.title AS course_title FROM exams e JOIN courses c ON c.id = e.course_id WHERE e.course_id = ?', [$cid]);
 }
-$chapters = $exam ? ['' => '— Aucun (examen final uniquement) —'] + array_column(q_all('SELECT id, title FROM chapters WHERE course_id = ? ORDER BY sort_order', [$cid]), 'title', 'id') : [];
+$chapters = $exam ? ['' => 'Aucun (examen final uniquement)'] + array_column(q_all('SELECT id, title FROM chapters WHERE course_id = ? ORDER BY sort_order', [$cid]), 'title', 'id') : [];
 $questions = $exam ? q_all('SELECT q.*, ch.title AS chapter_title, (SELECT COUNT(*) FROM answers a WHERE a.question_id = q.id) n,
                                    (SELECT ROUND(AVG(aa.is_correct)*100) FROM attempt_answers aa WHERE aa.question_id = q.id) rate
                               FROM questions q LEFT JOIN chapters ch ON ch.id = q.chapter_id WHERE q.exam_id = ? ORDER BY ch.sort_order, q.id', [$exam['id']]) : [];
@@ -127,7 +127,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
       <?= csrf_field() ?><input type="hidden" name="action" value="question"><input type="hidden" name="exam_id" value="<?= (int) $exam['id'] ?>"><input type="hidden" name="question_id" value="<?= (int) ($editQ['id'] ?? 0) ?>">
       <?= fld('prompt', 'Énoncé', old('prompt', $editQ['prompt'] ?? ''), 'textarea', ['rows' => 3, 'required' => true]) ?>
       <?= sel('chapter_id', 'Chapitre (QCM formatif)', $chapters, $editQ['chapter_id'] ?? '') ?>
-      <p class="label">Réponses — cochez la bonne</p>
+      <p class="label">Réponses : cochez la bonne</p>
       <div id="answers-list">
         <?php $list = $editAnswers ?: [['label' => '', 'is_correct' => 1], ['label' => '', 'is_correct' => 0], ['label' => '', 'is_correct' => 0], ['label' => '', 'is_correct' => 0]];
         foreach ($list as $i => $a): ?>
@@ -142,12 +142,12 @@ require APP_ROOT . '/includes/app-header.php'; ?>
   </form>
 </div>
 <section class="box reveal">
-  <div class="box__head"><h2>Banque de questions</h2><span class="mono"><?= count($questions) ?> question(s) · <?= $active ?> active(s)</span></div>
+  <div class="box__head"><h2>Banque de questions</h2><span class="mono"><?= count($questions) ?> question(s) | <?= $active ?> active(s)</span></div>
   <div class="table-wrap"><table class="table">
     <thead><tr><th>#</th><th>Énoncé</th><th>Chapitre</th><th class="num">Rép.</th><th class="num">Taux de bonnes réponses</th><th>État</th><th></th></tr></thead>
     <tbody><?php foreach ($questions as $q): ?>
-      <tr><td class="mono"><?= (int) $q['id'] ?></td><td><?= e(str_limit($q['prompt'], 110)) ?></td><td><small><?= e($q['chapter_title'] ?? '—') ?></small></td><td class="num"><?= (int) $q['n'] ?></td><td class="num"><?= $q['rate'] !== null ? (int) $q['rate'] . ' %' : '—' ?></td>
-        <td><?= $q['is_active'] ? '<span class="status-pill status-pill--on">● Active</span>' : '<span class="status-pill status-pill--off">● Inactive</span>' ?></td>
+      <tr><td class="mono"><?= (int) $q['id'] ?></td><td><?= e(str_limit($q['prompt'], 110)) ?></td><td><small><?= e($q['chapter_title'] ?? '-') ?></small></td><td class="num"><?= (int) $q['n'] ?></td><td class="num"><?= $q['rate'] !== null ? (int) $q['rate'] . ' %' : '-' ?></td>
+        <td><?= $q['is_active'] ? '<span class="status-pill status-pill--on">Active</span>' : '<span class="status-pill status-pill--off">Inactive</span>' ?></td>
         <td><div class="actions"><a class="btn btn--sm" href="<?= e(url('admin/exams.php', ['course' => $cid, 'q' => $q['id']])) ?>">Modifier</a><?= action_btn('delete_question', ['exam_id' => $exam['id'], 'question_id' => $q['id']], 'Supprimer', 'btn--sm btn--danger', 'Supprimer cette question ?') ?></div></td></tr>
     <?php endforeach; ?></tbody>
   </table></div>

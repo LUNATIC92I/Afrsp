@@ -1,5 +1,5 @@
 <?php
-/** AJAX — enregistre les notes personnelles d'un apprenant sur une leçon (sauvegarde automatique). */
+/** AJAX : enregistre les notes personnelles d'un apprenant sur une leçon (sauvegarde automatique). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/catalog.php';

@@ -1,4 +1,4 @@
-/* AFRICA'SPY — amorçage synchrone minimal (évite le flash avant les révélations). */
+/* AFRICA'SPY : amorçage synchrone minimal (évite le flash avant les révélations). */
 (function (d) {
   var h = d.documentElement;
   h.className = h.className.replace('no-js', 'js');

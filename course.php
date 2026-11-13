@@ -1,5 +1,5 @@
 <?php
-/** AFRICA'SPY — fiche détaillée d'une formation. */
+/** AFRICA'SPY : fiche détaillée d'une formation. */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/payments.php';
@@ -40,7 +40,7 @@ require APP_ROOT . '/includes/header.php';
         <div><dt>Chapitres</dt><dd><?= (int) $course['chapter_count'] ?></dd></div>
         <div><dt>Leçons</dt><dd><?= (int) $course['lesson_count'] ?></dd></div>
         <div><dt>Prix</dt><dd><?php if (course_discount_pct($course)): ?><s class="dim" style="font-weight:400"><?= e(fmt_xof((int) $course['price_xof'])) ?></s> <?php endif; ?><span class="gold"><?= e(fmt_xof(course_price($course))) ?></span></dd></div>
-        <div><dt>Certification</dt><dd><?= $exam ? 'Oui · ' . (int) $exam['pass_mark'] . ' %' : 'Non' ?></dd></div>
+        <div><dt>Certification</dt><dd><?= $exam ? 'Oui | ' . (int) $exam['pass_mark'] . ' %' : 'Non' ?></dd></div>
       </dl>
     </div>
   </section>
@@ -71,15 +71,15 @@ require APP_ROOT . '/includes/header.php';
             <summary>
               <span class="syllabus__n"><?= sprintf('%02d', $i + 1) ?></span>
               <span class="syllabus__t"><?= e($ch['title']) ?></span>
-              <span class="syllabus__c"><?= count($ch['lessons']) ?> élément<?= count($ch['lessons']) > 1 ? 's' : '' ?><?= $ch['quiz_count'] ? ' · QCM ' . (int) $ch['quiz_count'] . ' q.' : '' ?></span>
+              <span class="syllabus__c"><?= count($ch['lessons']) ?> élément<?= count($ch['lessons']) > 1 ? 's' : '' ?><?= $ch['quiz_count'] ? ' | QCM ' . (int) $ch['quiz_count'] . ' q.' : '' ?></span>
             </summary>
             <div class="syllabus__body">
               <?php if ($ch['summary']): ?><p><?= e($ch['summary']) ?></p><?php endif; ?>
               <ul class="syllabus__lessons">
                 <?php foreach ($ch['lessons'] as $l): ?>
-                <li><span><?= $l['done'] ? '<span class="green" aria-label="terminé" style="color:var(--green)">✓</span> ' : '' ?><?= e($l['title']) ?></span><span class="tag"><?= e(lesson_type_label($l['type'])) ?> · <?= (int) $l['duration_minutes'] ?> min</span></li>
+                <li><span><?= $l['done'] ? '<span class="tag tag--green">Terminé</span> ' : '' ?><?= e($l['title']) ?></span><span class="tag"><?= e(lesson_type_label($l['type'])) ?> | <?= (int) $l['duration_minutes'] ?> min</span></li>
                 <?php endforeach; ?>
-                <?php if ($ch['quiz_count']): ?><li><span>Évaluation du chapitre</span><span class="tag tag--cyan">QCM · <?= (int) $ch['quiz_count'] ?> questions</span></li><?php endif; ?>
+                <?php if ($ch['quiz_count']): ?><li><span>Évaluation du chapitre</span><span class="tag tag--cyan">QCM | <?= (int) $ch['quiz_count'] ?> questions</span></li><?php endif; ?>
               </ul>
             </div>
           </details>
@@ -112,13 +112,13 @@ require APP_ROOT . '/includes/header.php';
         <?php if ($hasCert): ?><a class="btn btn--gold mt-1" href="<?= e(url('learner/certificates.php')) ?>">Mon certificat</a><?php endif; ?>
       <?php else: ?>
         <?= price_block($course, 'price--aside') ?>
-        <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>"><span class="mono">Fin de l'offre dans</span><b data-cd>—</b></div><?php endif; ?>
-        <a class="btn btn--primary btn--pay mt-1" href="<?= e(url('checkout.php', ['course' => $course['slug']])) ?>" data-magnetic><span class="btn__stack"><?= course_is_free($course) ? 'Accéder gratuitement' : 'Acheter la formation' ?><small><?= course_is_free($course) ? 'Accès immédiat' : 'Mobile Money · carte · virement' ?></small></span></a>
+        <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>"><span class="mono">Fin de l'offre dans</span><b data-cd>-</b></div><?php endif; ?>
+        <a class="btn btn--primary btn--pay mt-1" href="<?= e(url('checkout.php', ['course' => $course['slug']])) ?>" data-magnetic><span class="btn__stack"><?= course_is_free($course) ? 'Accéder gratuitement' : 'Acheter la formation' ?><small><?= course_is_free($course) ? 'Accès immédiat' : 'Mobile Money | carte | virement' ?></small></span></a>
         <?php if ($pendingPay): ?><p class="dim mt-1" style="font-size:.85rem">Paiement en attente : <a href="<?= e(url('payment-return.php', ['ref' => $pendingPay['reference']])) ?>"><?= e($pendingPay['reference']) ?></a></p><?php endif; ?>
         <?php if (!$me): ?><p class="dim mt-1" style="font-size:.85rem">Déjà membre ? <a href="<?= e(url('login.php')) ?>">Connectez-vous</a></p><?php endif; ?>
       <?php endif; ?>
       <ul>
-        <li><span>Domaine</span><span><?= e($course['category_code']) ?> · <?= e(explode(' et ', $course['category_name'])[0]) ?></span></li>
+        <li><span>Domaine</span><span><?= e($course['category_code']) ?> | <?= e(explode(' et ', $course['category_name'])[0]) ?></span></li>
         <li><span>Niveau</span><span><?= e(level_label($course['level'])) ?></span></li>
         <li><span>Durée indicative</span><span><?= (int) $course['duration_hours'] ?> h</span></li>
         <li><span>Temps de lecture estimé</span><span><?= intdiv($minutes, 60) ?> h <?= sprintf('%02d', $minutes % 60) ?></span></li>

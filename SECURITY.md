@@ -1,4 +1,4 @@
-# Sécurité — AFRICA'SPY Intelligence Academy
+# Sécurité : AFRICA'SPY Intelligence Academy
 
 Audit réalisé le 13 novembre 2026 sur l'ensemble du code applicatif (PHP, JavaScript, configuration serveur, schéma SQL).
 
@@ -72,7 +72,7 @@ Pour signaler une vulnérabilité, consultez `/.well-known/security.txt` (RFC 91
 **Paiement**
 - Le statut n'est jamais déduit du retour du navigateur : il est revérifié auprès de l'API CinetPay.
 - Montant et devise contrôlés.
-- Verrou transactionnel (`SELECT … FOR UPDATE`) contre la double validation.
+- Verrou transactionnel (`SELECT ... FOR UPDATE`) contre la double validation.
 - Mode test désactivé d'office en production.
 
 **Traçabilité**
@@ -83,8 +83,8 @@ Pour signaler une vulnérabilité, consultez `/.well-known/security.txt` (RFC 91
 ## 3. Recommandations pour l'exploitation
 
 1. **HTTPS obligatoire.** Décommentez la redirection dans `.htaccess` et renseignez `base_url` en `https://`.
-2. **Activez la 2FA** sur votre compte, puis cochez « 2FA obligatoire pour le personnel » (*Administration › Paramètres*).
-3. **SMTP.** Configurez un vrai transport (*Paramètres › Messagerie*) : le mode `log` écrit les e-mails, dont les liens de réinitialisation, dans `storage/mail/` et `storage/logs/mail.log`, ce qui ne convient qu'au développement. Le mot de passe SMTP est chiffré en base (libsodium) et jamais réaffiché.
+2. **Activez la 2FA** sur votre compte, puis cochez « 2FA obligatoire pour le personnel » (*Administration / Paramètres*).
+3. **SMTP.** Configurez un vrai transport (*Paramètres / Messagerie*) : le mode `log` écrit les e-mails, dont les liens de réinitialisation, dans `storage/mail/` et `storage/logs/mail.log`, ce qui ne convient qu'au développement. Le mot de passe SMTP est chiffré en base (libsodium) et jamais réaffiché.
 4. **Proxy ou CDN** (Cloudflare, répartiteur de charge) : déclarez leurs adresses dans `trusted_proxies`.
 5. **Utilisateur MySQL dédié**, avec uniquement les droits `SELECT, INSERT, UPDATE, DELETE` sur la base `africaspy` une fois l'installation terminée.
 6. **PHP en production** : `expose_php = Off`, `display_errors = Off`, `session.cookie_secure = 1`, `upload_max_filesize` adapté.

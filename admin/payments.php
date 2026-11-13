@@ -1,5 +1,5 @@
 <?php
-/** Administration — paiements : suivi, validation des virements, annulation, remboursement. */
+/** Administration : paiements : suivi, validation des virements, annulation, remboursement. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -34,7 +34,7 @@ if (is_post()) {
                 if (!$cert && !has_paid((int) $p['user_id'], (int) $p['course_id'])) {
                     q('DELETE FROM course_enrollments WHERE user_id = ? AND course_id = ?', [$p['user_id'], $p['course_id']]);
                 }
-                audit('payment.refunded', 'payment', (int) $p['id'], $p['reference'] . ' · ' . ($note ?? ''));
+                audit('payment.refunded', 'payment', (int) $p['id'], $p['reference'] . ' | ' . ($note ?? ''));
                 try { issue_credit_note((int) $p['id'], $note ?? 'Remboursement'); mail_credit_note((int) $p['id']); } catch (Throwable $e) { error_log('[AFRICASPY credit note] ' . $e->getMessage()); }
                 flash('success', 'Paiement marqué remboursé' . ($cert ? ' (certificat déjà délivré : accès conservé, révoquez le certificat si nécessaire).' : ' : l\'accès à la formation a été retiré.'));
                 break;
@@ -61,11 +61,11 @@ $appArea = 'admin';
 $activeApp = 'payments';
 require APP_ROOT . '/includes/app-header.php'; ?>
 <section class="stats" data-stagger="60">
-  <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--green)"></i>Chiffre d'affaires encaissé</div><div class="stat__value" style="font-size:1.45rem"><?= e(fmt_xof((int) $k['revenue'])) ?></div><div class="stat__hint"><?= (int) $k['paid'] ?> paiement(s) · 30 j : <?= e(fmt_xof((int) $k['rev30'])) ?></div></div>
+  <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--green)"></i>Chiffre d'affaires encaissé</div><div class="stat__value" style="font-size:1.45rem"><?= e(fmt_xof((int) $k['revenue'])) ?></div><div class="stat__hint"><?= (int) $k['paid'] ?> paiement(s) | 30 j : <?= e(fmt_xof((int) $k['rev30'])) ?></div></div>
   <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--gold)"></i>En attente</div><div class="stat__value" data-count="<?= (int) $k['pending'] ?>">0</div><div class="stat__hint">Virements à vérifier / paiements non confirmés</div></div>
   <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--cyan)"></i>Remises accordées</div><div class="stat__value" style="font-size:1.45rem"><?= e(fmt_xof((int) $k['discount'])) ?></div><div class="stat__hint">Écart prix de référence / prix promotionnel</div></div>
 </section>
-<section class="box reveal"><div class="box__head"><h2>Encaissements · 30 jours</h2><span class="mono">milliers de FCFA</span></div>
+<section class="box reveal"><div class="box__head"><h2>Encaissements | 30 jours</h2><span class="mono">milliers de FCFA</span></div>
   <div class="box__body"><div class="chart" data-chart="bars"><canvas role="img" aria-label="Encaissements quotidiens"></canvas><script type="application/json"><?= json_encode($chart) ?></script></div></div></section>
 <form class="toolbar reveal" method="get">
   <input class="input grow" name="q" value="<?= e($q) ?>" placeholder="Référence, e-mail ou nom">

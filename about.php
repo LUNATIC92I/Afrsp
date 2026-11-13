@@ -1,5 +1,5 @@
 <?php
-/** AFRICA'SPY — Notre institution. */
+/** AFRICA'SPY : Notre institution. */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 
@@ -30,21 +30,21 @@ $values = [
 
   <div class="container section dossier">
     <nav class="dossier__index" aria-label="Sommaire">
-      <a href="#histoire">01 · Histoire</a><a href="#vision">02 · Vision</a><a href="#mission">03 · Mission</a><a href="#valeurs">04 · Valeurs</a>
-      <a href="#pedagogie">05 · Pédagogie</a><a href="#ethique">06 · Éthique &amp; légalité</a><a href="#ambition">07 · Ambition</a>
+      <a href="#histoire">01. Histoire</a><a href="#vision">02. Vision</a><a href="#mission">03. Mission</a><a href="#valeurs">04. Valeurs</a>
+      <a href="#pedagogie">05. Pédagogie</a><a href="#ethique">06. Éthique &amp; légalité</a><a href="#ambition">07. Ambition</a>
     </nav>
     <div>
       <section class="dossier__section" id="histoire">
         <p class="eyebrow">01 // Histoire</p>
         <h2 class="reveal">Née d'un constat</h2>
         <div class="prose reveal">
-          <p>Sur le continent, la demande de compétences en analyse de l'information, en protection des organisations et en anticipation des risques n'a jamais été aussi forte. Administrations, entreprises, banques, ONG, médias et universités font face à des menaces nouvelles — fraudes numériques, désinformation, ingérences économiques — et à des transformations géopolitiques rapides.</p>
+          <p>Sur le continent, la demande de compétences en analyse de l'information, en protection des organisations et en anticipation des risques n'a jamais été aussi forte. Administrations, entreprises, banques, ONG, médias et universités font face à des menaces nouvelles (fraudes numériques, désinformation, ingérences économiques) et à des transformations géopolitiques rapides.</p>
           <p>Or l'offre de formation dans ces domaines reste rare, souvent coûteuse, éloignée des réalités africaines, ou au contraire nourrie de fantasmes sur « l'espionnage ». AFRICA'SPY est née de la volonté de proposer un parcours sérieux, structuré et accessible, qui forme des professionnels de l'information plutôt que des agents de fiction.</p>
         </div>
         <ol class="timeline reveal">
-          <li><span class="mono">PHASE 1 · CONCEPTION</span><h3>Un référentiel pédagogique</h3><p>Définition de six domaines de compétences, de leurs objectifs et d'une charte éthique intangible.</p></li>
-          <li><span class="mono">PHASE 2 · PRODUCTION</span><h3>Des contenus développés</h3><p>Rédaction des leçons, exercices, études de cas fictives, banques de questions et supports PDF.</p></li>
-          <li><span class="mono">PHASE 3 · OUVERTURE</span><h3>La plateforme en ligne</h3><p>Ouverture de l'espace apprenant, du système d'examens et de la certification vérifiable.</p></li>
+          <li><span class="mono">PHASE 1 : CONCEPTION</span><h3>Un référentiel pédagogique</h3><p>Définition de six domaines de compétences, de leurs objectifs et d'une charte éthique intangible.</p></li>
+          <li><span class="mono">PHASE 2 : PRODUCTION</span><h3>Des contenus développés</h3><p>Rédaction des leçons, exercices, études de cas fictives, banques de questions et supports PDF.</p></li>
+          <li><span class="mono">PHASE 3 : OUVERTURE</span><h3>La plateforme en ligne</h3><p>Ouverture de l'espace apprenant, du système d'examens et de la certification vérifiable.</p></li>
         </ol>
       </section>
 
@@ -52,8 +52,8 @@ $values = [
         <p class="eyebrow">02 // Vision</p>
         <h2 class="reveal">Une Afrique qui anticipe</h2>
         <div class="split-media">
-          <div class="prose reveal"><p class="lead">Nous voulons contribuer à une Afrique qui comprend finement son environnement, anticipe les menaces et protège ses intérêts stratégiques — par la compétence de ses propres professionnels.</p><p>Cette vision suppose des analystes capables de penser contre leurs propres biais, de travailler avec des sources ouvertes en plusieurs langues, et de rendre compte avec honnêteté de ce qu'ils savent et de ce qu'ils ignorent.</p></div>
-          <figure class="media-frame img-reveal"><img src="<?= e(url('assets/images/geo-table.webp')) ?>" alt="Table d'analyse géopolitique montrant une carte de l'Afrique annotée" loading="lazy" width="1600" height="1000"><figcaption>Analyse géopolitique · visuel original</figcaption></figure>
+          <div class="prose reveal"><p class="lead">Nous voulons contribuer à une Afrique qui comprend finement son environnement, anticipe les menaces et protège ses intérêts stratégiques, par la compétence de ses propres professionnels.</p><p>Cette vision suppose des analystes capables de penser contre leurs propres biais, de travailler avec des sources ouvertes en plusieurs langues, et de rendre compte avec honnêteté de ce qu'ils savent et de ce qu'ils ignorent.</p></div>
+          <figure class="media-frame img-reveal"><img src="<?= e(url('assets/images/geo-table.webp')) ?>" alt="Table d'analyse géopolitique montrant une carte de l'Afrique annotée" loading="lazy" width="1600" height="1000"><figcaption>Analyse géopolitique | visuel original</figcaption></figure>
         </div>
       </section>
 
@@ -83,7 +83,7 @@ $values = [
       <section class="dossier__section" id="pedagogie">
         <p class="eyebrow">05 // Approche pédagogique</p>
         <h2 class="reveal">Apprendre en analyste</h2>
-        <div class="prose reveal"><p>Chaque formation suit une progression en quatre phases, du concept à la mise en situation. Les contenus sont rédigés pour être lus, compris et appliqués — pas seulement survolés.</p></div>
+        <div class="prose reveal"><p>Chaque formation suit une progression en quatre phases, du concept à la mise en situation. Les contenus sont rédigés pour être lus, compris et appliqués, pas seulement survolés.</p></div>
         <ol class="pedagogy reveal">
           <li><strong>Comprendre</strong><span>Leçons développées, briefing vidéo, support PDF téléchargeable.</span></li>
           <li><strong>Vérifier</strong><span>QCM formatif à la fin de chaque chapitre, avec explications.</span></li>
@@ -96,7 +96,7 @@ $values = [
         <p class="eyebrow eyebrow--gold">06 // Éthique, légalité et libertés</p>
         <h2 class="reveal">Notre charte</h2>
         <div class="charter reveal">
-          <span class="charter__stamp">CHARTE · ART. 1–8</span>
+          <span class="charter__stamp">CHARTE | ART. 1 à 8</span>
           <ol>
             <li>AFRICA'SPY n'enseigne que des pratiques <strong>légales</strong>, dans le respect des constitutions, des lois nationales et des instruments africains et internationaux relatifs aux droits humains et à la protection des données.</li>
             <li>Aucune technique d'<strong>intrusion informatique</strong>, d'<strong>interception de communications</strong> ou de <strong>surveillance clandestine</strong> de personnes n'est enseignée. Aucun plan de fabrication de dispositif clandestin n'est fourni.</li>
@@ -115,7 +115,7 @@ $values = [
         <h2 class="reveal">Développer les compétences du continent</h2>
         <div class="prose reveal">
           <p>Notre ambition est de contribuer, à notre échelle, au développement d'une génération de professionnels africains de l'analyse et de la sécurité de l'information : analystes, veilleurs, responsables sécurité, enquêteurs internes, journalistes d'investigation, chercheurs.</p>
-          <p>Nous souhaitons enrichir progressivement le catalogue — langues nationales, cas régionaux, nouveaux domaines — en restant fidèles à une exigence simple : chaque compétence enseignée doit servir la décision, la protection et le droit.</p>
+          <p>Nous souhaitons enrichir progressivement le catalogue (langues nationales, cas régionaux, nouveaux domaines) en restant fidèles à une exigence simple : chaque compétence enseignée doit servir la décision, la protection et le droit.</p>
         </div>
         <div class="flex mt-2"><a class="btn btn--primary" href="<?= e(url('academy.php')) ?>">Découvrir les formations</a><a class="btn btn--ghost" href="<?= e(url('contact.php')) ?>">Nous contacter</a></div>
       </section>

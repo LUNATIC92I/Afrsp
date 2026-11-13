@@ -1,5 +1,5 @@
 <?php
-/** AFRICA'SPY — page d'accueil. */
+/** AFRICA'SPY : page d'accueil. */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/payments.php';
@@ -32,18 +32,18 @@ require APP_ROOT . '/includes/header.php';
   <div class="intro__grid"></div>
   <div class="intro__sweep"></div>
   <div class="intro__log">
-    <span>&gt; Initialisation du terminal sécurisé…</span>
+    <span>&gt; Initialisation du terminal sécurisé...</span>
     <span>&gt; Chargement de la cartographie continentale</span>
     <span>&gt; Synchronisation horloge UTC</span>
     <span>&gt; Cadre éthique et légal : vérifié</span>
-    <span>&gt; Accès accordé — AFRICA'SPY Academy</span>
+    <span>&gt; Accès accordé : AFRICA'SPY Academy</span>
   </div>
   <div class="intro__core">
     <?= logo_svg('holo', 'intro__mark', true) ?>
     <div class="intro__word">AFRICA<i>'</i>SPY</div>
     <div class="intro__sub">Intelligence Academy</div>
   </div>
-  <div class="intro__coords">LAT 00°00'00" · LON 20°00'00"<br>SECTEUR : CONTINENT AFRICAIN</div>
+  <div class="intro__coords">LAT 00°00'00" | LON 20°00'00"<br>SECTEUR : CONTINENT AFRICAIN</div>
   <button class="intro__skip" type="button">Passer l'introduction</button>
 </div>
 
@@ -58,7 +58,7 @@ require APP_ROOT . '/includes/header.php';
       <div class="hero__copy">
         <p class="hero__coords reveal" aria-hidden="true">
           <span><i class="dot" style="color:var(--green)"></i> SYSTÈME OPÉRATIONNEL</span>
-          <span>N 09°04′ · E 07°29′</span>
+          <span>N 09°04′ | E 07°29′</span>
           <span data-utc-clock>UTC --:--:--</span>
         </p>
         <h1 class="hero__title" id="hero-title" data-split>AFRICA'SPY</h1>
@@ -83,7 +83,7 @@ require APP_ROOT . '/includes/header.php';
   <!-- ============================== BANDEAU DÉFILANT -->
   <div class="ticker" aria-hidden="true">
     <div class="ticker__track">
-      <?php for ($k = 0; $k < 2; $k++): foreach ($tickerItems as $t): ?><span><?= e($t) ?></span><i>◆</i><?php endforeach; endfor; ?>
+      <?php for ($k = 0; $k < 2; $k++): foreach ($tickerItems as $t): ?><span><?= e($t) ?></span><i aria-hidden="true"></i><?php endforeach; endfor; ?>
     </div>
   </div>
 
@@ -92,7 +92,7 @@ require APP_ROOT . '/includes/header.php';
     <div class="container brief">
       <div class="reveal reveal--left">
         <p class="eyebrow" data-decrypt>01 // Dossier institutionnel</p>
-        <h2 id="brief-title" class="brief__statement">Une académie pour former les <em>analystes</em> dont l'Afrique a besoin — et non des espions de cinéma.</h2>
+        <h2 id="brief-title" class="brief__statement">Une académie pour former les <em>analystes</em> dont l'Afrique a besoin, et non des espions de cinéma.</h2>
       </div>
       <div class="reveal">
         <div class="brief__cols">
@@ -116,7 +116,7 @@ require APP_ROOT . '/includes/header.php';
       </div>
       <div class="command reveal reveal--depth" data-command>
         <div class="command__rail" role="tablist" aria-label="Domaines d'expertise">
-          <div class="command__status">Poste d'analyse · <b>en ligne</b><br>Sélection : <span data-cmd-current>CMD-01</span></div>
+          <div class="command__status">Poste d'analyse | <b>en ligne</b><br>Sélection : <span data-cmd-current>CMD-01</span></div>
           <?php foreach ($panels as $i => $p): ?>
           <button class="cmd-tab" role="tab" id="tab-<?= e($p['id']) ?>" aria-controls="panel-<?= e($p['id']) ?>" aria-selected="<?= $i === 0 ? 'true' : 'false' ?>" tabindex="<?= $i === 0 ? '0' : '-1' ?>" data-code="<?= e($p['code']) ?>">
             <span class="cmd-tab__code"><?= e(substr($p['code'], -2)) ?></span><span class="cmd-tab__name"><?= e($p['name']) ?></span>
@@ -127,7 +127,7 @@ require APP_ROOT . '/includes/header.php';
           <?php foreach ($panels as $i => $p): ?>
           <div class="cmd-panel" role="tabpanel" id="panel-<?= e($p['id']) ?>" aria-labelledby="tab-<?= e($p['id']) ?>" <?= $i ? 'hidden' : '' ?>>
             <div>
-              <p class="cmd-panel__sub"><?= e($p['code']) ?> · <?= e($p['fr']) ?></p>
+              <p class="cmd-panel__sub"><?= e($p['code']) ?> | <?= e($p['fr']) ?></p>
               <h3><?= e($p['name']) ?></h3>
               <p class="lead"><?= e($p['lead']) ?></p>
               <ul><?php foreach ($p['points'] as $pt): ?><li><?= e($pt) ?></li><?php endforeach; ?></ul>
@@ -146,7 +146,7 @@ require APP_ROOT . '/includes/header.php';
         <div class="modal__box corners">
           <button class="modal__close" type="button" data-modal-close aria-label="Fermer">×</button>
           <p class="modal__code"><?= e($p['code']) ?> // Dossier de domaine</p>
-          <h3 id="mt-<?= e($p['id']) ?>" style="font-family:var(--f-display);font-size:1.6rem"><?= e($p['name']) ?> — <?= e($p['fr']) ?></h3>
+          <h3 id="mt-<?= e($p['id']) ?>" style="font-family:var(--f-display);font-size:1.6rem"><?= e($p['name']) ?> : <?= e($p['fr']) ?></h3>
           <p><?= e($p['detail']) ?></p>
           <ul><?php foreach ($p['points'] as $pt): ?><li><?= e($pt) ?></li><?php endforeach; ?></ul>
           <a class="btn btn--primary btn--sm" href="<?= e(url('academy.php', ['domaine' => $p['cat']])) ?>">Voir les formations</a>
@@ -169,12 +169,12 @@ require APP_ROOT . '/includes/header.php';
           <div class="holomap__tilt"><?= africa_map_svg(true) ?></div>
         </div>
         <div class="holomap__card panel corners" data-zone-card aria-live="polite">
-          <p class="mono" data-f="code">ZONE D'ÉTUDE · SÉLECTION</p>
+          <p class="mono" data-f="code">ZONE D'ÉTUDE | SÉLECTION</p>
           <h3 data-f="name">Sélectionnez une zone</h3>
           <p data-f="theme" class="lead">Cliquez sur un point lumineux de la carte pour afficher la fiche régionale.</p>
           <dl>
-            <dt>Enjeux</dt><dd data-f="issues">—</dd>
-            <dt>Domaine</dt><dd data-f="domain">—</dd>
+            <dt>Enjeux</dt><dd data-f="issues">-</dd>
+            <dt>Domaine</dt><dd data-f="domain">-</dd>
           </dl>
           <a class="link-arrow" data-f="link" href="<?= e(url('academy.php')) ?>">Formation associée</a>
           <p class="holomap__note">Ces zones sont des thèmes d'étude pédagogique. Elles ne représentent ni des implantations d'AFRICA'SPY, ni une activité de surveillance.</p>
@@ -216,13 +216,13 @@ require APP_ROOT . '/includes/header.php';
       </div>
       <div class="offer-card reveal reveal--zoom" data-tilt>
         <div class="offer-card__inner">
-          <p class="offer-card__tag mono">PRIX PAR FORMATION · FCFA</p>
+          <p class="offer-card__tag mono">PRIX PAR FORMATION | FCFA</p>
           <?php if ($offerPct): ?>
-          <p class="offer-card__old"><s data-strike><?= e(fmt_xof($offerList)) ?></s> <span class="price__badge">−<?= $offerPct ?> %</span></p>
+          <p class="offer-card__old"><s data-strike><?= e(fmt_xof($offerList)) ?></s> <span class="price__badge">-<?= $offerPct ?> %</span></p>
           <?php endif; ?>
           <p class="offer-card__price"><span data-count="<?= $offerPrice ?>">0</span><small>FCFA</small></p>
-          <p class="offer-card__label"><?= e(setting('promo_label', 'Prix promotionnel')) ?> · au lieu de <?= e(fmt_xof($offerList)) ?></p>
-          <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>"><span class="mono">Fin de l'offre dans</span><b data-cd>—</b></div><?php endif; ?>
+          <p class="offer-card__label"><?= e(setting('promo_label', 'Prix promotionnel')) ?> | au lieu de <?= e(fmt_xof($offerList)) ?></p>
+          <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>"><span class="mono">Fin de l'offre dans</span><b data-cd>-</b></div><?php endif; ?>
           <a class="btn btn--primary btn--block" href="<?= e(url('academy.php')) ?>" data-magnetic>Choisir ma formation</a>
         </div>
       </div>
@@ -252,7 +252,7 @@ require APP_ROOT . '/includes/header.php';
           <canvas width="380" height="380" aria-hidden="true"></canvas>
           <div class="radar__tip" role="tooltip"></div>
         </div>
-        <p class="radar__caption">Intelligence radar · notions clés · visualisation décorative</p>
+        <p class="radar__caption">Intelligence radar | notions clés | visualisation décorative</p>
         <script type="application/json" id="radar-data"><?= json_encode(radar_items(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) ?></script>
       </div>
     </div>
@@ -289,7 +289,7 @@ require APP_ROOT . '/includes/header.php';
             <div class="cert-preview__title">CERTIFICAT DE RÉUSSITE</div>
             <div class="cert-preview__course">décerné à</div>
             <div class="cert-preview__name">Nom de l'apprenant</div>
-            <div class="cert-preview__course">Fondements du renseignement · AFS-A101</div>
+            <div class="cert-preview__course">Fondements du renseignement | AFS-A101</div>
             <div class="cert-preview__foot"><span>N° AFSPY-2026-XXXXXXXX</span><span class="cert-preview__qr"></span></div>
           </div>
         </div>

@@ -68,7 +68,7 @@ $videoEmbed = static function (array $l): string {
 };
 
 $pageTitle = $course['title'];
-$crumb = $course['code'] . ' · Formation';
+$crumb = $course['code'] . ' | Formation';
 $appArea = 'learner';
 $activeApp = 'courses';
 require APP_ROOT . '/includes/app-header.php';
@@ -88,7 +88,7 @@ require APP_ROOT . '/includes/app-header.php';
       <h3><?= e($ch['title']) ?></h3>
       <ul class="learn__lessons">
         <?php foreach ($ch['lessons'] as $l): ?>
-        <li class="<?= $l['done'] ? 'is-done' : '' ?>" data-lesson-item="<?= (int) $l['id'] ?>"><a href="<?= e(url('learner/learning.php', ['course' => $cid, 'lesson' => $l['id']])) ?>" <?= $lesson && (int) $lesson['id'] === (int) $l['id'] ? 'aria-current="page"' : '' ?>><span class="st"><?= $l['done'] ? '✓' : '' ?></span><span><?= e($l['title']) ?></span><span class="ty"><?= e(lesson_type_label($l['type'])) ?></span></a></li>
+        <li class="<?= $l['done'] ? 'is-done' : '' ?>" data-lesson-item="<?= (int) $l['id'] ?>"><a href="<?= e(url('learner/learning.php', ['course' => $cid, 'lesson' => $l['id']])) ?>" <?= $lesson && (int) $lesson['id'] === (int) $l['id'] ? 'aria-current="page"' : '' ?>><span class="st"></span><span><?= e($l['title']) ?></span><span class="ty"><?= e(lesson_type_label($l['type'])) ?></span></a></li>
         <?php endforeach; ?>
         <?php if ($ch['quiz_count']): ?>
         <li><a href="<?= e(url('learner/learning.php', ['course' => $cid, 'quiz' => $ch['id']])) ?>" <?= $quizChapter === (int) $ch['id'] ? 'aria-current="page"' : '' ?>><span class="st">?</span><span>Évaluation QCM</span><span class="ty"><?= (int) $ch['quiz_count'] ?> q.</span></a></li>
@@ -102,7 +102,7 @@ require APP_ROOT . '/includes/app-header.php';
   <div class="learn__main">
   <?php if ($lesson): $prev = $flat[$current - 1] ?? null; $nextL = $flat[$current + 1] ?? null; $done = (bool) $flat[$current]['done']; ?>
     <header class="lesson-head reveal">
-      <p class="mono">Chapitre <?= sprintf('%02d', $flat[$current]['chapter_index'] + 1) ?> · <?= e($flat[$current]['chapter_title']) ?> · <?= e(lesson_type_label($lesson['type'])) ?> · <?= (int) $lesson['duration_minutes'] ?> min</p>
+      <p class="mono">Chapitre <?= sprintf('%02d', $flat[$current]['chapter_index'] + 1) ?> | <?= e($flat[$current]['chapter_title']) ?> | <?= e(lesson_type_label($lesson['type'])) ?> | <?= (int) $lesson['duration_minutes'] ?> min</p>
       <h1><?= e($lesson['title']) ?></h1>
     </header>
     <div class="lesson-body reveal">
@@ -110,7 +110,7 @@ require APP_ROOT . '/includes/app-header.php';
       <?php if ($lesson['type'] === 'document' && $lesson['media_id']): ?>
       <div class="doc-card">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h7M9 17h7"/></svg>
-        <div style="flex:1"><strong style="color:var(--white)"><?= e($lesson['original_name']) ?></strong><br><span class="mono dim" style="font-size:.72rem">PDF · <?= e(fmt_bytes((int) $lesson['size_bytes'])) ?></span></div>
+        <div style="flex:1"><strong style="color:var(--white)"><?= e($lesson['original_name']) ?></strong><br><span class="mono dim" style="font-size:.72rem">PDF | <?= e(fmt_bytes((int) $lesson['size_bytes'])) ?></span></div>
         <?php if ($lesson['is_downloadable']): ?>
         <a class="btn btn--sm" href="<?= e(url('download.php', ['media' => $lesson['media_id']])) ?>" target="_blank" rel="noopener" data-no-transition>Consulter</a>
         <a class="btn btn--sm btn--gold" href="<?= e(url('download.php', ['media' => $lesson['media_id'], 'dl' => 1])) ?>" data-no-transition>Télécharger</a>
@@ -123,10 +123,10 @@ require APP_ROOT . '/includes/app-header.php';
     <section class="work reveal" aria-labelledby="work-title">
       <div class="work__head">
         <h2 id="work-title">Votre travail</h2>
-        <?php if ($st === 'submitted'): ?><span class="status-pill status-pill--warn">● Déposé · en attente de correction (version <?= (int) $submission['version'] ?>)</span>
-        <?php elseif ($st === 'revision'): ?><span class="status-pill status-pill--bad">● Reprise demandée</span>
-        <?php elseif ($st === 'reviewed'): ?><span class="status-pill status-pill--on">● Corrigé</span>
-        <?php else: ?><span class="status-pill status-pill--off">● Non déposé</span><?php endif; ?>
+        <?php if ($st === 'submitted'): ?><span class="status-pill status-pill--warn">Déposé | en attente de correction (version <?= (int) $submission['version'] ?>)</span>
+        <?php elseif ($st === 'revision'): ?><span class="status-pill status-pill--bad">Reprise demandée</span>
+        <?php elseif ($st === 'reviewed'): ?><span class="status-pill status-pill--on">Corrigé</span>
+        <?php else: ?><span class="status-pill status-pill--off">Non déposé</span><?php endif; ?>
       </div>
       <?php if ($st === 'reviewed' || $st === 'revision'): ?>
       <div class="work__review">
@@ -148,28 +148,28 @@ require APP_ROOT . '/includes/app-header.php';
     <?php endif; ?>
     <?php if ($note !== null): ?>
     <details class="notes" <?= $note !== '' ? 'open' : '' ?>>
-      <summary><span>Mes notes personnelles</span><span class="mono dim notes__state" data-note-state><?= $note !== '' ? 'enregistrées' : 'privées · sauvegarde automatique' ?></span></summary>
+      <summary><span>Mes notes personnelles</span><span class="mono dim notes__state" data-note-state><?= $note !== '' ? 'enregistrées' : 'privées | sauvegarde automatique' ?></span></summary>
       <label class="sr-only" for="lesson-notes">Notes personnelles sur cette leçon</label>
-      <textarea class="textarea notes__text" id="lesson-notes" maxlength="20000" data-note="<?= (int) $lesson['id'] ?>" placeholder="Idées clés, questions, exemples de votre contexte professionnel… Visible par vous seul."><?= e($note) ?></textarea>
+      <textarea class="textarea notes__text" id="lesson-notes" maxlength="20000" data-note="<?= (int) $lesson['id'] ?>" placeholder="Idées clés, questions, exemples de votre contexte professionnel... Visible par vous seul."><?= e($note) ?></textarea>
     </details>
     <?php endif; ?>
     <footer class="lesson-foot">
       <div>
         <?php if ($enrolled): ?>
-        <span class="lesson-done" data-done-label <?= $done ? '' : 'hidden' ?>>✓ Leçon terminée</span>
+        <span class="lesson-done" data-done-label <?= $done ? '' : 'hidden' ?>>Leçon terminée</span>
         <button class="btn btn--primary" type="button" data-complete="<?= (int) $lesson['id'] ?>" <?= $done ? 'hidden' : '' ?>>Marquer comme terminée</button>
         <?php endif; ?>
       </div>
       <div class="flex">
-        <?php if ($prev): ?><a class="btn btn--sm" href="<?= e(url('learner/learning.php', ['course' => $cid, 'lesson' => $prev['id']])) ?>">← Précédent</a><?php endif; ?>
-        <?php if ($nextL): ?><a class="btn btn--sm btn--ghost" data-next href="<?= e(url('learner/learning.php', ['course' => $cid, 'lesson' => $nextL['id']])) ?>">Suivant →</a>
-        <?php else: ?><a class="btn btn--sm btn--gold" href="<?= e(url('learner/exams.php', ['course' => $cid])) ?>">Examen final →</a><?php endif; ?>
+        <?php if ($prev): ?><a class="btn btn--sm" href="<?= e(url('learner/learning.php', ['course' => $cid, 'lesson' => $prev['id']])) ?>">Précédent</a><?php endif; ?>
+        <?php if ($nextL): ?><a class="btn btn--sm btn--ghost" data-next href="<?= e(url('learner/learning.php', ['course' => $cid, 'lesson' => $nextL['id']])) ?>">Suivant</a>
+        <?php else: ?><a class="btn btn--sm btn--gold" href="<?= e(url('learner/exams.php', ['course' => $cid])) ?>">Examen final</a><?php endif; ?>
       </div>
     </footer>
   <?php else: ?>
     <header class="lesson-head reveal">
-      <p class="mono">Évaluation formative · non comptabilisée dans l'examen final</p>
-      <h1>QCM — <?= e($quizCh['title']) ?></h1>
+      <p class="mono">Évaluation formative | non comptabilisée dans l'examen final</p>
+      <h1>QCM : <?= e($quizCh['title']) ?></h1>
       <p class="dim">Répondez à toutes les questions puis validez : la correction et les explications s'affichent immédiatement. Vous pouvez recommencer autant de fois que nécessaire.</p>
     </header>
     <form class="quiz" data-quiz action="<?= e(url('ajax/quiz.php')) ?>" method="post">

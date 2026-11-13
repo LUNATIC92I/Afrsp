@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — configuration applicative.
+ * AFRICA'SPY : configuration applicative.
  *
  * Les valeurs sensibles (base de données, clé applicative, SMTP) ne sont JAMAIS
  * écrites ici : elles sont lues depuis config/config.local.php, fichier généré
@@ -13,7 +13,7 @@ $defaults = [
     'app_name'      => "AFRICA'SPY",
     'env'           => 'production',          // production | development
     'base_url'      => '',                    // ex. https://academy.example.org (sans / final)
-    'app_key'       => '',                    // 64 caractères hex — signature des certificats
+    'app_key'       => '',                    // 64 caractères hex : signature des certificats
     'timezone'      => 'Africa/Abidjan',
     'session_name'  => 'AFSPY_SESS',
     'session_idle'  => 7200,                  // déconnexion après 2 h d'inactivité

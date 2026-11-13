@@ -1,5 +1,5 @@
 <?php
-/** Administration — certificats : consultation, révocation, rétablissement, régénération. */
+/** Administration : certificats : consultation, révocation, rétablissement, régénération. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -14,7 +14,7 @@ if (is_post()) {
             case 'revoke':
                 $reason = input('reason') ?: 'Révocation administrative';
                 q("UPDATE certificates SET status = 'revoked', revoked_reason = ? WHERE id = ?", [mb_substr($reason, 0, 255), $c['id']]);
-                audit('certificate.revoke', 'certificate', (int) $c['id'], $c['certificate_no'] . ' · ' . $reason);
+                audit('certificate.revoke', 'certificate', (int) $c['id'], $c['certificate_no'] . ' | ' . $reason);
                 flash('success', 'Certificat révoqué : la vérification publique le signale désormais comme non valide.');
                 break;
             case 'restore':
@@ -45,7 +45,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
   <?php if (!$rows): ?><tr><td colspan="7" class="dim">Aucun certificat.</td></tr><?php endif; ?>
   <?php foreach ($rows as $r): ?>
     <tr><td class="mono"><?= e($r['certificate_no']) ?></td><td><?= e($r['holder_name']) ?></td><td><?= e($r['code']) ?></td><td><?= e(fmt_date($r['issued_at'], false)) ?></td><td class="num"><?= e(number_format((float) $r['score'], 0)) ?> %</td>
-      <td><?= $r['status'] === 'valid' ? '<span class="status-pill status-pill--on">● Valide</span>' : '<span class="status-pill status-pill--bad" title="' . e($r['revoked_reason']) . '">● Révoqué</span>' ?></td>
+      <td><?= $r['status'] === 'valid' ? '<span class="status-pill status-pill--on">Valide</span>' : '<span class="status-pill status-pill--bad" title="' . e($r['revoked_reason']) . '">Révoqué</span>' ?></td>
       <td><div class="actions">
         <a class="btn btn--sm" href="<?= e(url('learner/certificate.php', ['no' => $r['certificate_no']])) ?>" target="_blank" rel="noopener" data-no-transition>PDF</a>
         <a class="btn btn--sm" href="<?= e(url('verify-certificate.php', ['code' => $r['certificate_no']])) ?>" target="_blank" rel="noopener">Vérifier</a>

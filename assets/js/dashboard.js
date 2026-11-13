@@ -1,5 +1,5 @@
 /* =====================================================================
-   AFRICA'SPY — dashboard.js
+   AFRICA'SPY : dashboard.js
    Espace apprenant & administration : menu, notifications, progression,
    QCM, chronomètre d'examen, graphiques Canvas, aides d'édition.
    ===================================================================== */
@@ -68,7 +68,7 @@
         btn.hidden = true;
         var lbl = doc.querySelector('[data-done-label]'); if (lbl) lbl.hidden = false;
         var item = doc.querySelector('[data-lesson-item="' + btn.dataset.complete + '"]');
-        if (item) { item.classList.add('is-done'); var st = item.querySelector('.st'); if (st) st.textContent = '✓'; }
+        if (item) { item.classList.add('is-done'); var st = item.querySelector('.st'); }
         var bar = doc.querySelector('[data-course-progress]'); if (bar) bar.style.setProperty('--p', j.progress + '%');
         var pl = doc.querySelector('[data-course-progress-label]'); if (pl) pl.textContent = j.progress;
         burst(j.course_complete ? 'FORMATION COMPLÈTE' : (j.chapter_complete ? 'CHAPITRE VALIDÉ' : 'LEÇON VALIDÉE'));
@@ -94,7 +94,7 @@
           var good = fs.querySelector('[data-a="' + r.correct + '"]');
           if (good) good.classList.add('is-correct');
           if (!r.ok && r.chosen) { var bad = fs.querySelector('[data-a="' + r.chosen + '"]'); if (bad) bad.classList.add('is-wrong'); }
-          if (r.explanation) { var p = doc.createElement('p'); p.className = 'q__exp'; p.textContent = (r.ok ? '✓ ' : '✗ ') + r.explanation; fs.appendChild(p); }
+          if (r.explanation) { var p = doc.createElement('p'); p.className = 'q__exp'; p.textContent = (r.ok ? 'Exact. ' : 'Inexact. ') + r.explanation; fs.appendChild(p); }
         });
         var res = f.querySelector('[data-quiz-result]');
         res.textContent = j.message;
@@ -148,7 +148,7 @@
   }
 
   /* ------------------------------------------------------------------
-     Graphiques Canvas (barres, courbes, anneau) — sans bibliothèque
+     Graphiques Canvas (barres, courbes, anneau) : sans bibliothèque
      ------------------------------------------------------------------ */
   function setupCanvas(cv) {
     var dpr = Math.min(window.devicePixelRatio || 1, 2), r = cv.getBoundingClientRect();
@@ -251,7 +251,7 @@
     };
     typeSel.addEventListener('change', sync); sync();
   }
-  // Sélecteur de formation → filtre automatique
+  // Sélecteur de formation puis filtre automatique
   doc.querySelectorAll('select[data-autosubmit]').forEach(function (s) { s.addEventListener('change', function () { s.form.submit(); }); });
 })();
 
@@ -280,8 +280,8 @@
     wrap.innerHTML =
       '<div class="flash__head"><h2>Fiches de révision</h2><span class="flash__score" aria-live="polite"></span></div>' +
       '<button class="flash__card" type="button" aria-describedby="flash-hint-' + n + '"><span class="flash__inner"><span class="flash__face flash__front"><small>NOTION</small><b></b></span><span class="flash__face flash__back"><small>DÉFINITION</small><span></span></span></span></button>' +
-      '<p class="flash__hint" id="flash-hint-' + n + '">Cliquez (ou Espace) pour retourner la carte · ← → pour naviguer</p>' +
-      '<div class="flash__bar"><button class="btn btn--sm" type="button" data-f="prev">←</button><span class="flash__pos mono"></span><button class="btn btn--sm" type="button" data-f="next">→</button></div>' +
+      '<p class="flash__hint" id="flash-hint-' + n + '">Cliquez (ou Espace) pour retourner la carte, flèches gauche et droite pour naviguer</p>' +
+      '<div class="flash__bar"><button class="btn btn--sm" type="button" data-f="prev">Précédente</button><span class="flash__pos mono"></span><button class="btn btn--sm" type="button" data-f="next">Suivante</button></div>' +
       '<div class="flash__actions"><button class="btn btn--sm" type="button" data-f="again">À revoir</button><button class="btn btn--sm btn--primary" type="button" data-f="known">Je sais</button><button class="btn btn--sm btn--ghost" type="button" data-f="shuffle">Mélanger</button><button class="btn btn--sm" type="button" data-f="reset">Réinitialiser</button></div>';
     dl.parentNode.insertBefore(wrap, dl);
 
@@ -338,13 +338,13 @@
     function save() {
       if (ta.value === last) return;
       var val = ta.value;
-      if (state) state.textContent = 'enregistrement…';
+      if (state) state.textContent = 'enregistrement...';
       A.request(A.url('ajax/note.php'), { body: { lesson_id: ta.dataset.note, content: val } }).then(function (j) {
-        if (j.ok) { last = val; if (state) state.textContent = 'enregistrées · ' + j.saved_at; }
+        if (j.ok) { last = val; if (state) state.textContent = 'enregistrées | ' + j.saved_at; }
         else if (state) state.textContent = j.message || 'échec de l\'enregistrement';
       });
     }
-    ta.addEventListener('input', function () { clearTimeout(timer); if (state) state.textContent = 'modifications…'; timer = setTimeout(save, 900); });
+    ta.addEventListener('input', function () { clearTimeout(timer); if (state) state.textContent = 'modifications...'; timer = setTimeout(save, 900); });
     ta.addEventListener('blur', save);
     window.addEventListener('beforeunload', save);
   });
@@ -352,7 +352,7 @@
     var out = ta.form && ta.form.querySelector('[data-count-out]');
     var upd = function () {
       var n = ta.value.trim().length;
-      if (out) { out.textContent = n.toLocaleString('fr-FR') + ' caractère' + (n > 1 ? 's' : '') + (n < 200 ? ' · 200 minimum' : ''); out.style.color = n < 200 ? 'var(--gold)' : 'var(--green)'; }
+      if (out) { out.textContent = n.toLocaleString('fr-FR') + ' caractère' + (n > 1 ? 's' : '') + (n < 200 ? ' | 200 minimum' : ''); out.style.color = n < 200 ? 'var(--gold)' : 'var(--green)'; }
     };
     ta.addEventListener('input', upd); upd();
   });

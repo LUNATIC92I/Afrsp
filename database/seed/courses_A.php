@@ -1,6 +1,6 @@
 <?php
 /**
- * MODULE A — FONDEMENTS DU RENSEIGNEMENT
+ * MODULE A : FONDEMENTS DU RENSEIGNEMENT
  * Format des questions : [énoncé, [réponses], index_correct, explication]
  */
 return [
@@ -10,7 +10,7 @@ return [
   'subtitle' => 'Cycle, histoire et méthodes d\'analyse : le socle commun de tous les métiers de l\'intelligence.',
   'summary' => 'Comprendre ce qu\'est le renseignement, d\'où il vient, comment il se produit et comment l\'information brute devient un produit d\'aide à la décision fiable, sourcé et éthique.',
   'level' => 'fondamental', 'hours' => 14, 'featured' => true,
-  'description' => '<p>Cette formation pose les bases indispensables à tout parcours AFRICA\'SPY. Elle distingue <strong>l\'information</strong> (donnée brute), <strong>le renseignement</strong> (information évaluée, recoupée et mise en perspective pour un décideur) et <strong>la connaissance</strong> (savoir durable accumulé par une organisation).</p><p>Vous étudierez le cycle du renseignement, les grandes étapes de l\'histoire des services — en accordant une place réelle aux expériences africaines —, la typologie des disciplines de collecte et les méthodes structurées d\'analyse qui permettent de lutter contre les biais cognitifs.</p><p>Tout au long du parcours, le cadre légal et éthique est traité comme une compétence professionnelle à part entière, et non comme une contrainte annexe.</p>',
+  'description' => '<p>Cette formation pose les bases indispensables à tout parcours AFRICA\'SPY. Elle distingue <strong>l\'information</strong> (donnée brute), <strong>le renseignement</strong> (information évaluée, recoupée et mise en perspective pour un décideur) et <strong>la connaissance</strong> (savoir durable accumulé par une organisation).</p><p>Vous étudierez le cycle du renseignement, les grandes étapes de l\'histoire des services (en accordant une place réelle aux expériences africaines), la typologie des disciplines de collecte et les méthodes structurées d\'analyse qui permettent de lutter contre les biais cognitifs.</p><p>Tout au long du parcours, le cadre légal et éthique est traité comme une compétence professionnelle à part entière, et non comme une contrainte annexe.</p>',
   'objectives' => "Définir le renseignement et le distinguer de l'information et de la connaissance\nDécrire chaque phase du cycle du renseignement et ses points de défaillance\nSituer les grandes évolutions historiques des services, dont les trajectoires africaines\nIdentifier les principales disciplines de collecte et leurs limites\nAppliquer deux méthodes d'analyse structurée à un problème simple",
   'skills' => "Formuler un besoin en renseignement précis\nÉvaluer une information selon sa source et sa crédibilité\nRédiger une synthèse analytique courte et sourcée\nReconnaître les biais cognitifs courants\nRaisonner en hypothèses concurrentes",
   'prerequisites' => "Aucun prérequis technique\nBonne maîtrise du français écrit\nCuriosité pour l'actualité internationale et africaine",
@@ -21,7 +21,7 @@ return [
       'lessons' => [
         ['title' => 'Briefing vidéo : le métier d\'analyste', 'type' => 'video', 'minutes' => 4, 'content' => '<p>Ce briefing visuel présente en quelques minutes les notions clés de la formation : la différence entre information et renseignement, le cycle de production et les exigences éthiques du métier. Il ne comporte pas de narration : prenez le temps de lire chaque écran.</p>'],
         ['title' => 'Qu\'est-ce que le renseignement ?', 'type' => 'text', 'minutes' => 20, 'content' => <<<'HTML'
-<p>Le renseignement est <strong>une information élaborée pour éclairer une décision</strong>. Il se définit moins par la nature de ses sources que par sa finalité : réduire l'incertitude d'un décideur — chef d'État, dirigeant d'entreprise, responsable de la sécurité d'une organisation — face à une situation qui le concerne.</p>
+<p>Le renseignement est <strong>une information élaborée pour éclairer une décision</strong>. Il se définit moins par la nature de ses sources que par sa finalité : réduire l'incertitude d'un décideur (chef d'État, dirigeant d'entreprise, responsable de la sécurité d'une organisation) face à une situation qui le concerne.</p>
 <h3>Trois niveaux à ne pas confondre</h3>
 <table><thead><tr><th>Niveau</th><th>Définition</th><th>Exemple</th></tr></thead><tbody>
 <tr><td>Donnée / information</td><td>Fait brut, non évalué</td><td>« Un convoi de camions a été vu près de la frontière. »</td></tr>
@@ -61,9 +61,9 @@ HTML],
         ['title' => 'Grandes étapes historiques', 'type' => 'text', 'minutes' => 25, 'content' => <<<'HTML'
 <p>L'histoire du renseignement est aussi ancienne que celle du pouvoir politique. Elle éclaire les pratiques actuelles et rappelle que les dérives passées ont conduit à l'instauration de contrôles démocratiques.</p>
 <h3>Antiquité et royaumes africains</h3>
-<p>Les traités militaires anciens, dont <em>L'Art de la guerre</em> attribué à Sun Tzu, consacrent déjà un chapitre à l'emploi des informateurs. En Afrique, les grands ensembles politiques — empires du Ghana, du Mali et Songhaï, royaume du Dahomey, empire éthiopien, royaumes swahilis — s'appuyaient sur des réseaux de messagers, de commerçants caravaniers et de conseillers chargés de rapporter la situation des provinces et des voisins. Les routes transsahariennes étaient autant des voies d'échange que des canaux d'information.</p>
+<p>Les traités militaires anciens, dont <em>L'Art de la guerre</em> attribué à Sun Tzu, consacrent déjà un chapitre à l'emploi des informateurs. En Afrique, les grands ensembles politiques (empires du Ghana, du Mali et Songhaï, royaume du Dahomey, empire éthiopien, royaumes swahilis) s'appuyaient sur des réseaux de messagers, de commerçants caravaniers et de conseillers chargés de rapporter la situation des provinces et des voisins. Les routes transsahariennes étaient autant des voies d'échange que des canaux d'information.</p>
 <h3>L'âge des cabinets et des chiffres</h3>
-<p>Du XVI<sup>e</sup> au XIX<sup>e</sup> siècle, les monarchies européennes structurent des « cabinets noirs » chargés d'ouvrir le courrier diplomatique et de déchiffrer les messages. La cryptologie devient une discipline à part entière. La période coloniale voit ensuite les administrations imposer en Afrique des services de police politique tournés vers le contrôle des populations — un héritage que les États indépendants ont dû réformer.</p>
+<p>Du XVI<sup>e</sup> au XIX<sup>e</sup> siècle, les monarchies européennes structurent des « cabinets noirs » chargés d'ouvrir le courrier diplomatique et de déchiffrer les messages. La cryptologie devient une discipline à part entière. La période coloniale voit ensuite les administrations imposer en Afrique des services de police politique tournés vers le contrôle des populations, un héritage que les États indépendants ont dû réformer.</p>
 <h3>Le XX<sup>e</sup> siècle : institutionnalisation</h3>
 <ul>
 <li><strong>Les deux guerres mondiales</strong> industrialisent la collecte (écoutes radio, reconnaissance aérienne) et le décryptement.</li>
@@ -147,7 +147,7 @@ HTML],
 <h3>Consignes</h3>
 <ol>
 <li>Reformulez la demande en <strong>trois besoins en renseignement</strong> précis et vérifiables.</li>
-<li>Pour chacun, identifiez <strong>deux sources ouvertes légales</strong> que vous consulteriez (journaux officiels, presse régionale, communiqués des douanes, rapports d'organisations régionales…).</li>
+<li>Pour chacun, identifiez <strong>deux sources ouvertes légales</strong> que vous consulteriez (journaux officiels, presse régionale, communiqués des douanes, rapports d'organisations régionales...).</li>
 <li>Proposez une <strong>grille d'évaluation</strong> des sources (fiabilité de la source / crédibilité de l'information).</li>
 <li>Rédigez un <strong>jugement analytique de cinq lignes</strong> en séparant faits, jugements et lacunes, avec un niveau de confiance.</li>
 </ol>
@@ -212,7 +212,7 @@ HTML],
 <h3>Une méthode en six temps</h3>
 <ol>
 <li><strong>Cadrer</strong> la question et les limites (ce que l'on ne cherchera pas).</li>
-<li><strong>Planifier</strong> les sources et les mots-clés, y compris dans les langues locales (wolof, haoussa, swahili, amharique, arabe…).</li>
+<li><strong>Planifier</strong> les sources et les mots-clés, y compris dans les langues locales (wolof, haoussa, swahili, amharique, arabe...).</li>
 <li><strong>Collecter</strong> en archivant systématiquement : URL, date, capture, empreinte du fichier.</li>
 <li><strong>Vérifier</strong> : origine, date réelle, géolocalisation, cohérence.</li>
 <li><strong>Analyser</strong> et recouper.</li>

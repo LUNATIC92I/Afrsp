@@ -1,5 +1,5 @@
 <?php
-/** AJAX — statut d'une commande (polling de la page de retour). */
+/** AJAX : statut d'une commande (polling de la page de retour). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/payments.php';

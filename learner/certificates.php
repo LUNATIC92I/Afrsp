@@ -1,5 +1,5 @@
 <?php
-/** Espace apprenant — certificats obtenus. */
+/** Espace apprenant : certificats obtenus. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 
@@ -19,7 +19,7 @@ require APP_ROOT . '/includes/app-header.php';
   <article class="cert-card">
     <span class="mono"><?= e($c['certificate_no']) ?></span>
     <h3><?= e($c['course_title']) ?></h3>
-    <p class="dim" style="margin:0"><?= e($c['code']) ?> · Délivré le <?= e(fmt_date($c['issued_at'])) ?> · Score <?= e(number_format((float) $c['score'], 0)) ?> %</p>
+    <p class="dim" style="margin:0"><?= e($c['code']) ?> | Délivré le <?= e(fmt_date($c['issued_at'])) ?> | Score <?= e(number_format((float) $c['score'], 0)) ?> %</p>
     <?php if ($c['status'] === 'revoked'): ?><p class="tag tag--red mt-1">Révoqué</p><?php endif; ?>
     <div class="flex">
       <?php if ($c['status'] === 'valid'): ?>

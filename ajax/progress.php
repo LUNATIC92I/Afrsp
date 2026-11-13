@@ -1,5 +1,5 @@
 <?php
-/** AJAX — marque une leçon comme terminée et renvoie la progression. */
+/** AJAX : marque une leçon comme terminée et renvoie la progression. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/catalog.php';

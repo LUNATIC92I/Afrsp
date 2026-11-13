@@ -1,5 +1,5 @@
 <?php
-/** MODULE C — CONTRE-ESPIONNAGE */
+/** MODULE C : CONTRE-ESPIONNAGE */
 return [
 [
   'code' => 'AFS-C101', 'category' => 'C', 'slug' => 'contre-espionnage-menaces-protection',
@@ -44,7 +44,7 @@ HTML],
         ['title' => 'La menace interne', 'type' => 'text', 'minutes' => 25, 'content' => <<<'HTML'
 <p>La menace interne désigne le risque qu'une personne disposant d'un <strong>accès légitime</strong> (salarié, prestataire, partenaire) cause un préjudice, volontairement ou non.</p>
 <h3>Trois profils</h3>
-<ul><li><strong>Négligent</strong> : le plus fréquent — erreur, méconnaissance des règles ;</li><li><strong>Compromis</strong> : ses identifiants ou son poste sont utilisés par un tiers ;</li><li><strong>Malveillant</strong> : agit intentionnellement, souvent après une frustration non traitée.</li></ul>
+<ul><li><strong>Négligent</strong> : le plus fréquent : erreur, méconnaissance des règles ;</li><li><strong>Compromis</strong> : ses identifiants ou son poste sont utilisés par un tiers ;</li><li><strong>Malveillant</strong> : agit intentionnellement, souvent après une frustration non traitée.</li></ul>
 <h3>Facteurs de risque organisationnels</h3>
 <ul><li>Droits d'accès excessifs et jamais révisés ;</li><li>Départs mal gérés (comptes actifs après la fin du contrat) ;</li><li>Climat social dégradé, absence de canal d'écoute ;</li><li>Absence de séparation des tâches sensibles.</li></ul>
 <h3>Mesures proportionnées</h3>
@@ -89,7 +89,7 @@ HTML],
       'summary' => 'Les leviers psychologiques de la manipulation et les parades.',
       'lessons' => [
         ['title' => 'Reconnaître la manipulation', 'type' => 'text', 'minutes' => 25, 'content' => <<<'HTML'
-<p>L'ingénierie sociale exploite des réflexes humains normaux — serviabilité, respect de l'autorité, peur — pour obtenir une information ou une action. Elle précède la majorité des cyberattaques réussies.</p>
+<p>L'ingénierie sociale exploite des réflexes humains normaux (serviabilité, respect de l'autorité, peur) pour obtenir une information ou une action. Elle précède la majorité des cyberattaques réussies.</p>
 <h3>Les leviers utilisés</h3>
 <table><thead><tr><th>Levier</th><th>Formulation typique</th></tr></thead><tbody>
 <tr><td>Autorité</td><td>« Le directeur général exige ce virement aujourd'hui. »</td></tr>
@@ -118,7 +118,7 @@ HTML],
         ['title' => 'Exercice : cartographier les actifs sensibles', 'type' => 'exercise', 'minutes' => 45, 'content' => <<<'HTML'
 <p><strong>Organisation fictive :</strong> « AgroSahel Coop », coopérative de 40 salariés qui exporte des produits transformés et prépare une levée de fonds.</p>
 <h3>Consignes</h3>
-<ol><li>Identifiez huit actifs informationnels (recettes, fichier clients, négociation financière, données RH…).</li><li>Classez-les selon la grille à quatre niveaux.</li><li>Pour les trois plus critiques, indiquez qui y accède aujourd'hui et qui <em>devrait</em> y accéder.</li><li>Proposez cinq mesures prioritaires, réalistes pour une PME.</li></ol>
+<ol><li>Identifiez huit actifs informationnels (recettes, fichier clients, négociation financière, données RH...).</li><li>Classez-les selon la grille à quatre niveaux.</li><li>Pour les trois plus critiques, indiquez qui y accède aujourd'hui et qui <em>devrait</em> y accéder.</li><li>Proposez cinq mesures prioritaires, réalistes pour une PME.</li></ol>
 HTML],
         ['title' => 'Étude de cas : la fraude au fournisseur', 'type' => 'case_study', 'minutes' => 30, 'content' => <<<'HTML'
 <p><strong>Scénario pédagogique (fictif).</strong> Une société de BTP reçoit un courriel apparemment envoyé par son principal fournisseur annonçant un changement de banque. Le comptable met à jour les coordonnées. Deux virements importants partent vers le compte frauduleux avant que le vrai fournisseur ne réclame son paiement.</p>
@@ -231,7 +231,7 @@ HTML],
         ['title' => 'Fiche de synthèse (PDF)', 'type' => 'document', 'minutes' => 10, 'content' => '<p>Modèles de matrice de risques, de plan de déplacement et de fiche d\'exercice.</p>'],
         ['title' => 'Exercice : matrice de risques', 'type' => 'exercise', 'minutes' => 45, 'content' => <<<'HTML'
 <p><strong>Organisation fictive :</strong> une université régionale qui héberge un laboratoire de recherche sur les semences résistantes à la sécheresse.</p>
-<ol><li>Identifiez six risques (fuite de résultats, rançongiciel, vol de matériel, ingérence via partenariats…).</li><li>Évaluez chacun : intention, capacité, vulnérabilité, impact.</li><li>Placez-les dans la matrice.</li><li>Proposez deux contre-mesures par risque critique, classées par coût.</li></ol>
+<ol><li>Identifiez six risques (fuite de résultats, rançongiciel, vol de matériel, ingérence via partenariats...).</li><li>Évaluez chacun : intention, capacité, vulnérabilité, impact.</li><li>Placez-les dans la matrice.</li><li>Proposez deux contre-mesures par risque critique, classées par coût.</li></ol>
 HTML],
         ['title' => 'Étude de cas : exercice « Harmattan »', 'type' => 'case_study', 'minutes' => 40, 'content' => <<<'HTML'
 <p><strong>Simulation pédagogique (fictive).</strong> Un groupe logistique découvre un lundi matin que ses serveurs sont chiffrés par un rançongiciel, en pleine période de dédouanement.</p>

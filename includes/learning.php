@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — moteur d'examen et de certification.
+ * AFRICA'SPY : moteur d'examen et de certification.
  */
 declare(strict_types=1);
 

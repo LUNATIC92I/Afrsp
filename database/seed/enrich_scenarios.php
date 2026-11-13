@@ -15,18 +15,18 @@ return [
   'lessons' => [
     ['title' => 'Simulation guidée : de la commande à la note', 'type' => 'exercise', 'minutes' => 60, 'content' => $fictif . <<<'HTML'
 <p><strong>Commande.</strong> La directrice d'une compagnie aérienne régionale fictive, « Air Sahelia », vous demande : <em>« Devons-nous maintenir nos vols vers Port-Saba, capitale de la République de Kanaga, pendant les élections dans six semaines ? »</em></p>
-<h3>Étape 1 — Orientation (15 min)</h3>
+<h3>Étape 1 : Orientation (15 min)</h3>
 <p>Formulez trois besoins en renseignement et, pour chacun, deux éléments d'information observables.</p>
-<h3>Étape 2 — Plan de collecte (10 min)</h3>
+<h3>Étape 2 : Plan de collecte (10 min)</h3>
 <p>Associez à chaque élément au moins une source ouverte légale et une source de recoupement.</p>
-<h3>Étape 3 — Analyse (20 min)</h3>
+<h3>Étape 3 : Analyse (20 min)</h3>
 <p>À partir des éléments fictifs suivants, construisez une matrice ACH à trois hypothèses (vols normaux / perturbations ponctuelles / suspension nécessaire) :</p>
 <ul><li>L'autorité de l'aviation civile de Kanaga a publié un avis de fonctionnement normal de l'aéroport.</li><li>Deux manifestations ont eu lieu près du centre-ville, sans incident à l'aéroport.</li><li>Un syndicat de contrôleurs aériens évoque une grève « possible ».</li><li>Les ambassades n'ont pas modifié leurs conseils aux voyageurs.</li></ul>
-<h3>Étape 4 — Livrable (15 min)</h3>
+<h3>Étape 4 : Livrable (15 min)</h3>
 <p>Rédigez une note BLUF d'une demi-page avec niveau de confiance, trois indicateurs à surveiller et une recommandation.</p>
 HTML . $bareme([['Besoins précis et vérifiables', '4'], ['Plan de collecte légal et recoupé', '3'], ['Matrice ACH cohérente', '5'], ['Note BLUF claire, sourcée, avec confiance', '5'], ['Indicateurs pertinents', '3']])],
     ['title' => 'Étude de cas : le rapport qui arrivait trop tard', 'type' => 'case_study', 'minutes' => 30, 'content' => $fictif . <<<'HTML'
-<p>Une ONG humanitaire fictive dispose d'une analyste remarquable, dont les notes sont longues, exhaustives et parfaitement sourcées. Lors d'une crise d'approvisionnement en eau dans une région du nord de Kanaga, sa note de 22 pages arrive quatre jours après la décision de redéployer les équipes — prise sans elle.</p>
+<p>Une ONG humanitaire fictive dispose d'une analyste remarquable, dont les notes sont longues, exhaustives et parfaitement sourcées. Lors d'une crise d'approvisionnement en eau dans une région du nord de Kanaga, sa note de 22 pages arrive quatre jours après la décision de redéployer les équipes, prise sans elle.</p>
 <h3>Questions</h3>
 <ol><li>Quelle(s) phase(s) du cycle ont échoué ?</li><li>Comment concilier rigueur et délai ? Proposez un format en deux temps (alerte courte puis analyse).</li><li>Quel rôle aurait dû jouer le décideur dans l'orientation ?</li><li>Rédigez l'alerte de cinq lignes qui aurait dû être envoyée le premier jour.</li></ol>
 <blockquote>Leçon : la qualité d'un produit inclut sa pertinence temporelle.</blockquote>
@@ -42,7 +42,7 @@ RÉSUMÉ (5 lignes max.)
 - Constat principal
 - Cause probable
 - Conséquence pour le destinataire
-- Niveau de confiance : [élevé / modéré / faible] — pourquoi
+- Niveau de confiance : [élevé / modéré / faible], avec justification
 - Recommandation ou indicateur à suivre
 
 FAITS ÉTABLIS          (sources cotées, ex. B2)
@@ -76,7 +76,7 @@ HTML . $bareme([['Vérification méthodique des vidéos', '5'], ['Chronologie so
 HTML],
     ['title' => 'Fiche méthode : journal de vérification', 'type' => 'text', 'minutes' => 10, 'content' => <<<'HTML'
 <table><thead><tr><th>N°</th><th>Contenu (URL, archive)</th><th>Première publication</th><th>Lieu vérifié</th><th>Heure estimée</th><th>Méthode</th><th>Confiance</th></tr></thead><tbody>
-<tr><td>1</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr></tbody></table>
+<tr><td>1</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>
 <h3>Réflexes</h3>
 <ul><li>Archiver avant d'analyser (le contenu peut disparaître) ;</li><li>Noter la date UTC de chaque consultation ;</li><li>Indiquer la méthode utilisée, pas seulement le résultat.</li></ul>
 <div class="keypoints"><strong>Points clés</strong><ul><li>Un journal permet à un tiers de refaire la vérification.</li><li>La confiance s'exprime pour chaque élément.</li></ul></div>
@@ -104,7 +104,7 @@ HTML],
     ['title' => 'Fiche méthode : compte rendu d\'entretien', 'type' => 'text', 'minutes' => 10, 'content' => <<<'HTML'
 <pre><code>CR N° : [..]      Date / durée : [..]      Lieu : [type de lieu, non nominatif]
 Interlocuteur : [code pseudonyme, ex. S-021]   Accès : [nature de sa connaissance]
-Consentement : [oui — finalité annoncée — prise de notes acceptée]
+Consentement : [oui, finalité annoncée, prise de notes acceptée]
 
 1. Verbatim marquants        (entre guillemets)
 2. Faits rapportés           (cotation de chaque fait, ex. C2)
@@ -218,7 +218,7 @@ HTML],
 Certificats récents : erp-preprod.kilimanjaro-logistics.example
 Document public : Rapport_annuel.pdf  (Auteur: j.mwangi ; Producteur: Office 2013)
 Offre d'emploi : « administrateur système Windows Server 2012, VPN FortiGate »
-Profils publics : 14 employés, format d'adresse prenom.nom@…</code></pre>
+Profils publics : 14 employés, format d'adresse prenom.nom@...</code></pre>
 <h3>Consignes</h3>
 <ol><li>Classez les expositions en critique / importante / mineure en justifiant.</li><li>Expliquez, pour les trois plus graves, comment un attaquant pourrait les exploiter (sans détail technique offensif).</li><li>Proposez une remédiation par exposition, avec responsable et délai.</li><li>Rédigez un résumé exécutif d'une demi-page pour la direction, sans jargon.</li></ol>
 HTML . $bareme([['Classement argumenté', '5'], ['Compréhension des risques', '4'], ['Remédiations concrètes', '6'], ['Résumé exécutif accessible', '5']])],
@@ -252,11 +252,11 @@ HTML . $bareme([['Trois niveaux bien distingués', '6'], ['Marquages TLP justifi
 HTML],
     ['title' => 'Fiche méthode : modèle de bulletin CTI', 'type' => 'text', 'minutes' => 10, 'content' => <<<'HTML'
 <pre><code>BULLETIN CTI N° [..]   PÉRIODE : [..]   MARQUAGE GLOBAL : TLP:[..]
-1. SYNTHÈSE STRATÉGIQUE (direction)         — 5 lignes, impact métier
-2. CAMPAGNES OBSERVÉES (sécurité)           — description, TTP (ATT&CK), cibles
-3. INDICATEURS (SOC)                        — type | valeur | 1re/dernière observation | confiance
-4. RECOMMANDATIONS                          — action | responsable | échéance
-5. SOURCES                                  — émetteur | date | fiabilité</code></pre>
+1. SYNTHÈSE STRATÉGIQUE (direction)         : 5 lignes, impact métier
+2. CAMPAGNES OBSERVÉES (sécurité)           : description, TTP (ATT&CK), cibles
+3. INDICATEURS (SOC)                        : type | valeur | 1re/dernière observation | confiance
+4. RECOMMANDATIONS                          : action | responsable | échéance
+5. SOURCES                                  : émetteur | date | fiabilité</code></pre>
 <div class="keypoints"><strong>Points clés</strong><ul><li>Chaque indicateur porte une date et un niveau de confiance.</li><li>La synthèse stratégique ne contient pas de jargon.</li></ul></div>
 HTML],
   ],
@@ -310,9 +310,9 @@ HTML . $bareme([['Facteurs critiques et questions de veille', '3'], ['PESTEL com
 HTML],
     ['title' => 'Fiche méthode : tableau de bord de veille', 'type' => 'text', 'minutes' => 10, 'content' => <<<'HTML'
 <table><thead><tr><th>Axe</th><th>Question clé</th><th>Sources</th><th>Fréquence</th><th>Responsable</th><th>Dernier signal</th></tr></thead><tbody>
-<tr><td>Concurrence</td><td>…</td><td>…</td><td>Hebdo</td><td>…</td><td>…</td></tr>
-<tr><td>Réglementation</td><td>…</td><td>…</td><td>Mensuel</td><td>…</td><td>…</td></tr>
-<tr><td>Marques et brevets</td><td>Nouveaux dépôts proches de nos marques ?</td><td>Bulletins officiels de propriété intellectuelle</td><td>Mensuel</td><td>…</td><td>…</td></tr>
+<tr><td>Concurrence</td><td>...</td><td>...</td><td>Hebdo</td><td>...</td><td>...</td></tr>
+<tr><td>Réglementation</td><td>...</td><td>...</td><td>Mensuel</td><td>...</td><td>...</td></tr>
+<tr><td>Marques et brevets</td><td>Nouveaux dépôts proches de nos marques ?</td><td>Bulletins officiels de propriété intellectuelle</td><td>Mensuel</td><td>...</td><td>...</td></tr>
 </tbody></table>
 <div class="keypoints"><strong>Points clés</strong><ul><li>Chaque axe a un responsable.</li><li>Surveiller les dépôts de marques avant d'entrer sur un marché.</li></ul></div>
 HTML],
@@ -336,7 +336,7 @@ HTML . $bareme([['Analyse d\'acteurs nuancée', '4'], ['Notation argumentée', '
 <ol><li>Quelles erreurs méthodologiques (échelle, données, vocabulaire) ?</li><li>Comment représenter le risque de façon plus fine et plus juste ?</li><li>Quelle responsabilité l'analyste porte-t-il dans les effets de ses publications ?</li></ol>
 HTML],
     ['title' => 'Fiche méthode : grille de notation du risque pays', 'type' => 'text', 'minutes' => 10, 'content' => <<<'HTML'
-<table><thead><tr><th>Dimension</th><th>Note (1–5)</th><th>Tendance (↗ → ↘)</th><th>Poids projet</th><th>Justification et sources</th></tr></thead><tbody>
+<table><thead><tr><th>Dimension</th><th>Note (1 à 5)</th><th>Tendance (hausse, stable, baisse)</th><th>Poids projet</th><th>Justification et sources</th></tr></thead><tbody>
 <tr><td>Politique</td><td></td><td></td><td></td><td></td></tr><tr><td>Sécuritaire</td><td></td><td></td><td></td><td></td></tr>
 <tr><td>Économique</td><td></td><td></td><td></td><td></td></tr><tr><td>Juridique</td><td></td><td></td><td></td><td></td></tr>
 <tr><td>Opérationnelle</td><td></td><td></td><td></td><td></td></tr><tr><td>Environnementale et sociale</td><td></td><td></td><td></td><td></td></tr>

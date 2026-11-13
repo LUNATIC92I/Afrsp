@@ -55,7 +55,7 @@ if (is_post() && $open) {
 $pageTitle = 'Inscription';
 $authTitle = 'Rejoindre l\'Académie';
 $authIntro = $open ? 'Créez votre compte apprenant pour accéder aux formations, aux examens et à la certification.' : 'Les inscriptions sont momentanément fermées.';
-$authTerminal = 'Nouvel accès · enregistrement';
+$authTerminal = 'Nouvel accès | enregistrement';
 $authBody = function () use ($errors, $open): void {
     if (!$open) { echo '<a class="btn btn--ghost" href="' . e(url('contact.php')) . '">Nous contacter</a>'; return; }
     $err = static fn ($k) => isset($errors[$k]) ? '<span class="err">' . e($errors[$k]) . '</span>' : '';

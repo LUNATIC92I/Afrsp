@@ -1,5 +1,5 @@
 <?php
-/** AFRICA'SPY — Module E : galerie des outils du renseignement. */
+/** AFRICA'SPY : Module E : galerie des outils du renseignement. */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/content.php';
@@ -17,7 +17,7 @@ $fiche = static function (array $t, string $kind): string {
         . '<dt>Usages légitimes</dt><dd>' . e($t['use']) . '</dd><dt>Limites & cadre légal</dt><dd>' . e($t['limits']) . '</dd>';
     return '<div class="modal" id="tool-' . e($t['id']) . '" hidden role="dialog" aria-modal="true" aria-labelledby="tt-' . e($t['id']) . '"><div class="modal__box corners fiche">'
         . '<button class="modal__close" type="button" data-modal-close aria-label="Fermer">×</button>'
-        . '<p class="modal__code">Fiche technique · ' . ($kind === 'software' ? 'Logiciel' : 'Équipement') . '</p>'
+        . '<p class="modal__code">Fiche technique | ' . ($kind === 'software' ? 'Logiciel' : 'Équipement') . '</p>'
         . ($kind === 'equipment' ? '<div class="gear__fig" style="border-radius:8px;margin:14px 0"><img src="' . e(url('assets/images/equipment/' . $t['img'])) . '" alt=""></div>' : '')
         . '<h3 id="tt-' . e($t['id']) . '" style="font-size:1.6rem">' . e($t['name']) . '</h3><p>' . e($t['desc']) . '</p><dl>' . $rows . '</dl></div></div>';
 };

@@ -1,5 +1,5 @@
 <?php
-/** AFRICA'SPY — utilitaires de l'espace d'administration. */
+/** AFRICA'SPY : utilitaires de l'espace d'administration. */
 declare(strict_types=1);
 require_once APP_ROOT . '/includes/catalog.php';
 
@@ -31,7 +31,7 @@ function sel(string $name, string $label, array $options, $current, array $attrs
     return '<div class="field"><label for="' . $id . '">' . e($label) . '</label><select class="select" id="' . $id . '" name="' . e($name) . '"' . $a . '>' . $o . '</select></div>';
 }
 
-/** Petit formulaire POST d'action (supprimer, basculer…) protégé CSRF. */
+/** Petit formulaire POST d'action (supprimer, basculer...) protégé CSRF. */
 function action_btn(string $action, array $hidden, string $label, string $cls = 'btn--sm', ?string $confirm = null, string $target = ''): string
 {
     $h = csrf_field() . '<input type="hidden" name="action" value="' . e($action) . '">';
@@ -45,7 +45,7 @@ function admin_courses_options(bool $withAll = false): array
 {
     $o = $withAll ? ['' => 'Toutes les formations'] : [];
     foreach (q_all('SELECT id, code, title FROM courses ORDER BY sort_order, id') as $c) {
-        $o[$c['id']] = $c['code'] . ' — ' . $c['title'];
+        $o[$c['id']] = $c['code'] . ' : ' . $c['title'];
     }
     return $o;
 }

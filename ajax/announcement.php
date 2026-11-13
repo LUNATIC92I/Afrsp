@@ -1,5 +1,5 @@
 <?php
-/** AJAX — marque une annonce comme lue. */
+/** AJAX : marque une annonce comme lue. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 if (!is_post()) json_response(['ok' => false], 405);

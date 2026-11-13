@@ -69,11 +69,11 @@ $activeApp = 'security';
 require APP_ROOT . '/includes/app-header.php'; ?>
 <div class="grid-2">
   <section class="box reveal">
-    <div class="box__head"><h2>Double authentification (2FA)</h2><?= $enabled ? '<span class="status-pill status-pill--on">● Activée</span>' : '<span class="status-pill status-pill--warn">● Désactivée</span>' ?></div>
+    <div class="box__head"><h2>Double authentification (2FA)</h2><?= $enabled ? '<span class="status-pill status-pill--on">Activée</span>' : '<span class="status-pill status-pill--warn">Désactivée</span>' ?></div>
     <div class="box__body">
-      <p>La double authentification protège votre compte même si votre mot de passe est dérobé : un code à 6 chiffres, généré toutes les 30 secondes par une application (Google Authenticator, Microsoft Authenticator, FreeOTP, Aegis…), est demandé à chaque connexion.</p>
+      <p>La double authentification protège votre compte même si votre mot de passe est dérobé : un code à 6 chiffres, généré toutes les 30 secondes par une application (Google Authenticator, Microsoft Authenticator, FreeOTP, Aegis...), est demandé à chaque connexion.</p>
       <?php if ($newCodes): ?>
-        <div class="alert alert--warning"><strong>Codes de secours — affichés une seule fois.</strong> Chaque code ne sert qu'une fois si vous perdez votre téléphone. Imprimez-les ou conservez-les dans un gestionnaire de mots de passe.</div>
+        <div class="alert alert--warning"><strong>Codes de secours : affichés une seule fois.</strong> Chaque code ne sert qu'une fois si vous perdez votre téléphone. Imprimez-les ou conservez-les dans un gestionnaire de mots de passe.</div>
         <ul class="recovery mono"><?php foreach ($newCodes as $c): ?><li><?= e($c) ?></li><?php endforeach; ?></ul>
       <?php endif; ?>
       <?php if (!$enabled && !$setup): ?>
@@ -112,7 +112,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
     <div class="box__head"><h2>Connexions récentes</h2><span class="mono">Signalez toute connexion inconnue</span></div>
     <ul class="feed">
       <?php if (!$sessions): ?><li><span class="dim">Aucune connexion enregistrée.</span><time></time></li><?php endif; ?>
-      <?php foreach ($sessions as $s): ?><li><span><?= e(fmt_datetime($s['created_at'])) ?> · IP <?= e((string) $s['ip_address']) ?><?= $s['details'] ? ' · ' . e($s['details']) : '' ?></span><time><?= e(time_ago($s['created_at'])) ?></time></li><?php endforeach; ?>
+      <?php foreach ($sessions as $s): ?><li><span><?= e(fmt_datetime($s['created_at'])) ?> | IP <?= e((string) $s['ip_address']) ?><?= $s['details'] ? ' | ' . e($s['details']) : '' ?></span><time><?= e(time_ago($s['created_at'])) ?></time></li><?php endforeach; ?>
     </ul>
     <div class="box__body"><p class="disclaimer">Une connexion que vous ne reconnaissez pas ? Changez immédiatement votre mot de passe depuis votre profil : toutes les autres sessions seront fermées.</p></div>
   </section>

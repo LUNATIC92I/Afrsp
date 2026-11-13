@@ -1,5 +1,5 @@
 <?php
-/** Administration — médiathèque (images, documents PDF, vidéos). */
+/** Administration : médiathèque (images, documents PDF, vidéos). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -43,7 +43,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
     <?php foreach ($rows as $m): ?>
       <tr>
         <td><?php if ($m['kind'] === 'image'): ?><img src="<?= e(url('uploads/courses/' . rawurlencode($m['stored_name']))) ?>" alt="" style="width:64px;height:40px;object-fit:cover;border-radius:4px"><?php else: ?><span class="tag"><?= $m['kind'] === 'video' ? 'MP4' : 'PDF' ?></span><?php endif; ?></td>
-        <td><strong><?= e($m['title']) ?></strong><br><small class="dim"><?= e($m['original_name']) ?><?= $m['attribution'] ? ' · © ' . e($m['attribution']) : '' ?></small></td>
+        <td><strong><?= e($m['title']) ?></strong><br><small class="dim"><?= e($m['original_name']) ?><?= $m['attribution'] ? ' | © ' . e($m['attribution']) : '' ?></small></td>
         <td><?= e($m['mime_type']) ?></td><td class="num"><?= e(fmt_bytes((int) $m['size_bytes'])) ?></td><td class="num"><?= (int) $m['used'] ?></td>
         <td><div class="actions"><?php if ($m['kind'] !== 'image'): ?><a class="btn btn--sm" href="<?= e(url('download.php', ['media' => $m['id']])) ?>" target="_blank" rel="noopener" data-no-transition>Ouvrir</a><?php endif; ?><?= action_btn('delete', ['id' => $m['id'], 'filter' => $kind], 'Supprimer', 'btn--sm btn--danger', 'Supprimer définitivement ce fichier ?') ?></div></td>
       </tr>
@@ -54,7 +54,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
     <div class="box__head"><h2>Téléverser</h2></div>
     <div class="box__body">
       <?= csrf_field() ?><input type="hidden" name="action" value="upload">
-      <?= sel('kind', 'Type', ['image' => 'Image (JPG, PNG, WebP · 4 Mo)', 'document' => 'Document PDF (25 Mo)', 'video' => 'Vidéo MP4/WebM (200 Mo)'], 'image') ?>
+      <?= sel('kind', 'Type', ['image' => 'Image (JPG, PNG, WebP | 4 Mo)', 'document' => 'Document PDF (25 Mo)', 'video' => 'Vidéo MP4/WebM (200 Mo)'], 'image') ?>
       <?= fld('title', 'Titre', '', 'text', ['maxlength' => 190]) ?>
       <?= fld('file', 'Fichier', '', 'file', ['required' => true]) ?>
       <?= fld('attribution', 'Crédit / licence (à conserver pour les visuels tiers)', '', 'text', ['maxlength' => 255]) ?>

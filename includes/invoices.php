@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — factures et avoirs PDF.
+ * AFRICA'SPY : factures et avoirs PDF.
  *
  * - Numérotation continue et chronologique par année (FAC-2026-000001, AV-2026-000001),
  *   attribuée sous verrou transactionnel : aucun trou ni doublon.
@@ -24,7 +24,7 @@ function invoice_next_number(string $type): string
 function invoice_seller_snapshot(): array
 {
     return [
-        'name' => setting('seller_legal_name', setting('institution_name', "AFRICA'SPY — Intelligence Academy")),
+        'name' => setting('seller_legal_name', setting('institution_name', "AFRICA'SPY Intelligence Academy")),
         'address' => setting('seller_address', setting('contact_address')),
         'tax_id' => setting('seller_tax_id'), 'registration' => setting('seller_registration'),
         'email' => setting('seller_email', setting('contact_email')),
@@ -52,7 +52,7 @@ function issue_invoice(int $paymentId): ?array
             $no, $p['id'], $p['user_id'], $p['paid_at'],
             json_encode(invoice_seller_snapshot(), JSON_UNESCAPED_UNICODE),
             json_encode(['name' => trim($p['first_name'] . ' ' . $p['last_name']), 'email' => $p['email'], 'organization' => $p['organization'], 'country' => $p['country']], JSON_UNESCAPED_UNICODE),
-            'Formation en ligne ' . $p['code'] . ' — ' . $p['title'],
+            'Formation en ligne ' . $p['code'] . ' : ' . $p['title'],
             (int) $p['list_price_xof'], max(0, (int) $p['list_price_xof'] - $ttc), $ht, $rate, setting('tax_label', 'TVA'), $ttc - $ht, $ttc,
         ]);
         $id = (int) $pdo->lastInsertId();
@@ -61,7 +61,7 @@ function issue_invoice(int $paymentId): ?array
         if ($own && $pdo->inTransaction()) $pdo->rollBack();
         throw $e;
     }
-    audit('invoice.issue', 'invoice', $id, $no . ' · ' . $p['reference']);
+    audit('invoice.issue', 'invoice', $id, $no . ' | ' . $p['reference']);
     return q_one('SELECT * FROM invoices WHERE id = ?', [$id]);
 }
 
@@ -79,7 +79,7 @@ function issue_credit_note(int $paymentId, string $reason = 'Remboursement'): ?a
         q('INSERT INTO invoices (doc_type, invoice_no, payment_id, related_id, user_id, issued_at, seller, buyer, label, list_price_xof, discount_xof, amount_ht_xof, tax_rate, tax_label, tax_xof, amount_ttc_xof)
            VALUES (\'credit_note\', ?, ?, ?, ?, UTC_TIMESTAMP(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             $no, $paymentId, $inv['id'], $inv['user_id'], json_encode(invoice_seller_snapshot(), JSON_UNESCAPED_UNICODE), $inv['buyer'],
-            mb_substr('Avoir sur facture ' . $inv['invoice_no'] . ' — ' . $reason, 0, 255),
+            mb_substr('Avoir sur facture ' . $inv['invoice_no'] . ' : ' . $reason, 0, 255),
             -(int) $inv['list_price_xof'], -(int) $inv['discount_xof'], -(int) $inv['amount_ht_xof'], $inv['tax_rate'], $inv['tax_label'], -(int) $inv['tax_xof'], -(int) $inv['amount_ttc_xof'],
         ]);
         $id = (int) $pdo->lastInsertId();
@@ -88,17 +88,17 @@ function issue_credit_note(int $paymentId, string $reason = 'Remboursement'): ?a
         if ($pdo->inTransaction()) $pdo->rollBack();
         throw $e;
     }
-    audit('invoice.credit_note', 'invoice', $id, $no . ' · annule ' . $inv['invoice_no']);
+    audit('invoice.credit_note', 'invoice', $id, $no . ' | annule ' . $inv['invoice_no']);
     return q_one('SELECT * FROM invoices WHERE id = ?', [$id]);
 }
 
-/** Rendu HTML → PDF d'une facture ou d'un avoir. */
+/** Rendu HTML puis PDF d'une facture ou d'un avoir. */
 function invoice_pdf(array $inv): string
 {
     require_once APP_ROOT . '/includes/pdf.php';
     require_once APP_ROOT . '/includes/logo.php';
     $e = static fn ($v) => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
-    $money = static fn (int $v) => ($v < 0 ? '− ' : '') . number_format(abs($v), 0, ',', ' ') . ' FCFA';
+    $money = static fn (int $v) => ($v < 0 ? '- ' : '') . number_format(abs($v), 0, ',', ' ') . ' FCFA';
     $seller = json_decode($inv['seller'], true) ?: [];
     $buyer = json_decode($inv['buyer'], true) ?: [];
     $p = q_one('SELECT reference, provider, payment_method, provider_txn, paid_at FROM payments WHERE id = ?', [$inv['payment_id']]) ?: [];
@@ -138,15 +138,15 @@ function invoice_pdf(array $inv): string
     <div class="parties"><div><div class="k">Émetteur</div><strong>' . $e($seller['name'] ?? '') . '</strong><br>' . $sellerLines . '</div>
       <div><div class="k">Client</div>' . $buyerLines . '</div></div>
     <table class="lines"><thead><tr><th>Désignation</th><th class="r">Qté</th><th class="r">Prix de référence</th><th class="r">Remise</th><th class="r">Montant TTC</th></tr></thead><tbody>
-      <tr><td>' . $e($inv['label']) . '<br><span class="mention">Accès personnel en ligne : leçons, supports, évaluations, examen final et certificat.</span></td><td class="r">1</td><td class="r">' . $money((int) $inv['list_price_xof']) . '</td><td class="r">' . ((int) $inv['discount_xof'] ? $money(-(int) $inv['discount_xof']) : '—') . '</td><td class="r">' . $money((int) $inv['amount_ttc_xof']) . '</td></tr>
+      <tr><td>' . $e($inv['label']) . '<br><span class="mention">Accès personnel en ligne : leçons, supports, évaluations, examen final et certificat.</span></td><td class="r">1</td><td class="r">' . $money((int) $inv['list_price_xof']) . '</td><td class="r">' . ((int) $inv['discount_xof'] ? $money(-(int) $inv['discount_xof']) : '-') . '</td><td class="r">' . $money((int) $inv['amount_ttc_xof']) . '</td></tr>
     </tbody></table>
     <table class="tot"><tr><td>Total hors taxes</td><td class="r">' . $money((int) $inv['amount_ht_xof']) . '</td></tr>' . $taxLine . '
       <tr class="grand"><td>' . ($isCredit ? 'Total de l\'avoir' : 'Total TTC') . '</td><td class="r">' . $money((int) $inv['amount_ttc_xof']) . '</td></tr></table>
     <div class="pay">' . $status . ' &nbsp; '
         . ($isCredit ? 'Avoir annulant la facture ' . $e((string) $related) . '. Le remboursement est effectué via le moyen de paiement d\'origine.'
-            : 'Réglée le ' . $e(fmt_datetime($p['paid_at'] ?? $inv['issued_at'])) . ' par ' . $e(payment_provider_label((string) ($p['provider'] ?? ''))) . (($p['payment_method'] ?? '') ? ' (' . $e($p['payment_method']) . ')' : '') . (($p['provider_txn'] ?? '') ? ' — transaction ' . $e($p['provider_txn']) : '') . '.')
+            : 'Réglée le ' . $e(fmt_datetime($p['paid_at'] ?? $inv['issued_at'])) . ' par ' . $e(payment_provider_label((string) ($p['provider'] ?? ''))) . (($p['payment_method'] ?? '') ? ' (' . $e($p['payment_method']) . ')' : '') . (($p['provider_txn'] ?? '') ? ' : transaction ' . $e($p['provider_txn']) : '') . '.')
         . '</div>
-    <div class="foot">' . $e(setting('invoice_footer', 'Facture acquittée.')) . ' Montants exprimés en francs CFA (XOF). ' . $e($seller['name'] ?? '') . ($seller['tax_id'] ?? '' ? ' · NIF ' . $e($seller['tax_id']) : '') . '</div>
+    <div class="foot">' . $e(setting('invoice_footer', 'Facture acquittée.')) . ' Montants exprimés en francs CFA (XOF). ' . $e($seller['name'] ?? '') . ($seller['tax_id'] ?? '' ? ' | NIF ' . $e($seller['tax_id']) : '') . '</div>
     </body></html>';
     $pdf = pdf_engine();
     $pdf->loadHtml($html, 'UTF-8');
@@ -178,14 +178,14 @@ function mail_payment_confirmed(int $paymentId): bool
     $amount = number_format((int) $p['amount_xof'], 0, ',', ' ') . ' FCFA';
     $html = '<p>Bonjour ' . $e($p['first_name']) . ',</p><p>Votre paiement est confirmé : la formation est désormais ouverte dans votre espace.</p>'
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;border:1px solid #E3E7EC;border-radius:6px;font:14px/1.7 Arial,Helvetica,sans-serif">'
-        . '<tr><td style="padding:10px 16px;color:#6B7686">Formation</td><td style="padding:10px 16px;text-align:right"><strong>' . $e($p['code']) . ' — ' . $e($p['title']) . '</strong></td></tr>'
+        . '<tr><td style="padding:10px 16px;color:#6B7686">Formation</td><td style="padding:10px 16px;text-align:right"><strong>' . $e($p['code']) . ' : ' . $e($p['title']) . '</strong></td></tr>'
         . '<tr><td style="padding:10px 16px;color:#6B7686;border-top:1px solid #EEF1F5">Montant réglé</td><td style="padding:10px 16px;text-align:right;border-top:1px solid #EEF1F5"><strong>' . $amount . '</strong></td></tr>'
         . '<tr><td style="padding:10px 16px;color:#6B7686;border-top:1px solid #EEF1F5">Référence de paiement</td><td style="padding:10px 16px;text-align:right;border-top:1px solid #EEF1F5;font-family:Courier New,monospace">' . $e($p['reference']) . '</td></tr>'
         . ($inv ? '<tr><td style="padding:10px 16px;color:#6B7686;border-top:1px solid #EEF1F5">Facture</td><td style="padding:10px 16px;text-align:right;border-top:1px solid #EEF1F5;font-family:Courier New,monospace">' . $e($inv['invoice_no']) . '</td></tr>' : '')
         . '</table><p>Votre facture est jointe à ce message au format PDF. Elle reste téléchargeable à tout moment depuis « Mes paiements ».</p>';
-    $text = "Bonjour {$p['first_name']},\n\nVotre paiement de $amount pour la formation {$p['code']} — {$p['title']} est confirmé.\nRéférence : {$p['reference']}" . ($inv ? "\nFacture : {$inv['invoice_no']} (PDF en pièce jointe)" : '') . "\n\nCommencer la formation : $learn";
+    $text = "Bonjour {$p['first_name']},\n\nVotre paiement de $amount pour la formation {$p['code']} : {$p['title']} est confirmé.\nRéférence : {$p['reference']}" . ($inv ? "\nFacture : {$inv['invoice_no']} (PDF en pièce jointe)" : '') . "\n\nCommencer la formation : $learn";
     $att = $inv ? [[file_get_contents(invoice_file($inv)), 'Facture-' . $inv['invoice_no'] . '.pdf', 'application/pdf']] : [];
-    return send_mail($p['email'], "AFRICA'SPY — Paiement confirmé" . ($inv ? ' · Facture ' . $inv['invoice_no'] : ''), $text, [
+    return send_mail($p['email'], "AFRICA'SPY : Paiement confirmé" . ($inv ? ' | Facture ' . $inv['invoice_no'] : ''), $text, [
         'html' => mail_layout('Votre formation est ouverte. Facture jointe.', 'Paiement confirmé', $html, ['Commencer la formation', $learn]),
         'attachments' => $att, 'tag' => 'payment',
     ]);
@@ -199,7 +199,7 @@ function mail_credit_note(int $paymentId): bool
     if (!$cn || !$p) return false;
     $e = static fn ($v) => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
     $html = '<p>Bonjour ' . $e($p['first_name']) . ',</p><p>Le remboursement de votre paiement <span style="font-family:Courier New,monospace">' . $e($p['reference']) . '</span> a été enregistré. Vous trouverez ci-joint l\'avoir <strong>' . $e($cn['invoice_no']) . '</strong>.</p>';
-    return send_mail($p['email'], "AFRICA'SPY — Avoir " . $cn['invoice_no'], "Bonjour {$p['first_name']},\n\nLe remboursement de votre paiement {$p['reference']} a été enregistré. Avoir {$cn['invoice_no']} en pièce jointe.", [
+    return send_mail($p['email'], "AFRICA'SPY : Avoir " . $cn['invoice_no'], "Bonjour {$p['first_name']},\n\nLe remboursement de votre paiement {$p['reference']} a été enregistré. Avoir {$cn['invoice_no']} en pièce jointe.", [
         'html' => mail_layout('Avoir suite à remboursement.', 'Remboursement enregistré', $html),
         'attachments' => [[file_get_contents(invoice_file($cn)), 'Avoir-' . $cn['invoice_no'] . '.pdf', 'application/pdf']], 'tag' => 'credit-note',
     ]);

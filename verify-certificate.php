@@ -1,5 +1,5 @@
 <?php
-/** AFRICA'SPY — vérification publique des certificats (numéro ou QR Code). */
+/** AFRICA'SPY : vérification publique des certificats (numéro ou QR Code). */
 declare(strict_types=1);
 require __DIR__ . '/includes/bootstrap.php';
 
@@ -26,7 +26,7 @@ require APP_ROOT . '/includes/header.php';
   <section class="page-hero">
     <div class="container">
       <nav class="crumbs" aria-label="Fil d'Ariane"><a href="<?= e(url('index.php')) ?>">Accueil</a><span aria-hidden="true">/</span><span>Vérification</span></nav>
-      <p class="eyebrow eyebrow--gold">Service public · authentification</p>
+      <p class="eyebrow eyebrow--gold">Service public | authentification</p>
       <h1 data-split>Vérifier un certificat</h1>
       <p class="reveal">Saisissez le numéro figurant sur le certificat (format AFSPY-AAAA-XXXXXXXX) ou scannez son QR Code.</p>
     </div>
@@ -49,7 +49,7 @@ require APP_ROOT . '/includes/header.php';
               <dt>Formation</dt><dd><?= e($r['course_title']) ?> <span class="dim mono">(<?= e($r['course_code']) ?>)</span></dd>
               <dt>Score à l'examen</dt><dd><?= e(number_format((float) $r['score'], 0)) ?> %</dd>
               <dt>Date d'obtention</dt><dd><?= e(fmt_date($r['issued_at'])) ?></dd>
-              <dt>Émetteur</dt><dd>AFRICA'SPY — Intelligence Academy (organisme de formation privé)</dd>
+              <dt>Émetteur</dt><dd>AFRICA'SPY Intelligence Academy (organisme de formation privé)</dd>
             </dl>
             <p class="disclaimer mt-2">Ce certificat atteste la réussite d'un parcours de formation interne. Il ne constitue ni un diplôme d'État ni une qualification officiellement reconnue.</p>
           </div>

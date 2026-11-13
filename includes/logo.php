@@ -1,10 +1,10 @@
 <?php
 /**
- * AFRICA'SPY — emblème institutionnel (SVG vectoriel, généré côté serveur).
+ * AFRICA'SPY : emblème institutionnel (SVG vectoriel, généré côté serveur).
  *
  * Concept : un cadran d'observation circulaire (graduations, réticule) enserrant
  * une Afrique géométrique facettée, traversée de lignes électroniques qui
- * convergent vers un noyau lumineux — « l'œil » analytique de l'Académie.
+ * convergent vers un noyau lumineux, « l'œil » analytique de l'Académie.
  * Variantes : holo (holographique), gold (or), silver (argent), mono (currentColor).
  */
 declare(strict_types=1);

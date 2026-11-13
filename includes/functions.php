@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — fonctions utilitaires transverses.
+ * AFRICA'SPY : fonctions utilitaires transverses.
  */
 declare(strict_types=1);
 
@@ -298,7 +298,7 @@ function validate(array $data, array $rules, array $labels = []): array
                     'max'      => "« $label » ne doit pas dépasser $arg caractères.",
                     'in'       => "La valeur de « $label » n'est pas autorisée.",
                     'int'      => "« $label » doit être un nombre entier.",
-                    'url'      => "« $label » doit être une URL valide (https://…).",
+                    'url'      => "« $label » doit être une URL valide (https://...).",
                     'same'     => "La confirmation de « $label » ne correspond pas.",
                     'name'     => "« $label » contient des caractères non autorisés.",
                     default    => "« $label » est invalide.",
@@ -475,7 +475,7 @@ function fmt_date(?string $utc, bool $long = true): string
 {
     $d = local_dt($utc);
     if (!$d) {
-        return '—';
+        return '-';
     }
     static $months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
     return $long ? ($d->format('j') . ' ' . $months[(int) $d->format('n') - 1] . ' ' . $d->format('Y')) : $d->format('d/m/Y');
@@ -484,13 +484,13 @@ function fmt_date(?string $utc, bool $long = true): string
 function fmt_datetime(?string $utc): string
 {
     $d = local_dt($utc);
-    return $d ? $d->format('d/m/Y · H:i') : '—';
+    return $d ? $d->format('d/m/Y | H:i') : '-';
 }
 
 function time_ago(?string $utc): string
 {
     if (!$utc) {
-        return '—';
+        return '-';
     }
     $diff = time() - strtotime($utc . ' UTC');
     return match (true) {
@@ -528,7 +528,7 @@ function lines(?string $text): array
 function str_limit(string $s, int $max): string
 {
     $s = trim(preg_replace('/\s+/', ' ', strip_tags($s)));
-    return mb_strlen($s) > $max ? rtrim(mb_substr($s, 0, $max - 1)) . '…' : $s;
+    return mb_strlen($s) > $max ? rtrim(mb_substr($s, 0, $max - 1)) . '...' : $s;
 }
 
 function slugify(string $s): string
@@ -638,7 +638,7 @@ function handle_upload(array $file, string $kind, string $title = '', ?string $a
         $attribution ? mb_substr($attribution, 0, 255) : null, current_user()['id'] ?? null,
     ]);
     $id = (int) db()->lastInsertId();
-    audit('media.upload', 'media', $id, $kind . ' · ' . $original);
+    audit('media.upload', 'media', $id, $kind . ' | ' . $original);
     return ['id' => $id, 'stored' => $stored];
 }
 

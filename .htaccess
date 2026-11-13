@@ -1,5 +1,5 @@
 # =====================================================================
-#  AFRICA'SPY — configuration Apache (racine)
+#  AFRICA'SPY : configuration Apache (racine)
 # =====================================================================
 Options -Indexes -MultiViews
 DirectoryIndex index.php
@@ -9,7 +9,7 @@ AddDefaultCharset UTF-8
     RewriteEngine On
     # security.txt (RFC 9116), seule exception aux fichiers cachés
     RewriteRule ^\.well-known/security\.txt$ security-txt.php [L]
-    # Fichiers cachés (.git, .env, .htaccess…)
+    # Fichiers cachés (.git, .env, .htaccess...)
     RewriteRule (^|/)\. - [F,L]
     # Répertoires et fichiers sensibles : jamais servis directement
     RewriteRule ^(config|includes|database|vendor|storage|resources|certificates)(/|$) - [F,L]

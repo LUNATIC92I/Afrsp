@@ -1,5 +1,5 @@
 <?php
-/** Administration — catégories (domaines / modules). */
+/** Administration : catégories (domaines / modules). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -45,7 +45,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
   <section class="box reveal"><div class="box__head"><h2>Domaines de formation</h2></div><div class="table-wrap"><table class="table">
     <thead><tr><th>Code</th><th>Nom</th><th class="num">Formations</th><th></th></tr></thead><tbody>
     <?php foreach ($rows as $r): ?>
-      <tr><td><span class="mono" style="color:<?= e($r['accent']) ?>">■ <?= e($r['code']) ?></span></td><td><strong><?= e($r['name']) ?></strong><br><small class="dim"><?= e(str_limit((string) $r['description'], 90)) ?></small></td><td class="num"><?= (int) $r['course_count'] ?></td>
+      <tr><td><span class="mono" style="color:<?= e($r['accent']) ?>"><?= e($r['code']) ?></span></td><td><strong><?= e($r['name']) ?></strong><br><small class="dim"><?= e(str_limit((string) $r['description'], 90)) ?></small></td><td class="num"><?= (int) $r['course_count'] ?></td>
       <td><div class="actions"><a class="btn btn--sm" href="<?= e(url('admin/categories.php', ['edit' => $r['id']])) ?>">Modifier</a><?= action_btn('delete', ['id' => $r['id']], 'Supprimer', 'btn--sm btn--danger', 'Supprimer cette catégorie ?') ?></div></td></tr>
     <?php endforeach; ?></tbody></table></div></section>
   <form class="box reveal" method="post" novalidate>

@@ -31,7 +31,7 @@ if (is_post()) {
 $pageTitle = 'Connexion';
 $authTitle = 'Connexion';
 $authIntro = 'Accédez à votre espace de formation sécurisé.';
-$authTerminal = 'Canal chiffré · identification';
+$authTerminal = 'Canal chiffré | identification';
 $authBody = function (): void { ?>
   <form method="post" action="<?= e(url('login.php')) ?>" novalidate>
     <?= csrf_field() ?>

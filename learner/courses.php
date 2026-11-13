@@ -1,5 +1,5 @@
 <?php
-/** Espace apprenant — mes formations et historique. */
+/** Espace apprenant : mes formations et historique. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/catalog.php';
@@ -23,10 +23,10 @@ require APP_ROOT . '/includes/app-header.php';
     <?php foreach ($rows as $r): ?>
       <tr>
         <td><span class="mono cyan" style="font-size:.72rem"><?= e($r['code']) ?></span><br><strong><?= e($r['title']) ?></strong></td>
-        <td><?= e($r['category_code']) ?> · <?= e(level_label($r['level'])) ?></td>
+        <td><?= e($r['category_code']) ?> | <?= e(level_label($r['level'])) ?></td>
         <td><?= e(fmt_date($r['enrolled_at'], false)) ?></td>
         <td style="min-width:160px"><div class="progress"><span data-p="<?= (int) $r['progress'] ?>"></span></div><small class="mono dim"><?= (int) $r['progress'] ?> %</small></td>
-        <td><?= $r['status'] === 'completed' ? '<span class="status-pill status-pill--on">● Certifiée</span>' : '<span class="status-pill status-pill--warn">● En cours</span>' ?></td>
+        <td><?= $r['status'] === 'completed' ? '<span class="status-pill status-pill--on">Certifiée</span>' : '<span class="status-pill status-pill--warn">En cours</span>' ?></td>
         <td><div class="actions">
           <a class="btn btn--sm" href="<?= e(url('learner/learning.php', ['course' => $r['course_id']])) ?>"><?= $r['status'] === 'completed' ? 'Revoir' : 'Continuer' ?></a>
           <?php if ($r['cert_no']): ?><a class="btn btn--sm btn--gold" href="<?= e(url('learner/certificate.php', ['no' => $r['cert_no']])) ?>" data-no-transition>Certificat</a><?php endif; ?>

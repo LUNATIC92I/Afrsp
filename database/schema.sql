@@ -1,7 +1,7 @@
 -- =====================================================================
---  AFRICA'SPY — Intelligence Academy
+--  AFRICA'SPY Intelligence Academy
 --  Schéma relationnel MySQL 8 / MariaDB 10.4+
---  Encodage : utf8mb4 — Moteur : InnoDB
+--  Encodage : utf8mb4, moteur : InnoDB
 -- =====================================================================
 
 SET NAMES utf8mb4;
@@ -227,7 +227,7 @@ CREATE TABLE lesson_progress (
 -- ---------------------------------------------------------------------
 --  Examens & banque de questions QCM
 --  Une banque par formation ; chaque question peut être rattachée à un
---  chapitre (évaluation formative) — l'examen final tire au sort dans
+--  chapitre (évaluation formative) : l'examen final tire au sort dans
 --  toute la banque.
 -- ---------------------------------------------------------------------
 CREATE TABLE exams (

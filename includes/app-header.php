@@ -128,7 +128,7 @@ require APP_ROOT . '/includes/header.php';
             <?php if (!$notifs): ?><p class="dim" style="padding:16px;margin:0">Aucune annonce.</p><?php endif; ?>
             <?php foreach ($notifs as $n): ?>
             <button class="notif__item<?= $n['is_read'] ? '' : ' is-unread' ?>" type="button" data-ann="<?= (int) $n['id'] ?>">
-              <strong><?= $n['level'] === 'alert' ? '⚠ ' : '' ?><?= e($n['title']) ?></strong><p><?= e($n['body']) ?></p><small><?= e(fmt_datetime($n['published_at'])) ?></small>
+              <strong><?= $n['level'] === 'alert' ? 'Alerte : ' : '' ?><?= e($n['title']) ?></strong><p><?= e($n['body']) ?></p><small><?= e(fmt_datetime($n['published_at'])) ?></small>
             </button>
             <?php endforeach; ?>
           </div>

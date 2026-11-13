@@ -1,5 +1,5 @@
 <?php
-/** MODULE B — ESPIONNAGE ET RENSEIGNEMENT HUMAIN */
+/** MODULE B : ESPIONNAGE ET RENSEIGNEMENT HUMAIN */
 return [
 [
   'code' => 'AFS-B101', 'category' => 'B', 'slug' => 'renseignement-humain-principes-ethique',
@@ -56,7 +56,7 @@ HTML],
 <li>Droit du travail et secret des affaires.</li>
 </ul>
 <h3>Les lignes rouges absolues</h3>
-<div class="warning"><ul class="mb-0"><li>Offrir un avantage pour obtenir une information confidentielle (corruption) ;</li><li>Menacer, faire pression, exploiter une vulnérabilité (chantage, abus de faiblesse) ;</li><li>Usurper une identité ou une qualité (se dire policier, journaliste, auditeur…) ;</li><li>Enregistrer une conversation privée à l'insu de l'interlocuteur lorsque la loi l'interdit ;</li><li>Inciter quelqu'un à violer son obligation de confidentialité.</li></ul></div>
+<div class="warning"><ul class="mb-0"><li>Offrir un avantage pour obtenir une information confidentielle (corruption) ;</li><li>Menacer, faire pression, exploiter une vulnérabilité (chantage, abus de faiblesse) ;</li><li>Usurper une identité ou une qualité (se dire policier, journaliste, auditeur...) ;</li><li>Enregistrer une conversation privée à l'insu de l'interlocuteur lorsque la loi l'interdit ;</li><li>Inciter quelqu'un à violer son obligation de confidentialité.</li></ul></div>
 <h3>Le test des quatre questions</h3>
 <ol><li>Est-ce légal dans le pays concerné ?</li><li>Serais-je à l'aise si la méthode était rendue publique ?</li><li>L'interlocuteur aurait-il accepté s'il avait su ?</li><li>Le bénéfice attendu justifie-t-il le risque pour les personnes ?</li></ol>
 <p>Une seule réponse négative suffit à abandonner la démarche.</p>
@@ -77,11 +77,11 @@ HTML],
 <h3>Préparation</h3>
 <ul><li>Objectif écrit en une phrase ;</li><li>Recherche préalable sur le sujet (pour poser des questions intelligentes) ;</li><li>Guide d'entretien : 5 à 8 questions ouvertes, du général au particulier ;</li><li>Logistique : lieu neutre et confortable, durée annoncée.</li></ul>
 <h3>Conduite : la méthode de l'entonnoir</h3>
-<ol><li><strong>Accueil</strong> : présentation, finalité, règles de confidentialité, accord sur la prise de notes.</li><li><strong>Questions ouvertes</strong> : « Comment décririez-vous… ? », « Que s'est-il passé ensuite ? »</li><li><strong>Approfondissement</strong> : reformulation, relances neutres, demandes d'exemples.</li><li><strong>Questions fermées</strong> de vérification : dates, chiffres, noms publics.</li><li><strong>Clôture</strong> : « Y a-t-il un point que je n'ai pas abordé ? », remerciements.</li></ol>
+<ol><li><strong>Accueil</strong> : présentation, finalité, règles de confidentialité, accord sur la prise de notes.</li><li><strong>Questions ouvertes</strong> : « Comment décririez-vous... ? », « Que s'est-il passé ensuite ? »</li><li><strong>Approfondissement</strong> : reformulation, relances neutres, demandes d'exemples.</li><li><strong>Questions fermées</strong> de vérification : dates, chiffres, noms publics.</li><li><strong>Clôture</strong> : « Y a-t-il un point que je n'ai pas abordé ? », remerciements.</li></ol>
 <h3>Écoute active</h3>
-<p>Silence accueillant, reformulation, attention au non-verbal, absence de jugement. On évite les questions suggestives (« Vous êtes d'accord que… ? ») qui contaminent la réponse.</p>
+<p>Silence accueillant, reformulation, attention au non-verbal, absence de jugement. On évite les questions suggestives (« Vous êtes d'accord que... ? ») qui contaminent la réponse.</p>
 <h3>Observation non intrusive</h3>
-<p>Observer un <strong>espace public</strong> (marché, gare, salon professionnel) permet de comprendre des flux, des usages, une ambiance — sans jamais suivre, photographier ou ficher des individus. On note des tendances (affluence, horaires, types d'activités), pas des identités.</p>
+<p>Observer un <strong>espace public</strong> (marché, gare, salon professionnel) permet de comprendre des flux, des usages, une ambiance, sans jamais suivre, photographier ou ficher des individus. On note des tendances (affluence, horaires, types d'activités), pas des identités.</p>
 <div class="note">Après l'entretien, rédigez votre compte rendu dans l'heure : la mémoire se dégrade très vite. Distinguez verbatim, paraphrase et impressions personnelles.</div>
 HTML],
       ],
@@ -98,12 +98,12 @@ HTML],
         ['title' => 'Coter une source et une information', 'type' => 'text', 'minutes' => 25, 'content' => <<<'HTML'
 <p>Le système de cotation le plus répandu, souvent appelé <strong>code de l'Amirauté</strong> ou système OTAN, évalue séparément <strong>la source</strong> (lettre) et <strong>l'information</strong> (chiffre).</p>
 <table><thead><tr><th>Fiabilité de la source</th><th>Crédibilité de l'information</th></tr></thead><tbody>
-<tr><td>A — Totalement fiable</td><td>1 — Confirmée par d'autres sources</td></tr>
-<tr><td>B — Habituellement fiable</td><td>2 — Probablement vraie</td></tr>
-<tr><td>C — Assez fiable</td><td>3 — Possiblement vraie</td></tr>
-<tr><td>D — Pas toujours fiable</td><td>4 — Douteuse</td></tr>
-<tr><td>E — Non fiable</td><td>5 — Improbable</td></tr>
-<tr><td>F — Fiabilité impossible à évaluer</td><td>6 — Véracité impossible à évaluer</td></tr>
+<tr><td>A : Totalement fiable</td><td>1 : Confirmée par d'autres sources</td></tr>
+<tr><td>B : Habituellement fiable</td><td>2 : Probablement vraie</td></tr>
+<tr><td>C : Assez fiable</td><td>3 : Possiblement vraie</td></tr>
+<tr><td>D : Pas toujours fiable</td><td>4 : Douteuse</td></tr>
+<tr><td>E : Non fiable</td><td>5 : Improbable</td></tr>
+<tr><td>F : Fiabilité impossible à évaluer</td><td>6 : Véracité impossible à évaluer</td></tr>
 </tbody></table>
 <p>Une source habituellement fiable peut transmettre une information douteuse (B4), et une source inconnue une information confirmée (F1). C'est tout l'intérêt de la double cotation.</p>
 <h3>Critères d'évaluation de la source</h3>
@@ -181,7 +181,7 @@ HTML],
         ['title' => 'Mythes et réalités du comportement', 'type' => 'text', 'minutes' => 30, 'content' => <<<'HTML'
 <p>Films et séries ont popularisé l'idée qu'un regard fuyant ou un geste de la main trahirait le mensonge. <strong>La recherche scientifique contredit largement ces croyances.</strong></p>
 <h3>Ce que montrent les études</h3>
-<ul><li>Les méta-analyses de la recherche en psychologie montrent que la capacité moyenne à détecter le mensonge à partir du comportement dépasse à peine le hasard (de l'ordre de 54 %).</li><li>Il n'existe <strong>aucun indice non verbal universel</strong> du mensonge, à la manière du « nez de Pinocchio ».</li><li>Le stress d'une personne honnête soupçonnée peut produire les mêmes signes que ceux attribués aux menteurs.</li><li>Les variations culturelles du contact visuel, de la gestuelle ou des silences sont considérables — un point crucial sur un continent aussi divers que l'Afrique.</li></ul>
+<ul><li>Les méta-analyses de la recherche en psychologie montrent que la capacité moyenne à détecter le mensonge à partir du comportement dépasse à peine le hasard (de l'ordre de 54 %).</li><li>Il n'existe <strong>aucun indice non verbal universel</strong> du mensonge, à la manière du « nez de Pinocchio ».</li><li>Le stress d'une personne honnête soupçonnée peut produire les mêmes signes que ceux attribués aux menteurs.</li><li>Les variations culturelles du contact visuel, de la gestuelle ou des silences sont considérables, un point crucial sur un continent aussi divers que l'Afrique.</li></ul>
 <h3>Ce qui fonctionne mieux</h3>
 <ul><li>Les approches centrées sur le <strong>contenu verbal</strong> : richesse en détails vérifiables, cohérence, plausibilité ;</li><li>La <strong>vérification factuelle</strong> des éléments avancés ;</li><li>Les entretiens non accusatoires, qui favorisent un récit libre et détaillé.</li></ul>
 <div class="warning">Ne jamais fonder un jugement sur une personne (recrutement, soupçon, sanction) à partir d'une « lecture » du comportement. C'est scientifiquement infondé et potentiellement discriminatoire.</div>
@@ -203,10 +203,10 @@ HTML],
 <p><em>Bottom Line Up Front</em> : la conclusion d'abord.</p>
 <ol><li><strong>Titre-jugement</strong> : une phrase qui dit l'essentiel (« La hausse des prix du transport devrait se poursuivre jusqu'en mars »).</li><li><strong>Résumé</strong> en trois à cinq lignes, avec niveau de confiance.</li><li><strong>Développement</strong> : faits, analyse, hypothèses alternatives.</li><li><strong>Lacunes et indicateurs</strong> à surveiller.</li><li><strong>Sources</strong> et cotations.</li></ol>
 <h3>Règles d'écriture</h3>
-<ul><li>Phrases courtes, voix active, un paragraphe = une idée ;</li><li>Vocabulaire de probabilité normalisé (presque certain, probable, possible…) ;</li><li>Distinction visible entre faits et jugements ;</li><li>Pas d'adjectifs dramatiques ni de jargon inutile.</li></ul>
+<ul><li>Phrases courtes, voix active, un paragraphe = une idée ;</li><li>Vocabulaire de probabilité normalisé (presque certain, probable, possible...) ;</li><li>Distinction visible entre faits et jugements ;</li><li>Pas d'adjectifs dramatiques ni de jargon inutile.</li></ul>
 <table><thead><tr><th>À éviter</th><th>À privilégier</th></tr></thead><tbody>
 <tr><td>« La situation est explosive. »</td><td>« Trois incidents ont été signalés en une semaine contre un par mois en moyenne ; une escalade est possible (confiance faible). »</td></tr>
-<tr><td>« Il semblerait que peut-être… »</td><td>« Il est probable que… »</td></tr>
+<tr><td>« Il semblerait que peut-être... »</td><td>« Il est probable que... »</td></tr>
 </tbody></table>
 HTML],
       ],

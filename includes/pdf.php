@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — génération PDF (Dompdf) : supports de cours et certificats.
+ * AFRICA'SPY : génération PDF (Dompdf) : supports de cours et certificats.
  */
 declare(strict_types=1);
 
@@ -122,7 +122,7 @@ ul.biblio { padding-left: 5mm; } ul.biblio li { margin-bottom: 2.5mm; } ul.bibli
 <div class="cover"><div class="band"></div>
 <img src="{$logo}" alt="">
 <div class="brand">AFRICA'SPY<small>INTELLIGENCE ACADEMY</small></div>
-<div class="code">{$course['code']} · SUPPORT DE COURS ET FICHE DE SYNTHÈSE</div>
+<div class="code">{$course['code']} | SUPPORT DE COURS ET FICHE DE SYNTHÈSE</div>
 <h1>{$course['title_e']}</h1>
 <div class="sub">{$course['subtitle_e']}</div>
 <table class="meta"><tr><td class="k">DOMAINE</td><td>{$course['category_e']}</td></tr><tr><td class="k">NIVEAU</td><td>{$course['level_e']}</td></tr><tr><td class="k">DURÉE INDICATIVE</td><td>{$course['duration_hours']} heures</td></tr><tr><td class="k">ÉDITION</td><td>{$date}</td></tr></table>
@@ -149,7 +149,7 @@ function render_course_support_pdf(array $course, array $chapters): string
     $pdf->render();
     $canvas = $pdf->getCanvas();
     $canvas->page_text(520, 810, '{PAGE_NUM} / {PAGE_COUNT}', null, 7, [0.45, 0.5, 0.56]);
-    $canvas->page_text(50, 810, "AFRICA'SPY · " . $course['code'], null, 7, [0.45, 0.5, 0.56]);
+    $canvas->page_text(50, 810, "AFRICA'SPY | " . $course['code'], null, 7, [0.45, 0.5, 0.56]);
     return $pdf->output();
 }
 
@@ -193,7 +193,7 @@ function certificate_html(array $c): string
     $signer = e(setting('certificate_signatory_name', 'Direction académique'));
     $signerTitle = e(setting('certificate_signatory_title', "Direction académique AFRICA'SPY"));
     $fictitious = setting('signature_is_fictitious', '1') === '1';
-    $sigNote = $fictitious ? '<div class="signote">Signature institutionnelle fictive — aucun signataire nominatif désigné</div>' : '';
+    $sigNote = $fictitious ? '<div class="signote">Signature institutionnelle fictive : aucun signataire nominatif désigné</div>' : '';
     $verifyShort = e(preg_replace('#^https?://#', '', $verifyUrl));
     // Motif électronique discret (lignes de circuit) en SVG
     $traces = '';
@@ -246,7 +246,7 @@ body { margin: 0; font-family: Inter; color: #E8F2FA; background: #070A10; }
 <div class="name">{$name}</div>
 <div class="for">a suivi avec succès le parcours pédagogique et réussi l'examen final de la formation</div>
 <div class="course">{$course}</div>
-<div class="meta">{$code} &nbsp;·&nbsp; SCORE {$score} &nbsp;·&nbsp; DÉLIVRÉ LE {$date}</div>
+<div class="meta">{$code} &nbsp;|&nbsp; SCORE {$score} &nbsp;|&nbsp; DÉLIVRÉ LE {$date}</div>
 <div class="sig"><div class="script">{$signer}</div><div class="line">{$signerTitle}<small>Pour l'Académie</small></div>{$sigNote}</div>
 <div class="no"><small>N° DE CERTIFICAT</small>{$no}</div>
 <div class="qr"><img src="{$qr}" alt="QR"><p>VÉRIFICATION : {$verifyShort}</p></div>

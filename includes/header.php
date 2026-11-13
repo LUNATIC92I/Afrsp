@@ -6,8 +6,8 @@
 declare(strict_types=1);
 require_once APP_ROOT . '/includes/logo.php';
 $pageTitle       = $pageTitle ?? '';
-$pageDescription = $pageDescription ?? "AFRICA'SPY — académie africaine de formation au renseignement, au contre-espionnage et à l'intelligence stratégique.";
-$fullTitle       = ($pageTitle !== '' ? $pageTitle . ' · ' : '') . "AFRICA'SPY Intelligence Academy";
+$pageDescription = $pageDescription ?? "AFRICA'SPY : académie africaine de formation au renseignement, au contre-espionnage et à l'intelligence stratégique.";
+$fullTitle       = ($pageTitle !== '' ? $pageTitle . ' | ' : '') . "AFRICA'SPY Intelligence Academy";
 $bodyClass       = $bodyClass ?? '';
 $extraCss        = $extraCss ?? [];
 $csrfMeta        = session_status() === PHP_SESSION_ACTIVE ? csrf_token() : '';
@@ -47,7 +47,7 @@ $csrfMeta        = session_status() === PHP_SESSION_ACTIVE ? csrf_token() : '';
 <?php if (empty($hideChrome)): ?>
 <header class="site-header" id="top">
   <div class="container site-header__inner">
-    <a href="<?= e(url('index.php')) ?>" aria-label="AFRICA'SPY — accueil"><?= logo_lockup('holo') ?></a>
+    <a href="<?= e(url('index.php')) ?>" aria-label="AFRICA'SPY : accueil"><?= logo_lockup('holo') ?></a>
     <?php require APP_ROOT . '/includes/navigation.php'; ?>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
   </div>

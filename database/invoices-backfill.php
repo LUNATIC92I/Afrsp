@@ -13,4 +13,4 @@ foreach (q_all("SELECT id, status FROM payments WHERE status IN ('paid','refunde
     if (!q_val("SELECT 1 FROM invoices WHERE payment_id = ? AND doc_type = 'invoice'", [$p['id']])) { issue_invoice((int) $p['id']); $n++; }
     if ($p['status'] === 'refunded' && !q_val("SELECT 1 FROM invoices WHERE payment_id = ? AND doc_type = 'credit_note'", [$p['id']])) { issue_credit_note((int) $p['id']); $c++; }
 }
-echo "Factures émises : $n · Avoirs émis : $c\n";
+echo "Factures émises : $n | Avoirs émis : $c\n";

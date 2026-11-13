@@ -1,5 +1,5 @@
 <?php
-/** Administration — paramètres institutionnels. */
+/** Administration : paramètres institutionnels. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -9,7 +9,7 @@ $keys = [
     'institution_name' => ['Nom de l\'institution', 'text', 190], 'contact_email' => ['E-mail de contact public', 'email', 190],
     'contact_phone' => ['Téléphone', 'text', 60], 'contact_address' => ['Adresse', 'textarea', 400], 'footer_tagline' => ['Texte de présentation (pied de page)', 'textarea', 400],
     'payment_manual_instructions' => ['Instructions de virement / dépôt (coordonnées bancaires, numéros Mobile Money marchands)', 'textarea', 1500],
-    'promo_label' => ['Libellé de la promotion', 'text', 60], 'promo_ends_at' => ['Fin de la promotion (AAAA-MM-JJ HH:MM, UTC — vide = sans échéance)', 'text', 20],
+    'promo_label' => ['Libellé de la promotion', 'text', 60], 'promo_ends_at' => ['Fin de la promotion (AAAA-MM-JJ HH:MM, UTC : vide = sans échéance)', 'text', 20],
     'security_contact' => ['E-mail de signalement des vulnérabilités (security.txt)', 'email', 190],
     'certificate_signatory_name' => ['Signataire affiché sur les certificats', 'text', 120], 'certificate_signatory_title' => ['Qualité du signataire', 'text', 160],
 ];
@@ -45,7 +45,7 @@ if (is_post() && in_array(input('action'), ['mail', 'mail_test', 'billing'], tru
         $to = input('test_to') ?: current_user()['email'];
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) { flash('error', 'Adresse de test invalide.'); back(['tab' => 'mail']); }
         $ok = mail_test($to);
-        audit('settings.mail_test', 'settings', null, ($ok ? 'ok' : 'échec') . ' · ' . $to);
+        audit('settings.mail_test', 'settings', null, ($ok ? 'ok' : 'échec') . ' | ' . $to);
         $mode = mail_config()['transport'];
         flash($ok ? 'success' : 'error', $ok ? ($mode === 'log' ? 'Message de test enregistré dans storage/mail/ (mode journal : aucun envoi réel).' : "E-mail de test envoyé à $to.") : 'Échec de l\'envoi : vérifiez le serveur, le port, le chiffrement et les identifiants (détail dans storage/logs/php-error.log).');
         back(['tab' => 'mail']);
@@ -89,15 +89,15 @@ require APP_ROOT . '/includes/app-header.php';
 $mc = mail_config(); ?>
 <div class="grid-2 grid-2--even">
 <form class="box reveal" method="post" novalidate id="mail">
-  <div class="box__head"><h2>Messagerie (e-mails automatiques)</h2><span class="status-pill <?= $mc['transport'] === 'log' ? 'status-pill--warn' : 'status-pill--on' ?>">● <?= e(['smtp' => 'SMTP', 'mail' => 'mail() du serveur', 'log' => 'Journal (aucun envoi)'][$mc['transport']] ?? $mc['transport']) ?></span></div>
+  <div class="box__head"><h2>Messagerie (e-mails automatiques)</h2><span class="status-pill <?= $mc['transport'] === 'log' ? 'status-pill--warn' : 'status-pill--on' ?>"><?= e(['smtp' => 'SMTP', 'mail' => 'mail() du serveur', 'log' => 'Journal (aucun envoi)'][$mc['transport']] ?? $mc['transport']) ?></span></div>
   <div class="box__body">
     <?= csrf_field() ?><input type="hidden" name="action" value="mail">
-    <?= sel('mail_transport', 'Mode d\'envoi', ['smtp' => 'SMTP (recommandé)', 'mail' => 'Fonction mail() de l\'hébergeur', 'log' => 'Journal — développement, aucun envoi réel'], setting('mail_transport') ?: $mc['transport']) ?>
+    <?= sel('mail_transport', 'Mode d\'envoi', ['smtp' => 'SMTP (recommandé)', 'mail' => 'Fonction mail() de l\'hébergeur', 'log' => 'Journal : développement, aucun envoi réel'], setting('mail_transport') ?: $mc['transport']) ?>
     <div class="form-row"><?= fld('mail_from', 'Adresse d\'expédition', setting('mail_from') ?: (filter_var($mc['from'] ?? '', FILTER_VALIDATE_EMAIL) && !str_ends_with((string) $mc['from'], '@localhost') ? $mc['from'] : mail_default_from()), 'email', ['maxlength' => 190, 'placeholder' => 'no-reply@votre-domaine.org']) ?><?= fld('mail_from_name', 'Nom d\'expéditeur', setting('mail_from_name', "AFRICA'SPY Academy"), 'text', ['maxlength' => 120]) ?></div>
     <?= fld('mail_reply_to', 'Adresse de réponse (facultatif)', setting('mail_reply_to'), 'email', ['maxlength' => 190]) ?>
     <div class="form-row"><?= fld('smtp_host', 'Serveur SMTP', setting('smtp_host'), 'text', ['maxlength' => 190, 'placeholder' => 'smtp.votre-fournisseur.com']) ?><?= fld('smtp_port', 'Port', setting('smtp_port', '587'), 'number', ['min' => 1, 'max' => 65535]) ?></div>
     <div class="form-row"><?= sel('smtp_secure', 'Chiffrement', ['tls' => 'STARTTLS (port 587)', 'ssl' => 'SSL/TLS (port 465)', 'none' => 'Aucun (déconseillé)'], setting('smtp_secure', 'tls')) ?><?= fld('smtp_user', 'Identifiant SMTP', setting('smtp_user'), 'text', ['maxlength' => 190, 'autocomplete' => 'off']) ?></div>
-    <?= fld('smtp_pass', 'Mot de passe SMTP', '', 'password', ['autocomplete' => 'new-password', 'placeholder' => setting('smtp_pass_enc') !== '' ? '•••••••• (enregistré — laisser vide pour conserver)' : '']) ?>
+    <?= fld('smtp_pass', 'Mot de passe SMTP', '', 'password', ['autocomplete' => 'new-password', 'placeholder' => setting('smtp_pass_enc') !== '' ? 'Mot de passe enregistré : laisser vide pour le conserver' : '']) ?>
     <?php if (setting('smtp_pass_enc') !== ''): ?><label class="check mb-2"><input type="checkbox" name="smtp_pass_clear" value="1"> Effacer le mot de passe enregistré</label><?php endif; ?>
     <label class="check mb-2"><input type="checkbox" name="welcome_mail_enabled" value="1" <?= setting('welcome_mail_enabled', '1') === '1' ? 'checked' : '' ?>> Envoyer l'e-mail de bienvenue après chaque inscription</label>
     <p class="disclaimer">Le mot de passe SMTP est chiffré (libsodium) avec la clé applicative et n'est jamais réaffiché. Pour la délivrabilité, configurez SPF, DKIM et DMARC sur le domaine d'expédition.</p>
@@ -134,9 +134,9 @@ $mc = mail_config(); ?>
   <div class="box__body form-grid">
     <?= csrf_field() ?>
     <?php foreach ($keys as $k => [$label, $type, $max]): ?><?= fld($k, $label, setting($k), $type, ['maxlength' => $max] + ($type === 'textarea' ? ['rows' => 3] : [])) ?><?php endforeach; ?>
-    <label class="check full"><input type="checkbox" name="signature_is_fictitious" value="1" <?= setting('signature_is_fictitious', '1') === '1' ? 'checked' : '' ?>> Signature institutionnelle <strong>fictive</strong> (mention explicite sur les certificats — à décocher uniquement si un signataire réel et habilité est désigné)</label>
+    <label class="check full"><input type="checkbox" name="signature_is_fictitious" value="1" <?= setting('signature_is_fictitious', '1') === '1' ? 'checked' : '' ?>> Signature institutionnelle <strong>fictive</strong> (mention explicite sur les certificats : à décocher uniquement si un signataire réel et habilité est désigné)</label>
     <label class="check full"><input type="checkbox" name="mfa_required_staff" value="1" <?= setting('mfa_required_staff', '0') === '1' ? 'checked' : '' ?>> <strong>Double authentification obligatoire</strong> pour les administrateurs et responsables pédagogiques (recommandé ; activez d'abord la vôtre dans « Sécurité du compte »)</label>
-    <label class="check full"><input type="checkbox" name="payment_manual_enabled" value="1" <?= setting('payment_manual_enabled', '1') === '1' ? 'checked' : '' ?>> Proposer le paiement par virement / dépôt (validation manuelle dans Administration › Paiements)</label>
+    <label class="check full"><input type="checkbox" name="payment_manual_enabled" value="1" <?= setting('payment_manual_enabled', '1') === '1' ? 'checked' : '' ?>> Proposer le paiement par virement / dépôt (validation manuelle dans Administration / Paiements)</label>
     <label class="check full"><input type="checkbox" name="registration_open" value="1" <?= setting('registration_open', '1') === '1' ? 'checked' : '' ?>> Inscriptions publiques ouvertes</label>
     <div class="full"><button class="btn btn--primary" type="submit">Enregistrer</button></div>
   </div>
@@ -145,9 +145,9 @@ $mc = mail_config(); ?>
   <dl class="kv">
     <dt>URL de base</dt><dd class="mono"><?= e(config('base_url') ?: '(détection automatique)') ?></dd>
     <dt>Environnement</dt><dd><?= e(config('env')) ?></dd>
-    <dt>Paiement CinetPay</dt><dd><?= config('payments.cinetpay_enabled') && config('payments.cinetpay_apikey') ? 'activé (site ' . e((string) config('payments.cinetpay_site_id')) . ')' : 'non configuré — voir README §5' ?></dd>
+    <dt>Paiement CinetPay</dt><dd><?= config('payments.cinetpay_enabled') && config('payments.cinetpay_apikey') ? 'activé (site ' . e((string) config('payments.cinetpay_site_id')) . ')' : 'non configuré : voir la section 5 du README' ?></dd>
     <dt>Paiement de test</dt><dd><?= config('payments.sandbox') && config('env') !== 'production' ? '<span class="gold">actif (développement uniquement)</span>' : 'désactivé' ?></dd>
-    <dt>Transport e-mail</dt><dd><?= e(config('mail.transport')) ?><?= config('mail.transport') === 'log' ? ' — les e-mails sont écrits dans storage/logs/mail.log' : '' ?></dd>
+    <dt>Transport e-mail</dt><dd><?= e(config('mail.transport')) ?><?= config('mail.transport') === 'log' ? ' : les e-mails sont écrits dans storage/logs/mail.log' : '' ?></dd>
     <dt>PHP</dt><dd><?= e(PHP_VERSION) ?></dd>
     <dt>Base de données</dt><dd><?= e((string) q_val('SELECT VERSION()')) ?></dd>
   </dl>

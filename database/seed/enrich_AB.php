@@ -1,6 +1,6 @@
 <?php
 /**
- * Enrichissements pédagogiques — modules A et B.
+ * Enrichissements pédagogiques : modules A et B.
  * Clé : code de formation. 'chapters' : index (0 = premier chapitre) => leçons et questions ajoutées.
  * 'atelier' : leçons ajoutées au dernier chapitre (glossaire, ressources).
  */
@@ -12,7 +12,7 @@ return [
 <p>Le cycle ne démarre vraiment qu'avec un <strong>besoin en renseignement</strong> bien formulé. Les services distinguent généralement trois niveaux de besoins, du plus large au plus précis.</p>
 <table><thead><tr><th>Niveau</th><th>Formulation</th><th>Exemple</th></tr></thead><tbody>
 <tr><td>Priorité</td><td>Grand thème fixé par le décideur</td><td>Stabilité des corridors logistiques régionaux</td></tr>
-<tr><td>Besoin en renseignement</td><td>Question analytique</td><td>Quels facteurs pourraient perturber le corridor Abidjan–Ouagadougou dans les six mois ?</td></tr>
+<tr><td>Besoin en renseignement</td><td>Question analytique</td><td>Quels facteurs pourraient perturber le corridor Abidjan-Ouagadougou dans les six mois ?</td></tr>
 <tr><td>Élément d'information</td><td>Fait observable à collecter</td><td>Évolution des délais de passage aux postes frontières</td></tr>
 </tbody></table>
 <h3>Les principaux types de produits</h3>
@@ -56,7 +56,7 @@ HTML]],
 <p>Le <strong>plan de collecte</strong> associe chaque élément d'information recherché à des sources possibles, en privilégiant les moins coûteuses et les moins intrusives.</p>
 <table><thead><tr><th>Élément recherché</th><th>Sources ouvertes</th><th>Sources humaines (consenties)</th><th>Imagerie</th></tr></thead><tbody>
 <tr><td>Activité d'un port</td><td>Statistiques portuaires, presse économique</td><td>Échanges avec des transitaires</td><td>Images satellitaires libres (navires à quai)</td></tr>
-<tr><td>Prix des denrées</td><td>Systèmes d'information sur les marchés</td><td>Commerçants interrogés</td><td>—</td></tr>
+<tr><td>Prix des denrées</td><td>Systèmes d'information sur les marchés</td><td>Commerçants interrogés</td><td>-</td></tr>
 <tr><td>Inondations</td><td>Communiqués officiels, ONG</td><td>Témoignages publics</td><td>Imagerie radar (traverse les nuages)</td></tr>
 </tbody></table>
 <h3>Principe de parcimonie</h3>
@@ -139,14 +139,14 @@ HTML]],
     3 => [
       'lessons' => [['title' => 'Approfondissement : indices de végétation et suivi environnemental', 'type' => 'text', 'minutes' => 20, 'content' => <<<'HTML'
 <p>Les capteurs multispectraux enregistrent la lumière réfléchie dans plusieurs longueurs d'onde. En combinant le rouge et le proche infrarouge, on calcule le <strong>NDVI</strong> (indice de végétation par différence normalisée), qui mesure la vigueur de la végétation.</p>
-<p><code>NDVI = (PIR − Rouge) / (PIR + Rouge)</code> — valeur comprise entre −1 et 1 ; plus elle est élevée, plus la végétation est dense et active.</p>
+<p><code>NDVI = (PIR - Rouge) / (PIR + Rouge)</code> : valeur comprise entre -1 et 1 ; plus elle est élevée, plus la végétation est dense et active.</p>
 <h3>Usages légitimes</h3>
 <ul><li>Anticiper les crises alimentaires (sécheresse, baisse des récoltes) ;</li><li>Suivre la déforestation et les feux de brousse ;</li><li>Repérer l'extension d'exploitations minières artisanales à proximité de cours d'eau.</li></ul>
 <p>Les données Sentinel-2 (Copernicus) et Landsat sont librement accessibles et suffisent pour la plupart de ces analyses.</p>
 <div class="keypoints"><strong>Points clés</strong><ul><li>Le NDVI combine rouge et proche infrarouge.</li><li>La comparaison entre années révèle les tendances.</li><li>Ces analyses servent la sécurité alimentaire et environnementale.</li></ul></div>
 HTML]],
       'quiz' => [
-        ['Quelles bandes combine le NDVI ?', ['Bleu et vert', 'Rouge et proche infrarouge', 'Radar et thermique', 'Ultraviolet et rouge'], 1, 'NDVI = (PIR − Rouge) / (PIR + Rouge).'],
+        ['Quelles bandes combine le NDVI ?', ['Bleu et vert', 'Rouge et proche infrarouge', 'Radar et thermique', 'Ultraviolet et rouge'], 1, 'NDVI = (PIR - Rouge) / (PIR + Rouge).'],
         ['Un NDVI élevé indique :', ['Un sol nu', 'De l\'eau', 'Une végétation dense et active', 'Une zone urbaine'], 2, 'Plus la valeur est proche de 1, plus la végétation est vigoureuse.'],
       ],
     ],

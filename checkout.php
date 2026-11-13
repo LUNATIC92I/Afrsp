@@ -56,14 +56,14 @@ $pending = q_all("SELECT * FROM payments WHERE user_id = ? AND course_id = ? AND
 $deadline = promo_deadline();
 $cover = !empty($course['cover_stored']) ? url('uploads/courses/' . rawurlencode($course['cover_stored'])) : url('assets/images/covers/' . $course['category_code'] . '.webp');
 
-$pageTitle = 'Paiement — ' . $course['title'];
+$pageTitle = 'Paiement : ' . $course['title'];
 $activeNav = 'academy';
 require APP_ROOT . '/includes/header.php';
 ?>
 <main id="main" class="section checkout-page">
   <div class="container">
     <nav class="crumbs" aria-label="Fil d'Ariane"><a href="<?= e(url('academy.php')) ?>">Académie</a><span aria-hidden="true">/</span><a href="<?= e(url('course.php', ['slug' => $course['slug']])) ?>"><?= e($course['code']) ?></a><span aria-hidden="true">/</span><span>Paiement</span></nav>
-    <p class="eyebrow" data-decrypt>Accès sécurisé · étape 2 / 3</p>
+    <p class="eyebrow" data-decrypt>Accès sécurisé | étape 2 / 3</p>
     <h1 class="checkout-title">Débloquer la formation</h1>
     <ol class="checkout-steps" aria-label="Étapes">
       <li class="is-done">Compte</li><li class="is-current" aria-current="step">Paiement</li><li>Accès à la formation</li>
@@ -83,7 +83,7 @@ require APP_ROOT . '/includes/header.php';
           <?php $first = true; foreach ($methods as $key => $m): ?>
           <label class="paymethod paymethod--<?= e($key) ?>">
             <input type="radio" name="method" value="<?= e($key) ?>" <?= (input('method') === $key || (!input('method') && $first)) ? 'checked' : '' ?>>
-            <span class="paymethod__icon" aria-hidden="true"><?= $key === 'manual' ? '⇄' : ($key === 'sandbox' ? '⚙' : '◉') ?></span>
+            <span class="paymethod__icon" aria-hidden="true"><?= $key === 'manual' ? '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg>' : ($key === 'sandbox' ? '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>' : '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>') ?></span>
             <span><strong><?= e($m['label']) ?></strong><small><?= e($m['hint']) ?></small></span>
           </label>
           <?php $first = false; endforeach; ?>
@@ -93,18 +93,18 @@ require APP_ROOT . '/includes/header.php';
         <?php endif; ?>
         <label class="check mt-2"><input type="checkbox" name="terms" value="1" required> <span>J'accepte les <a href="<?= e(url('legal.php#vente')) ?>" target="_blank" rel="noopener">conditions de vente</a> et la <a href="<?= e(url('about.php#ethique')) ?>" target="_blank" rel="noopener">charte éthique</a>. L'accès est personnel et non cessible.</span></label>
         <button class="btn btn--primary btn--block btn--pay mt-2" type="submit" <?= $methods ? '' : 'disabled' ?> data-magnetic>
-          <span class="btn__stack">Payer <?= e(fmt_xof(course_price($course))) ?><small>Paiement sécurisé · reçu PDF immédiat</small></span>
+          <span class="btn__stack">Payer <?= e(fmt_xof(course_price($course))) ?><small>Paiement sécurisé | reçu PDF immédiat</small></span>
         </button>
-        <p class="checkout__secure mono"><span aria-hidden="true">⛨</span> Aucune donnée bancaire n'est saisie ni stockée sur AFRICA'SPY.</p>
+        <p class="checkout__secure mono"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-2px" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span> Aucune donnée bancaire n'est saisie ni stockée sur AFRICA'SPY.</p>
       </form>
 
       <aside class="order panel" aria-label="Récapitulatif de commande">
         <div class="order__img"><img src="<?= e($cover) ?>" alt="" width="960" height="600"></div>
         <div class="order__body">
-          <p class="mono cyan" style="font-size:.72rem;letter-spacing:.16em"><?= e($course['code']) ?> · <?= e(level_label($course['level'])) ?></p>
+          <p class="mono cyan" style="font-size:.72rem;letter-spacing:.16em"><?= e($course['code']) ?> | <?= e(level_label($course['level'])) ?></p>
           <h2 class="order__title"><?= e($course['title']) ?></h2>
           <ul class="order__incl">
-            <li><?= (int) $course['chapter_count'] ?> chapitres · <?= (int) $course['lesson_count'] ?> leçons, vidéos et supports PDF</li>
+            <li><?= (int) $course['chapter_count'] ?> chapitres | <?= (int) $course['lesson_count'] ?> leçons, vidéos et supports PDF</li>
             <li>Exercices pratiques et études de cas</li>
             <li>QCM corrigés et examen final</li>
             <li>Certificat PDF vérifiable par QR Code</li>
@@ -112,10 +112,10 @@ require APP_ROOT . '/includes/header.php';
           </ul>
           <div class="order__lines">
             <div><span>Prix de référence</span><span><?= e(fmt_xof((int) $course['price_xof'])) ?></span></div>
-            <?php if (course_discount_pct($course)): ?><div class="order__discount"><span><?= e(setting('promo_label', 'Remise')) ?> (−<?= course_discount_pct($course) ?> %)</span><span>− <?= e(fmt_xof((int) $course['price_xof'] - course_price($course))) ?></span></div><?php endif; ?>
+            <?php if (course_discount_pct($course)): ?><div class="order__discount"><span><?= e(setting('promo_label', 'Remise')) ?> (-<?= course_discount_pct($course) ?> %)</span><span>- <?= e(fmt_xof((int) $course['price_xof'] - course_price($course))) ?></span></div><?php endif; ?>
             <div class="order__total"><span>Total à payer</span><span data-count-price="<?= course_price($course) ?>"><?= e(fmt_xof(course_price($course))) ?></span></div>
           </div>
-          <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>" aria-live="off"><span class="mono">Fin de l'offre dans</span><b data-cd>—</b></div><?php endif; ?>
+          <?php if ($deadline): ?><div class="countdown" data-countdown="<?= $deadline ?>" aria-live="off"><span class="mono">Fin de l'offre dans</span><b data-cd>-</b></div><?php endif; ?>
         </div>
       </aside>
     </div>

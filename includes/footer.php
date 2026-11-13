@@ -11,7 +11,7 @@ $year = gmdate('Y');
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="<?= e(url('index.php')) ?>" aria-label="Accueil"><?= logo_lockup('gold') ?></a>
-        <p><?= e(setting('footer_tagline', "Académie africaine de formation aux métiers du renseignement, du contre-espionnage et de l'intelligence stratégique — dans le strict respect du droit et des libertés.")) ?></p>
+        <p><?= e(setting('footer_tagline', "Académie africaine de formation aux métiers du renseignement, du contre-espionnage et de l'intelligence stratégique, dans le strict respect du droit et des libertés.")) ?></p>
       </div>
       <div class="footer-col">
         <h3>Académie</h3>
@@ -43,7 +43,7 @@ $year = gmdate('Y');
     </div>
     <p class="footer-legal">AFRICA'SPY est un organisme de formation privé. Ses certificats attestent la réussite d'un parcours pédagogique interne ; ils ne constituent ni un diplôme d'État ni une qualification officiellement reconnue. Les enseignements portent exclusivement sur des pratiques légales, éthiques et défensives, avec des données synthétiques et des scénarios autorisés.</p>
     <div class="footer-bottom">
-      <span>© <?= e($year) ?> AFRICA'SPY · Intelligence Academy</span>
+      <span>© <?= e($year) ?> AFRICA'SPY | Intelligence Academy</span>
       <span class="mono" data-utc-clock>UTC --:--:--</span>
     </div>
   </div>

@@ -1,5 +1,5 @@
 /* =====================================================================
-   AFRICA'SPY — interactions.js
+   AFRICA'SPY : interactions.js
    Cartes holographiques, centre de commandement, fenêtres modales,
    Afrique holographique, radar, catalogue filtrable (AJAX), formulaires AJAX.
    ===================================================================== */
@@ -130,7 +130,7 @@
       if (!z || !card) return;
       stage.querySelectorAll('.zone').forEach(function (g) { g.classList.toggle('is-active', g.dataset.zone === id); });
       var set = function (k, v) { var el = card.querySelector('[data-f="' + k + '"]'); if (el) el.textContent = v; };
-      set('code', 'ZONE D\'ÉTUDE · ' + z.id.toUpperCase());
+      set('code', 'ZONE D\'ÉTUDE | ' + z.id.toUpperCase());
       set('name', z.name); set('theme', z.theme); set('issues', z.issues); set('domain', z.domain);
       var link = card.querySelector('[data-f="link"]');
       if (link) { link.href = z.url; link.textContent = 'Formation associée'; }
@@ -144,7 +144,7 @@
   }
 
   /* ------------------------------------------------------------------
-     Radar de renseignement (Canvas) — purement décoratif et pédagogique
+     Radar de renseignement (Canvas) : purement décoratif et pédagogique
      ------------------------------------------------------------------ */
   doc.querySelectorAll('[data-radar]').forEach(function (box) {
     var canvas = box.querySelector('canvas'), tip = box.querySelector('.radar__tip');
@@ -233,7 +233,7 @@
       history.replaceState(null, '', location.pathname + (params.toString() ? '?' + params : ''));
       results.setAttribute('aria-busy', 'true');
       results.style.opacity = '.45';
-      if (status) status.textContent = 'Recherche en cours…';
+      if (status) status.textContent = 'Recherche en cours...';
       if (ctrl) ctrl.abort();
       ctrl = ('AbortController' in window) ? new AbortController() : null;
       fetch(A.url('ajax/courses.php') + '?' + params.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, signal: ctrl ? ctrl.signal : undefined, credentials: 'same-origin' })

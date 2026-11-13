@@ -1,5 +1,5 @@
 <?php
-/** Enrichissements pédagogiques — modules E et F. */
+/** Enrichissements pédagogiques : modules E et F. */
 return [
 'AFS-E101' => [
   'chapters' => [

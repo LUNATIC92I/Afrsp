@@ -1,5 +1,5 @@
 <?php
-/** Administration — leçons d'un chapitre (texte, vidéo, PDF, exercice, étude de cas). */
+/** Administration : leçons d'un chapitre (texte, vidéo, PDF, exercice, étude de cas). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -74,7 +74,7 @@ if (!$chapter) {
     $activeApp = 'lessons';
     require APP_ROOT . '/includes/app-header.php'; ?>
 <section class="box reveal"><div class="box__head"><h2>Choisir un chapitre</h2></div><ul class="feed">
-  <?php foreach ($chs as $c): ?><li><span><span class="mono cyan"><?= e($c['code']) ?></span> · <?= e($c['title']) ?></span><a class="link-arrow" href="<?= e(url('admin/lessons.php', ['chapter' => $c['id']])) ?>">Leçons</a></li><?php endforeach; ?>
+  <?php foreach ($chs as $c): ?><li><span><span class="mono cyan"><?= e($c['code']) ?></span> | <?= e($c['title']) ?></span><a class="link-arrow" href="<?= e(url('admin/lessons.php', ['chapter' => $c['id']])) ?>">Leçons</a></li><?php endforeach; ?>
 </ul></section>
 <?php require APP_ROOT . '/includes/app-footer.php'; exit;
 }
@@ -82,16 +82,16 @@ $lessons = q_all('SELECT l.*, m.original_name FROM lessons l LEFT JOIN media m O
 $editId = input('edit');
 $edit = ctype_digit($editId) ? q_one('SELECT * FROM lessons WHERE id = ? AND chapter_id = ?', [(int) $editId, $chapter['id']]) : null;
 $showForm = $edit || $editId === 'new';
-$mediaOpts = ['' => '— Aucun / nouveau fichier ci-dessous —'] + array_column(q_all("SELECT id, CONCAT(UPPER(kind), ' · ', title) t FROM media WHERE kind IN ('video','document') ORDER BY id DESC"), 't', 'id');
+$mediaOpts = ['' => 'Aucun / nouveau fichier ci-dessous'] + array_column(q_all("SELECT id, CONCAT(UPPER(kind), ' | ', title) t FROM media WHERE kind IN ('video','document') ORDER BY id DESC"), 't', 'id');
 $v = static fn ($k, $d = '') => old($k, (string) ($edit[$k] ?? $d));
 
 $pageTitle = 'Leçons';
-$crumb = $chapter['code'] . ' › ' . $chapter['title'];
+$crumb = $chapter['code'] . ' / ' . $chapter['title'];
 $appArea = 'admin';
 $activeApp = 'lessons';
 require APP_ROOT . '/includes/app-header.php'; ?>
 <div class="toolbar reveal">
-  <a class="btn btn--sm" href="<?= e(url('admin/chapters.php', ['course' => $chapter['cid']])) ?>">← Chapitres de <?= e($chapter['code']) ?></a>
+  <a class="btn btn--sm" href="<?= e(url('admin/chapters.php', ['course' => $chapter['cid']])) ?>">Retour aux chapitres de <?= e($chapter['code']) ?></a>
   <a class="btn btn--sm btn--primary" href="<?= e(url('admin/lessons.php', ['chapter' => $chapter['id'], 'edit' => 'new'])) ?>">+ Nouvelle leçon</a>
 </div>
 <section class="box reveal"><div class="box__head"><h2><?= e($chapter['title']) ?></h2><span class="mono"><?= count($lessons) ?> élément(s)</span></div>
@@ -99,9 +99,9 @@ require APP_ROOT . '/includes/app-header.php'; ?>
   <?php if (!$lessons): ?><li><span></span><span class="dim">Aucune leçon dans ce chapitre.</span><span></span></li><?php endif; ?>
   <?php foreach ($lessons as $i => $l): ?>
     <li><span class="mono gold"><?= sprintf('%02d', $i + 1) ?></span>
-      <span><strong><?= e($l['title']) ?></strong><br><small class="dim"><?= e(lesson_type_label($l['type'])) ?> · <?= (int) $l['duration_minutes'] ?> min<?= $l['original_name'] ? ' · ' . e($l['original_name']) : '' ?><?= $l['video_url'] ? ' · ' . e($l['video_url']) : '' ?></small></span>
+      <span><strong><?= e($l['title']) ?></strong><br><small class="dim"><?= e(lesson_type_label($l['type'])) ?> | <?= (int) $l['duration_minutes'] ?> min<?= $l['original_name'] ? ' | ' . e($l['original_name']) : '' ?><?= $l['video_url'] ? ' | ' . e($l['video_url']) : '' ?></small></span>
       <span class="actions">
-        <?= action_btn('move', ['id' => $l['id'], 'chapter_id' => $chapter['id'], 'dir' => 'up'], '↑') ?><?= action_btn('move', ['id' => $l['id'], 'chapter_id' => $chapter['id'], 'dir' => 'down'], '↓') ?>
+        <?= action_btn('move', ['id' => $l['id'], 'chapter_id' => $chapter['id'], 'dir' => 'up'], 'Monter') ?><?= action_btn('move', ['id' => $l['id'], 'chapter_id' => $chapter['id'], 'dir' => 'down'], 'Descendre') ?>
         <a class="btn btn--sm" href="<?= e(url('admin/lessons.php', ['chapter' => $chapter['id'], 'edit' => $l['id']])) ?>">Modifier</a>
         <?= action_btn('delete', ['id' => $l['id'], 'chapter_id' => $chapter['id']], 'Supprimer', 'btn--sm btn--danger', 'Supprimer cette leçon ? La progression des apprenants sera recalculée.') ?>
       </span></li>
@@ -116,9 +116,9 @@ require APP_ROOT . '/includes/app-header.php'; ?>
     <?= fld('title', 'Titre', $v('title'), 'text', ['required' => true, 'maxlength' => 190, 'data-full' => true]) ?>
     <?= sel('type', 'Type de leçon', ['text' => 'Leçon (texte)', 'video' => 'Vidéo', 'document' => 'Support PDF', 'exercise' => 'Exercice pratique', 'case_study' => 'Étude de cas'], $v('type', 'text'), ['data-lesson-type' => true]) ?>
     <?= fld('duration_minutes', 'Durée estimée (minutes)', $v('duration_minutes', '15'), 'number', ['min' => 1, 'max' => 600]) ?>
-    <div class="full" data-show-for="video"><?= fld('video_url', 'URL YouTube ou Vimeo (facultatif si fichier)', $v('video_url'), 'url', ['maxlength' => 255, 'placeholder' => 'https://www.youtube.com/watch?v=…']) ?></div>
+    <div class="full" data-show-for="video"><?= fld('video_url', 'URL YouTube ou Vimeo (facultatif si fichier)', $v('video_url'), 'url', ['maxlength' => 255, 'placeholder' => 'https://www.youtube.com/watch?v=...']) ?></div>
     <div data-show-for="video,document"><?= sel('media_id', 'Média existant', $mediaOpts, $v('media_id')) ?></div>
-    <div data-show-for="video,document"><?= fld('file', 'Ou téléverser (PDF ≤ 25 Mo · MP4/WebM ≤ 200 Mo)', '', 'file', ['accept' => 'application/pdf,video/mp4,video/webm']) ?></div>
+    <div data-show-for="video,document"><?= fld('file', 'Ou téléverser (PDF 25 Mo max., MP4/WebM 200 Mo max.)', '', 'file', ['accept' => 'application/pdf,video/mp4,video/webm']) ?></div>
     <div class="full" data-show-for="video,document"><?= fld('attribution', 'Crédit / licence du média (si applicable)', '', 'text', ['maxlength' => 255]) ?></div>
     <div class="full" data-show-for="document"><label class="check"><input type="checkbox" name="is_downloadable" value="1" <?= ($edit['is_downloadable'] ?? 1) ? 'checked' : '' ?>> Téléchargement autorisé pour les apprenants inscrits</label></div>
     <?= fld('content', 'Contenu (HTML : h3, p, ul, ol, table, blockquote, div class="callout|note|warning")', $v('content'), 'textarea', ['data-full' => true, 'data-code' => true, 'rows' => 18]) ?>

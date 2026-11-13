@@ -1,5 +1,5 @@
 <?php
-/** Administration — gestion des formations. */
+/** Administration : gestion des formations. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';
@@ -33,7 +33,7 @@ if (is_post()) {
         if (!q_val('SELECT 1 FROM categories WHERE id = ?', [$d['category_id']])) $errors['category_id'] = 'Catégorie invalide.';
         $coverId = input_int('cover_media_id') ?: null;
         if (!$errors && !empty($_FILES['cover']['name'])) {
-            $up = handle_upload($_FILES['cover'], 'image', 'Couverture — ' . $d['title'], input('cover_attribution') ?: null);
+            $up = handle_upload($_FILES['cover'], 'image', 'Couverture : ' . $d['title'], input('cover_attribution') ?: null);
             if (is_string($up)) $errors['cover'] = $up; else $coverId = $up['id'];
         }
         if ($errors) {
@@ -51,7 +51,7 @@ if (is_post()) {
             q('INSERT INTO courses (category_id, code, slug, title, subtitle, summary, description, objectives, skills, prerequisites, level, duration_hours, price_xof, promo_price_xof, cover_media_id, is_featured, status, sort_order, created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', array_merge($vals, [$admin['id']]));
             $id = (int) db()->lastInsertId();
             q('INSERT INTO exams (course_id, title, instructions, pass_mark, max_attempts, question_count, time_limit_min) VALUES (?, ?, ?, 70, 3, 10, 25)',
-                [$id, 'Examen final — ' . $d['title'], 'Questionnaire à choix multiples tiré au sort dans la banque de questions. Une seule bonne réponse par question.']);
+                [$id, 'Examen final : ' . $d['title'], 'Questionnaire à choix multiples tiré au sort dans la banque de questions. Une seule bonne réponse par question.']);
             audit('course.create', 'course', $id, $d['code']);
             flash('success', 'Formation créée (brouillon conseillé tant que les chapitres ne sont pas rédigés). Ajoutez maintenant ses chapitres.');
         }
@@ -81,13 +81,13 @@ if (is_post()) {
 $action = input('action');
 $appArea = 'admin';
 $activeApp = 'courses';
-$cats = array_column(q_all('SELECT id, CONCAT(code, " · ", name) n FROM categories ORDER BY sort_order'), 'n', 'id');
+$cats = array_column(q_all('SELECT id, CONCAT(code, " | ", name) n FROM categories ORDER BY sort_order'), 'n', 'id');
 
 if ($action === 'new' || $action === 'edit') {
     $c = $action === 'edit' ? q_one('SELECT * FROM courses WHERE id = ?', [input_int('id')]) : null;
     if ($action === 'edit' && !$c) render_error_page(404, 'Formation introuvable', 'Cet élément n\'existe pas.');
     $v = static fn ($k, $def = '') => old($k, (string) ($c[$k] ?? $def));
-    $images = ['' => '— Couverture du domaine (par défaut) —'] + array_column(q_all("SELECT id, title FROM media WHERE kind = 'image' ORDER BY id DESC"), 'title', 'id');
+    $images = ['' => 'Couverture du domaine (par défaut)'] + array_column(q_all("SELECT id, title FROM media WHERE kind = 'image' ORDER BY id DESC"), 'title', 'id');
     $pageTitle = $c ? 'Modifier : ' . $c['code'] : 'Nouvelle formation';
     $crumb = 'Formations';
     require APP_ROOT . '/includes/app-header.php'; ?>
@@ -116,12 +116,12 @@ if ($action === 'new' || $action === 'edit') {
     <?= sel('status', 'Statut', ['draft' => 'Brouillon (invisible)', 'published' => 'Publiée'], $v('status', 'draft')) ?>
     <div class="field"><label class="check" style="margin-top:30px"><input type="checkbox" name="is_featured" value="1" <?= ($c['is_featured'] ?? 0) ? 'checked' : '' ?>> Mettre à la une (page d'accueil)</label></div>
     <?= fld('summary', 'Présentation courte', $v('summary'), 'textarea', ['required' => true, 'maxlength' => 2000, 'data-full' => true, 'rows' => 3]) ?>
-    <?= fld('description', 'Présentation générale (HTML autorisé : p, h3, ul, strong, table…)', $v('description'), 'textarea', ['data-full' => true, 'data-code' => true, 'rows' => 8]) ?>
+    <?= fld('description', 'Présentation générale (HTML autorisé : p, h3, ul, strong, table...)', $v('description'), 'textarea', ['data-full' => true, 'data-code' => true, 'rows' => 8]) ?>
     <?= fld('objectives', 'Objectifs pédagogiques (un par ligne)', $v('objectives'), 'textarea', ['rows' => 6]) ?>
     <?= fld('skills', 'Compétences à acquérir (une par ligne)', $v('skills'), 'textarea', ['rows' => 6]) ?>
     <?= fld('prerequisites', 'Prérequis (un par ligne)', $v('prerequisites'), 'textarea', ['rows' => 4, 'data-full' => true]) ?>
     <?= sel('cover_media_id', 'Image de couverture existante', $images, $v('cover_media_id')) ?>
-    <?= fld('cover', 'Ou téléverser une image (JPG, PNG, WebP · 4 Mo max.)', '', 'file', ['accept' => 'image/jpeg,image/png,image/webp']) ?>
+    <?= fld('cover', 'Ou téléverser une image (JPG, PNG, WebP | 4 Mo max.)', '', 'file', ['accept' => 'image/jpeg,image/png,image/webp']) ?>
     <?= fld('cover_attribution', 'Crédit / licence de l\'image (si applicable)', '', 'text', ['maxlength' => 255, 'data-full' => true]) ?>
     <div class="full flex"><button class="btn btn--primary" type="submit">Enregistrer</button><a class="btn" href="<?= e(url('admin/courses.php')) ?>">Annuler</a></div>
   </div>
@@ -152,7 +152,7 @@ require APP_ROOT . '/includes/app-header.php'; ?>
       <td class="num"><?php if ($r['promo_price_xof'] !== null && $r['promo_price_xof'] < $r['price_xof']): ?><s class="dim"><?= number_format((int) $r['price_xof'], 0, ',', ' ') ?></s><br><?php endif; ?><strong class="gold"><?= number_format((int) ($r['promo_price_xof'] ?? $r['price_xof']), 0, ',', ' ') ?></strong> <small>FCFA</small></td>
       <td><?= e(level_label($r['level'])) ?></td>
       <td class="num"><?= (int) $r['chapters'] ?></td><td class="num"><?= (int) $r['lessons'] ?></td><td class="num"><?= (int) $r['questions'] ?></td><td class="num"><?= (int) $r['enrolled'] ?></td>
-      <td><?= $r['status'] === 'published' ? '<span class="status-pill status-pill--on">● Publiée</span>' : '<span class="status-pill status-pill--off">● Brouillon</span>' ?></td>
+      <td><?= $r['status'] === 'published' ? '<span class="status-pill status-pill--on">Publiée</span>' : '<span class="status-pill status-pill--off">Brouillon</span>' ?></td>
       <td><div class="actions">
         <a class="btn btn--sm" href="<?= e(url('admin/courses.php', ['action' => 'edit', 'id' => $r['id']])) ?>">Modifier</a>
         <a class="btn btn--sm" href="<?= e(url('admin/chapters.php', ['course' => $r['id']])) ?>">Chapitres</a>

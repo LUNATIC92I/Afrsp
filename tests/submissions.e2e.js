@@ -9,7 +9,7 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@africaspy.test';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin-Test-2026';
 const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N', 'africaspy', '-e', q]).toString().trim();
 let pass = 0, fail = 0;
-const check = (n, c, x = '') => { c ? pass++ : fail++; console.log((c ? '  PASS ' : '  FAIL ') + n + (x ? ' — ' + x : '')); };
+const check = (n, c, x = '') => { c ? pass++ : fail++; console.log((c ? '  PASS ' : '  FAIL ') + n + (x ? ' : ' + x : '')); };
 const token = h => (h.match(/name="_csrf" value="([^"]+)"/) || [])[1];
 
 (async () => {

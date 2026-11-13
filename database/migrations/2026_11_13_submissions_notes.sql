@@ -1,5 +1,5 @@
 -- =====================================================================
---  AFRICA'SPY — migration : dépôt de travaux corrigés et notes personnelles
+--  AFRICA'SPY : migration : dépôt de travaux corrigés et notes personnelles
 --    mysql africaspy < database/migrations/2026_11_13_submissions_notes.sql
 -- =====================================================================
 SET NAMES utf8mb4;

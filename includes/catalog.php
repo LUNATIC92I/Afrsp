@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — accès aux données pédagogiques (catalogue, progression, examens).
+ * AFRICA'SPY : accès aux données pédagogiques (catalogue, progression, examens).
  */
 declare(strict_types=1);
 
@@ -189,7 +189,7 @@ function course_card(array $c, string $extraClass = ''): string
         . '<span class="holo-card__meta"><span>Durée <b>' . (int) $c['duration_hours'] . ' h</b></span><span>Chapitres <b>' . (int) $c['chapter_count'] . '</b></span><span>Domaine <b>' . e($c['category_code']) . '</b></span></span>'
         . $prog
         . (!($c['enrolled'] ?? false) && isset($c['price_xof']) ? card_price_tag($c) : '')
-        . '<span class="holo-card__cta">' . (($c['enrolled'] ?? false) ? 'Reprendre la formation →' : 'Consulter la formation →') . '</span></span></a>';
+        . '<span class="holo-card__cta">' . (($c['enrolled'] ?? false) ? 'Reprendre la formation' : 'Consulter la formation') . '</span></span></a>';
 }
 
 /** Étiquette de prix compacte sur les cartes (sans dépendance au module de paiement). */
@@ -200,7 +200,7 @@ function card_price_tag(array $c): string
     $price = ($promo !== null && $promo < $list) ? $promo : $list;
     $f = static fn (int $v) => number_format($v, 0, ',', "\u{202F}") . "\u{00A0}FCFA";
     if ($price <= 0) return '<span class="card-price"><b>Gratuit</b></span>';
-    return '<span class="card-price">' . ($price < $list ? '<s>' . e($f($list)) . '</s><i>−' . (int) round(100 - $price * 100 / $list) . ' %</i>' : '') . '<b>' . e($f($price)) . '</b></span>';
+    return '<span class="card-price">' . ($price < $list ? '<s>' . e($f($list)) . '</s><i>-' . (int) round(100 - $price * 100 / $list) . ' %</i>' : '') . '<b>' . e($f($price)) . '</b></span>';
 }
 
 /** Résultats du catalogue groupés par domaine (rendu partagé page + AJAX). */
@@ -218,7 +218,7 @@ function render_catalog(array $courses, array $categories): string
         if (empty($by[$cat['id']])) continue;
         $html .= '<section class="domain" style="--accent:' . e($cat['accent']) . '" aria-labelledby="dom-' . e($cat['code']) . '">'
             . '<header class="domain__head reveal"><span class="domain__code" aria-hidden="true">' . e($cat['code']) . '</span>'
-            . '<h2 id="dom-' . e($cat['code']) . '">Module ' . e($cat['code']) . ' · ' . e($cat['name']) . '</h2><p>' . e($cat['description']) . '</p></header>'
+            . '<h2 id="dom-' . e($cat['code']) . '">Module ' . e($cat['code']) . ' | ' . e($cat['name']) . '</h2><p>' . e($cat['description']) . '</p></header>'
             . '<div class="modules" data-stagger="90">';
         foreach ($by[$cat['id']] as $c) {
             $html .= course_card($c);
@@ -229,7 +229,7 @@ function render_catalog(array $courses, array $categories): string
                 . '<span class="holo-card__top"><span class="holo-card__code">AFS-E-GAL</span><span>Galerie</span></span>'
                 . '<span class="holo-card__body"><h3 class="holo-card__title">Galerie des outils du renseignement</h3>'
                 . '<p class="holo-card__desc">Fiches descriptives des outils logiciels et des équipements professionnels : fonction, usages légitimes, limites légales.</p>'
-                . '<span class="holo-card__cta">Ouvrir la galerie →</span></span></a>';
+                . '<span class="holo-card__cta">Ouvrir la galerie</span></span></a>';
         }
         $html .= '</div></section>';
     }

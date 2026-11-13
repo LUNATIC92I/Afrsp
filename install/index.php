@@ -1,5 +1,5 @@
 <?php
-/** Assistant d'installation web — se verrouille automatiquement après usage. */
+/** Assistant d'installation web : se verrouille automatiquement après usage. */
 declare(strict_types=1);
 define('AFSPY_INSTALLER', true);
 require dirname(__DIR__) . '/includes/bootstrap.php';

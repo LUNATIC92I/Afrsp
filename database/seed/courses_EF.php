@@ -1,11 +1,11 @@
 <?php
-/** MODULE E — OUTILS DU RENSEIGNEMENT · MODULE F — INTELLIGENCE STRATÉGIQUE ET GÉOPOLITIQUE */
+/** MODULE E : OUTILS DU RENSEIGNEMENT, MODULE F : INTELLIGENCE STRATÉGIQUE ET GÉOPOLITIQUE */
 return [
 [
   'code' => 'AFS-E101', 'category' => 'E', 'slug' => 'outils-du-renseignement',
   'title' => 'Outils du renseignement : usages légitimes',
   'subtitle' => 'Logiciels d\'investigation et équipements professionnels, de la prise en main à l\'éthique d\'usage.',
-  'summary' => 'Découvrir les principaux outils logiciels et matériels de l\'analyste — Maltego, SpiderFoot, theHarvester, Shodan, Google Earth, Wireshark, Autopsy, Volatility, Recon-ng et équipements d\'observation — avec leurs usages légitimes, leurs limites et leur cadre légal.',
+  'summary' => 'Découvrir les principaux outils logiciels et matériels de l\'analyste (Maltego, SpiderFoot, theHarvester, Shodan, Google Earth, Wireshark, Autopsy, Volatility, Recon-ng et équipements d\'observation) avec leurs usages légitimes, leurs limites et leur cadre légal.',
   'level' => 'intermediaire', 'hours' => 16, 'featured' => true,
   'description' => '<p>Un outil n\'est ni bon ni mauvais : c\'est l\'usage, le mandat et le cadre légal qui le rendent légitime. Cette formation présente les outils de référence de l\'investigation numérique et de l\'observation professionnelle, <strong>pour des usages défensifs, journalistiques, académiques et d\'enquête autorisée</strong>.</p><p>La galerie visuelle de l\'Académie (page « Outils ») complète ce cours avec des fiches descriptives détaillées.</p>',
   'objectives' => "Connaître la fonction et l'usage légitime des principaux outils logiciels\nChoisir l'outil adapté à une question d'investigation\nComprendre les principes de l'investigation numérique légale (forensique)\nConnaître les équipements d'observation et de protection documentaire\nAppliquer une grille d'évaluation éthique avant tout usage",
@@ -42,11 +42,11 @@ HTML],
       'summary' => 'Wireshark, Autopsy, Volatility.',
       'lessons' => [
         ['title' => 'Analyse réseau et forensique', 'type' => 'text', 'minutes' => 30, 'content' => <<<'HTML'
-<h3>Wireshark — analyse de protocoles</h3>
+<h3>Wireshark : analyse de protocoles</h3>
 <p>Wireshark capture et décode le trafic d'un réseau. Usage légitime : diagnostiquer une panne, comprendre un protocole, analyser une capture fournie dans un cadre pédagogique ou d'incident. <strong>Capturer le trafic d'un réseau dont on n'est pas responsable est illégal.</strong></p>
-<h3>Autopsy — investigation de supports</h3>
+<h3>Autopsy : investigation de supports</h3>
 <p>Interface graphique d'investigation de disques : chronologie des fichiers, recherche par mots-clés, récupération d'éléments supprimés, extraction de métadonnées. Utilisé par les enquêteurs autorisés et les équipes de réponse à incident, sur des <strong>copies</strong> de supports.</p>
-<h3>Volatility — analyse de la mémoire vive</h3>
+<h3>Volatility : analyse de la mémoire vive</h3>
 <p>Cadre d'analyse d'images mémoire : processus actifs, connexions, artefacts de logiciels malveillants. Indispensable en réponse à incident, car certaines menaces ne laissent aucune trace sur disque.</p>
 <h3>Principes de l'investigation numérique</h3>
 <ol><li><strong>Mandat</strong> : autorisation écrite ou cadre judiciaire ;</li><li><strong>Préservation</strong> : copie bit à bit, empreinte cryptographique ;</li><li><strong>Traçabilité</strong> : chaîne de possession documentée ;</li><li><strong>Reproductibilité</strong> : un autre expert doit aboutir aux mêmes constats ;</li><li><strong>Neutralité</strong> : rechercher les éléments à charge comme à décharge.</li></ol>
@@ -103,7 +103,7 @@ HTML],
         ['title' => 'Fiche de synthèse (PDF)', 'type' => 'document', 'minutes' => 10, 'content' => '<p>Tableau des outils, usages légitimes et modèle de note de cadrage.</p>'],
         ['title' => 'Exercice : rédiger une note de cadrage', 'type' => 'exercise', 'minutes' => 40, 'content' => <<<'HTML'
 <p><strong>Mandat fictif :</strong> une banque régionale vous charge par écrit d'évaluer l'exposition publique de ses propres services en ligne.</p>
-<ol><li>Rédigez la note de cadrage en six rubriques.</li><li>Sélectionnez trois outils et justifiez chaque choix.</li><li>Listez explicitement ce qui est hors périmètre (employés à titre privé, fournisseurs non mandants…).</li><li>Prévoyez la restitution et la destruction des données.</li></ol>
+<ol><li>Rédigez la note de cadrage en six rubriques.</li><li>Sélectionnez trois outils et justifiez chaque choix.</li><li>Listez explicitement ce qui est hors périmètre (employés à titre privé, fournisseurs non mandants...).</li><li>Prévoyez la restitution et la destruction des données.</li></ol>
 HTML],
         ['title' => 'Étude de cas : la dérive d\'un outil', 'type' => 'case_study', 'minutes' => 30, 'content' => <<<'HTML'
 <p><strong>Scénario pédagogique (fictif).</strong> Un analyste mandaté pour auditer l'exposition d'une entreprise utilise ensuite les mêmes outils pour réunir des informations sur la vie privée d'un dirigeant concurrent, « par curiosité ». L'affaire est révélée.</p>
@@ -160,7 +160,7 @@ HTML],
 </tbody></table>
 <h3>Le processus</h3>
 <ol><li>Définir les <strong>facteurs critiques de succès</strong> et les questions clés ;</li><li>Sélectionner et qualifier les sources ;</li><li>Mettre en place des alertes et une revue régulière ;</li><li>Analyser et diffuser un bulletin court ;</li><li>Mesurer l'utilité auprès des destinataires.</li></ol>
-<div class="callout">Les <strong>signaux faibles</strong> — informations fragmentaires annonçant un changement — sont la vraie valeur ajoutée de la veille. Ils ne prennent sens que s'ils sont rapprochés et discutés.</div>
+<div class="callout">Les <strong>signaux faibles</strong> (informations fragmentaires annonçant un changement) sont la vraie valeur ajoutée de la veille. Ils ne prennent sens que s'ils sont rapprochés et discutés.</div>
 HTML],
       ],
       'quiz' => [
@@ -174,7 +174,7 @@ HTML],
       'summary' => 'Savoir-faire, propriété intellectuelle et réputation.',
       'lessons' => [
         ['title' => 'Protéger la valeur', 'type' => 'text', 'minutes' => 25, 'content' => <<<'HTML'
-<ul><li><strong>Propriété intellectuelle</strong> : brevets, marques, dessins — en Afrique, via l'OAPI (espace francophone) et l'ARIPO (espace anglophone) en complément des offices nationaux ;</li><li><strong>Secret des affaires</strong> : protection des informations confidentielles par des mesures raisonnables (contrats, accès restreints) ;</li><li><strong>Contrats</strong> : clauses de confidentialité et de non-concurrence dans les partenariats ;</li><li><strong>Réputation</strong> : surveillance des atteintes, plan de réponse aux campagnes de dénigrement.</li></ul>
+<ul><li><strong>Propriété intellectuelle</strong> : brevets, marques, dessins : en Afrique, via l'OAPI (espace francophone) et l'ARIPO (espace anglophone) en complément des offices nationaux ;</li><li><strong>Secret des affaires</strong> : protection des informations confidentielles par des mesures raisonnables (contrats, accès restreints) ;</li><li><strong>Contrats</strong> : clauses de confidentialité et de non-concurrence dans les partenariats ;</li><li><strong>Réputation</strong> : surveillance des atteintes, plan de réponse aux campagnes de dénigrement.</li></ul>
 <h3>Situations à risque</h3>
 <p>Joint-ventures, transferts de technologie, levées de fonds, délégations étrangères, recrutement de profils issus de la concurrence, stagiaires et visites de site.</p>
 <div class="note">Protéger n'est pas se fermer : il s'agit de partager <em>ce qu'il faut, avec qui il faut, au bon moment</em>.</div>
@@ -239,7 +239,7 @@ HTML],
         ['title' => 'Briefing vidéo : un continent pluriel', 'type' => 'video', 'minutes' => 4, 'content' => '<p>Les grandes clés de lecture géopolitique du continent.</p>'],
         ['title' => 'Grilles de lecture du continent', 'type' => 'text', 'minutes' => 30, 'content' => <<<'HTML'
 <h3>Les acteurs</h3>
-<ul><li><strong>Union africaine</strong> : Conseil de paix et de sécurité, Agenda 2063 ;</li><li><strong>Communautés économiques régionales</strong> : CEDEAO, CEEAC, SADC, EAC, IGAD, UMA, COMESA… ;</li><li><strong>États</strong> et leurs intérêts propres ;</li><li><strong>Acteurs non étatiques</strong> : entreprises, diasporas, organisations religieuses, groupes armés ;</li><li><strong>Puissances extérieures</strong> et nouveaux partenaires.</li></ul>
+<ul><li><strong>Union africaine</strong> : Conseil de paix et de sécurité, Agenda 2063 ;</li><li><strong>Communautés économiques régionales</strong> : CEDEAO, CEEAC, SADC, EAC, IGAD, UMA, COMESA... ;</li><li><strong>États</strong> et leurs intérêts propres ;</li><li><strong>Acteurs non étatiques</strong> : entreprises, diasporas, organisations religieuses, groupes armés ;</li><li><strong>Puissances extérieures</strong> et nouveaux partenaires.</li></ul>
 <h3>Les espaces stratégiques</h3>
 <table><thead><tr><th>Espace</th><th>Enjeux</th></tr></thead><tbody>
 <tr><td>Sahel</td><td>Sécurité, gouvernance, climat, migrations</td></tr>

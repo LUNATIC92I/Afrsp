@@ -1,5 +1,5 @@
 <?php
-/** Administration — annonces aux apprenants. */
+/** Administration : annonces aux apprenants. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/admin.php';

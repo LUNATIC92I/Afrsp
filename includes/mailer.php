@@ -1,8 +1,8 @@
 <?php
 /**
- * AFRICA'SPY — messagerie transactionnelle.
+ * AFRICA'SPY : messagerie transactionnelle.
  *
- * Configuration : les paramètres saisis dans Administration › Paramètres (table settings,
+ * Configuration : les paramètres saisis dans Administration / Paramètres (table settings,
  * mot de passe SMTP chiffré) priment sur config/config.local.php.
  * Transports : smtp (recommandé), mail (fonction mail() du serveur), log (développement :
  * chaque message complet est enregistré en .eml dans storage/mail/, rien n'est envoyé).
@@ -135,7 +135,7 @@ function mail_layout(string $preheader, string $title, string $bodyHtml, ?array 
     $btn = $cta ? '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:26px 0 8px"><tr><td style="border-radius:4px;background:#087CFF;background-image:linear-gradient(135deg,#087CFF,#00C8FF)">'
         . '<a href="' . $esc($cta[1]) . '" style="display:inline-block;padding:14px 26px;font:600 14px/1 Arial,Helvetica,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#031019;text-decoration:none">' . $esc($cta[0]) . '</a></td></tr></table>' : '';
     $site = $esc(absolute_url('index.php'));
-    $legal = $esc(setting('seller_legal_name', "AFRICA'SPY — Intelligence Academy"));
+    $legal = $esc(setting('seller_legal_name', "AFRICA'SPY Intelligence Academy"));
     $addr = $esc(setting('seller_address', setting('contact_address')));
     return <<<HTML
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>{$esc($title)}</title></head>
@@ -206,7 +206,7 @@ function mail_password_reset(array $user, string $link, int $ttlMinutes): bool
         . '<p>Ce lien est valable <strong>' . $ttlMinutes . ' minutes</strong> et ne peut servir qu\'une seule fois.</p>'
         . '<p style="font-size:14px;color:#4A5666">Si vous n\'êtes pas à l\'origine de cette demande, ignorez ce message : votre mot de passe reste inchangé.</p>';
     $text = "Bonjour {$user['first_name']},\n\nUne demande de réinitialisation de mot de passe a été effectuée pour votre compte.\nCe lien est valable $ttlMinutes minutes et ne peut servir qu'une fois :\n\n$link\n\nSi vous n'êtes pas à l'origine de cette demande, ignorez ce message.";
-    return send_mail($user['email'], "AFRICA'SPY — Réinitialisation de votre mot de passe", $text, [
+    return send_mail($user['email'], "AFRICA'SPY : Réinitialisation de votre mot de passe", $text, [
         'html' => mail_layout('Lien de réinitialisation valable ' . $ttlMinutes . ' minutes.', 'Réinitialisation du mot de passe', $html, ['Choisir un nouveau mot de passe', $link]),
         'tag' => 'reset',
     ]);
@@ -217,7 +217,7 @@ function mail_test(string $to): bool
 {
     $cfg = mail_config();
     $html = '<p>Ce message confirme que la messagerie de la plateforme fonctionne.</p><p style="font:13px/1.7 \'Courier New\',monospace;color:#4A5666">Transport : ' . htmlspecialchars($cfg['transport']) . '<br>Expéditeur : ' . htmlspecialchars((string) ($cfg['from'] ?? '')) . '<br>Envoyé le : ' . gmdate('d/m/Y H:i') . ' UTC</p>';
-    return send_mail($to, "AFRICA'SPY — E-mail de test", "La messagerie de la plateforme fonctionne. Transport : {$cfg['transport']}.", [
+    return send_mail($to, "AFRICA'SPY : E-mail de test", "La messagerie de la plateforme fonctionne. Transport : {$cfg['transport']}.", [
         'html' => mail_layout('Test de configuration de la messagerie.', 'Messagerie opérationnelle', $html), 'tag' => 'test',
     ]);
 }

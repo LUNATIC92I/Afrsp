@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — amorçage commun à toutes les pages.
+ * AFRICA'SPY : amorçage commun à toutes les pages.
  * Charge la configuration, sécurise la session, émet les en-têtes de sécurité.
  */
 declare(strict_types=1);

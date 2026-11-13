@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — authentification, contrôle d'accès par rôle, anti force brute.
+ * AFRICA'SPY : authentification, contrôle d'accès par rôle, anti force brute.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ function require_permission(string $permission): array
     $u = require_login();
     enforce_staff_mfa($u);
     if (!can($permission)) {
-        audit('access.denied', null, null, $permission . ' · ' . ($_SERVER['REQUEST_URI'] ?? ''));
+        audit('access.denied', null, null, $permission . ' | ' . ($_SERVER['REQUEST_URI'] ?? ''));
         if (is_ajax()) {
             json_response(['ok' => false, 'message' => 'Accès refusé.'], 403);
         }

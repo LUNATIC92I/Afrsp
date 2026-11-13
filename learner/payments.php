@@ -1,5 +1,5 @@
 <?php
-/** Espace apprenant — historique des paiements et reçus. */
+/** Espace apprenant : historique des paiements et reçus. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/payments.php';

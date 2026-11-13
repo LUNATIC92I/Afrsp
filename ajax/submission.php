@@ -1,5 +1,5 @@
 <?php
-/** AJAX — dépôt (ou nouveau dépôt après demande de reprise) d'un travail sur un exercice ou une étude de cas. */
+/** AJAX : dépôt (ou nouveau dépôt après demande de reprise) d'un travail sur un exercice ou une étude de cas. */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/catalog.php';

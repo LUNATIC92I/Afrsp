@@ -9,7 +9,7 @@ require APP_ROOT . '/includes/header.php';
   <section class="page-hero"><div class="container"><p class="eyebrow">Informations légales</p><h1>Mentions &amp; confidentialité</h1></div></section>
   <section class="section section--tight"><div class="container container--narrow prose">
     <h2>Éditeur</h2>
-    <p><?= e(setting('institution_name', "AFRICA'SPY — Intelligence Academy")) ?>, organisme de formation privé. <?= e(setting('contact_address')) ?> — Contact : <?= e(setting('contact_email')) ?>.</p>
+    <p><?= e(setting('institution_name', "AFRICA'SPY Intelligence Academy")) ?>, organisme de formation privé. <?= e(setting('contact_address')) ?> : Contact : <?= e(setting('contact_email')) ?>.</p>
     <p>AFRICA'SPY ne revendique aucune reconnaissance gouvernementale, accréditation officielle ou partenariat institutionnel. Ses certificats attestent la réussite d'un parcours interne et ne constituent pas des diplômes d'État.</p>
     <h2>Données personnelles</h2>
     <ul>

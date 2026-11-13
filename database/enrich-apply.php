@@ -65,4 +65,4 @@ foreach ($enrich as $code => $e) {
 db()->commit();
 // Les nouvelles leçons modifient le pourcentage de progression des apprenants inscrits
 foreach (q_all('SELECT user_id, course_id FROM course_enrollments') as $r) recompute_progress((int) $r['user_id'], (int) $r['course_id']);
-printf("Chapitres ajoutés : %d · Leçons ajoutées : %d · Questions ajoutées : %d · Éléments déjà présents : %d\n", $stats['chapters'] ?? 0, $stats['lessons'], $stats['questions'], $stats['skipped']);
+printf("Chapitres ajoutés : %d | Leçons ajoutées : %d | Questions ajoutées : %d | Éléments déjà présents : %d\n", $stats['chapters'] ?? 0, $stats['lessons'], $stats['questions'], $stats['skipped']);

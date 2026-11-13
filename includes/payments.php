@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — paiement des formations (FCFA / XOF).
+ * AFRICA'SPY : paiement des formations (FCFA / XOF).
  *
  * Canaux :
  *  - cinetpay : passerelle agréée (Mobile Money Orange/MTN/Moov/Wave, cartes bancaires).
@@ -67,7 +67,7 @@ function payment_methods(): array
 {
     $m = [];
     if (payments_cinetpay_enabled()) {
-        $m['cinetpay'] = ['label' => 'Mobile Money ou carte bancaire', 'hint' => 'Orange Money, MTN MoMo, Moov Money, Wave, Visa, Mastercard — paiement sécurisé via CinetPay. Accès immédiat après confirmation.'];
+        $m['cinetpay'] = ['label' => 'Mobile Money ou carte bancaire', 'hint' => 'Orange Money, MTN MoMo, Moov Money, Wave, Visa, Mastercard, paiement sécurisé via CinetPay. Accès immédiat après confirmation.'];
     }
     if (payments_manual_enabled()) {
         $m['manual'] = ['label' => 'Virement bancaire ou dépôt', 'hint' => 'Vous recevez une référence à indiquer lors du versement. L\'accès est ouvert après vérification par l\'administration.'];
@@ -110,7 +110,7 @@ function create_payment(array $user, array $course, string $provider, ?string $p
     q('INSERT INTO payments (reference, user_id, course_id, amount_xof, list_price_xof, provider, payer_phone, created_at) VALUES (?,?,?,?,?,?,?,UTC_TIMESTAMP())',
         [$ref, $user['id'], $course['id'], $amount, (int) $course['price_xof'], $provider, $phone]);
     $id = (int) db()->lastInsertId();
-    audit('payment.create', 'payment', $id, "$ref · {$course['code']} · $amount XOF · $provider");
+    audit('payment.create', 'payment', $id, "$ref | {$course['code']} | $amount XOF | $provider");
     return q_one('SELECT * FROM payments WHERE id = ?', [$id]);
 }
 
@@ -148,7 +148,7 @@ function mark_payment_paid(int $paymentId, array $info = [], ?int $validatedBy =
         throw $e;
     }
     recompute_progress((int) $p['user_id'], (int) $p['course_id']);
-    audit('payment.paid', 'payment', (int) $p['id'], $p['reference'] . ' · ' . $p['amount_xof'] . ' XOF' . ($validatedBy ? ' · validé manuellement' : ''));
+    audit('payment.paid', 'payment', (int) $p['id'], $p['reference'] . ' | ' . $p['amount_xof'] . ' XOF' . ($validatedBy ? ' | validé manuellement' : ''));
     // Facture PDF numérotée + e-mail de confirmation (n'interrompt jamais la validation du paiement)
     try {
         require_once APP_ROOT . '/includes/invoices.php';
@@ -209,7 +209,7 @@ function cinetpay_init(array $payment, array $user, array $course): string
         'metadata' => (string) $payment['id'],
     ]);
     if (($j['code'] ?? '') !== '201' || empty($j['data']['payment_url'])) {
-        throw new RuntimeException('Initialisation refusée par la passerelle : ' . ($j['message'] ?? 'erreur inconnue') . (isset($j['description']) ? ' — ' . $j['description'] : ''));
+        throw new RuntimeException('Initialisation refusée par la passerelle : ' . ($j['message'] ?? 'erreur inconnue') . (isset($j['description']) ? ' : ' . $j['description'] : ''));
     }
     q('UPDATE payments SET provider_txn = ? WHERE id = ?', [$j['data']['payment_token'] ?? null, $payment['id']]);
     return (string) $j['data']['payment_url'];
@@ -265,10 +265,10 @@ function payment_receipt_pdf(array $p): string
     <h1>Reçu de paiement</h1><p class="ref">' . e($p['reference']) . '</p><p class="paid">PAYÉ</p>
     <table>' . $row('Date de paiement', e(fmt_datetime($p['paid_at']))) . $row('Apprenant', e($p['first_name'] . ' ' . $p['last_name']) . '<br><small>' . e($p['email']) . '</small>')
         . $row('Formation', e($p['course_title']) . ' <small>(' . e($p['course_code']) . ')</small>') . $row('Prix de référence', e(fmt_xof((int) $p['list_price_xof'])))
-        . ($saving > 0 ? $row('Remise promotionnelle', '− ' . e(fmt_xof($saving))) : '') . $row('Moyen de paiement', e(payment_provider_label($p['provider']) . ($p['payment_method'] ? ' · ' . $p['payment_method'] : '')))
+        . ($saving > 0 ? $row('Remise promotionnelle', '- ' . e(fmt_xof($saving))) : '') . $row('Moyen de paiement', e(payment_provider_label($p['provider']) . ($p['payment_method'] ? ' | ' . $p['payment_method'] : '')))
         . ($p['provider_txn'] ? $row('Transaction', '<span style="font-family:ShareTechMono">' . e($p['provider_txn']) . '</span>') : '')
         . '<tr class="total"><td class="k">Montant réglé</td><td>' . e(fmt_xof((int) $p['amount_xof'])) . '</td></tr></table>
-    <p class="foot">' . e(setting('institution_name', "AFRICA'SPY — Intelligence Academy")) . ' · ' . e(setting('contact_address')) . ' · ' . e(setting('contact_email')) . '<br>Reçu généré électroniquement. Montants exprimés en francs CFA (XOF).</p></body></html>';
+    <p class="foot">' . e(setting('institution_name', "AFRICA'SPY Intelligence Academy")) . ' | ' . e(setting('contact_address')) . ' | ' . e(setting('contact_email')) . '<br>Reçu généré électroniquement. Montants exprimés en francs CFA (XOF).</p></body></html>';
     $pdf = pdf_engine();
     $pdf->loadHtml($html, 'UTF-8');
     $pdf->render();
@@ -284,7 +284,7 @@ function payment_status_pill(string $s): string
 {
     $map = ['paid' => ['on', 'Payé'], 'pending' => ['warn', 'En attente'], 'failed' => ['bad', 'Échoué'], 'cancelled' => ['off', 'Annulé'], 'refunded' => ['off', 'Remboursé']];
     [$cls, $label] = $map[$s] ?? ['off', $s];
-    return '<span class="status-pill status-pill--' . $cls . '">● ' . e($label) . '</span>';
+    return '<span class="status-pill status-pill--' . $cls . '">' . e($label) . '</span>';
 }
 
 /** Bloc de prix réutilisable (fiche formation, cartes, paiement). */
@@ -297,7 +297,7 @@ function price_block(array $c, string $extra = ''): string
         return '<div class="price ' . e($extra) . '"><span class="price__now">Gratuit</span></div>';
     }
     return '<div class="price ' . e($extra) . '">'
-        . ($pct ? '<span class="price__badge">−' . $pct . ' %</span><span class="price__old"><s>' . e(fmt_xof($list)) . '</s></span>' : '')
+        . ($pct ? '<span class="price__badge">-' . $pct . ' %</span><span class="price__old"><s>' . e(fmt_xof($list)) . '</s></span>' : '')
         . '<span class="price__now" data-price="' . $price . '">' . e(fmt_xof($price)) . '</span>'
         . ($pct ? '<span class="price__label">' . e(setting('promo_label', 'Prix promotionnel')) . '</span>' : '') . '</div>';
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * AFRICA'SPY — contenus éditoriaux statiques des pages publiques
+ * AFRICA'SPY : contenus éditoriaux statiques des pages publiques
  * (centre de commandement, zones d'étude, radar, galerie d'outils) et carte SVG.
  */
 declare(strict_types=1);
@@ -12,11 +12,11 @@ function command_panels(): array
         ['id' => 'analysis', 'code' => 'CMD-01', 'name' => 'Intelligence Analysis', 'fr' => 'Analyse du renseignement', 'cat' => 'fondements-du-renseignement',
          'lead' => 'Transformer des informations éparses en jugements fiables, sourcés et utiles à la décision.',
          'points' => ['Cycle du renseignement et besoins en renseignement', 'Évaluation des sources et cotation', 'Analyse des hypothèses concurrentes', 'Expression normalisée de l\'incertitude'],
-         'detail' => 'L\'analyste est le cœur de tout dispositif de renseignement. Il reçoit des éléments hétérogènes — articles, images, témoignages, données — et doit en tirer des jugements défendables. Nos formations l\'entraînent à lutter contre les biais cognitifs, à séparer les faits des interprétations et à rédiger des produits clairs pour des décideurs pressés.', 'glyph' => 'analysis'],
+         'detail' => 'L\'analyste est le cœur de tout dispositif de renseignement. Il reçoit des éléments hétérogènes (articles, images, témoignages, données) et doit en tirer des jugements défendables. Nos formations l\'entraînent à lutter contre les biais cognitifs, à séparer les faits des interprétations et à rédiger des produits clairs pour des décideurs pressés.', 'glyph' => 'analysis'],
         ['id' => 'humint', 'code' => 'CMD-02', 'name' => 'Human Intelligence', 'fr' => 'Renseignement humain', 'cat' => 'espionnage-renseignement-humain',
-         'lead' => 'Recueillir, auprès de personnes consentantes, des informations fiables — dans le strict respect du droit.',
+         'lead' => 'Recueillir, auprès de personnes consentantes, des informations fiables, dans le strict respect du droit.',
          'points' => ['Entretien d\'information et écoute active', 'Évaluation de la fiabilité des sources', 'Protection et confidentialité des sources', 'Limites scientifiques de l\'analyse comportementale'],
-         'detail' => 'Le renseignement humain apporte ce qu\'aucun capteur ne fournit : les intentions, le contexte, les nuances culturelles. L\'Académie l\'enseigne sous sa forme légitime — entretiens transparents, observation non intrusive, protection des interlocuteurs — et rappelle les lignes rouges absolues : corruption, chantage, usurpation d\'identité.', 'glyph' => 'humint'],
+         'detail' => 'Le renseignement humain apporte ce qu\'aucun capteur ne fournit : les intentions, le contexte, les nuances culturelles. L\'Académie l\'enseigne sous sa forme légitime (entretiens transparents, observation non intrusive, protection des interlocuteurs) et rappelle les lignes rouges absolues : corruption, chantage, usurpation d\'identité.', 'glyph' => 'humint'],
         ['id' => 'counter', 'code' => 'CMD-03', 'name' => 'Counterintelligence', 'fr' => 'Contre-espionnage', 'cat' => 'contre-espionnage',
          'lead' => 'Protéger l\'information, les personnes et les organisations contre les ingérences.',
          'points' => ['Menaces internes et risques d\'infiltration', 'Classification et protection de l\'information', 'Détection de l\'ingénierie sociale', 'Exercices de simulation de crise'],
@@ -24,7 +24,7 @@ function command_panels(): array
         ['id' => 'cyber', 'code' => 'CMD-04', 'name' => 'Cyber Intelligence', 'fr' => 'Renseignement numérique', 'cat' => 'cyberespionnage-renseignement-numerique',
          'lead' => 'Comprendre les menaces numériques et produire du renseignement exploitable par les défenseurs.',
          'points' => ['OSINT avancé et empreintes numériques', 'Métadonnées et investigation', 'Cyber Threat Intelligence (CTI)', 'Détection d\'activités suspectes'],
-         'detail' => 'Le cyberespace est devenu le premier terrain de collecte et d\'affrontement informationnel. Nos parcours forment des analystes capables de dialoguer avec les équipes techniques, de qualifier des menaces et de recommander des défenses — exclusivement sur données synthétiques et dans des environnements isolés.', 'glyph' => 'cyber'],
+         'detail' => 'Le cyberespace est devenu le premier terrain de collecte et d\'affrontement informationnel. Nos parcours forment des analystes capables de dialoguer avec les équipes techniques, de qualifier des menaces et de recommander des défenses, exclusivement sur données synthétiques et dans des environnements isolés.', 'glyph' => 'cyber'],
         ['id' => 'strategic', 'code' => 'CMD-05', 'name' => 'Strategic Analysis', 'fr' => 'Analyse stratégique', 'cat' => 'intelligence-strategique-geopolitique',
          'lead' => 'Lire les dynamiques du continent pour anticiper les risques et saisir les opportunités.',
          'points' => ['Intelligence économique et veille', 'Géopolitique africaine', 'Analyse des conflits et alerte précoce', 'Risques pays et notes stratégiques'],
@@ -101,12 +101,12 @@ function africa_map_svg(bool $zones = true): string
             $mx = ($x + $x2) / 2 + ($y2 - $y) * .18;
             $my = ($y + $y2) / 2 - ($x2 - $x) * .18;
             $links .= "<path class=\"link\" d=\"M$x,$y Q$mx,$my $x2,$y2\"/>";
-            $z .= '<g class="zone" tabindex="0" role="button" data-zone="' . e($zn['id']) . '" aria-label="' . e($zn['name']) . ' — zone d\'étude" transform="translate(' . $x . ' ' . $y . ')">'
+            $z .= '<g class="zone" tabindex="0" role="button" data-zone="' . e($zn['id']) . '" aria-label="' . e($zn['name']) . ' : zone d\'étude" transform="translate(' . $x . ' ' . $y . ')">'
                 . '<circle class="zone__pulse" r="12"/><circle class="zone__ring" r="11"/><circle class="zone__core" r="4"/>'
                 . '<text class="zone__label" x="18" y="4">' . e(mb_strtoupper(explode(' & ', $zn['name'])[0])) . '</text></g>';
         }
     }
-    return '<svg class="holomap__svg" viewBox="-20 -10 780 750" role="img" aria-label="Carte de l\'Afrique — zones d\'étude pédagogiques">'
+    return '<svg class="holomap__svg" viewBox="-20 -10 780 750" role="img" aria-label="Carte de l\'Afrique : zones d\'étude pédagogiques">'
         . '<path class="graticule" d="' . $grat . '"/><g>' . $paths . '</g><g>' . $links . '</g><g>' . $z . '</g></svg>';
 }
 
@@ -115,7 +115,7 @@ function radar_items(): array
 {
     return [
         ['t' => 'Cycle du renseignement', 'd' => 'Orientation, collecte, exploitation, analyse, diffusion.'],
-        ['t' => 'Code de l\'Amirauté', 'd' => 'Coter séparément la source (A–F) et l\'information (1–6).'],
+        ['t' => 'Code de l\'Amirauté', 'd' => 'Coter séparément la source (A à F) et l\'information (1 à 6).'],
         ['t' => 'Biais de confirmation', 'd' => 'Retenir ce qui confirme l\'idée initiale : l\'ennemi n°1 de l\'analyste.'],
         ['t' => 'Moindre privilège', 'd' => 'Chacun n\'accède qu\'aux informations nécessaires à sa mission.'],
         ['t' => 'Signal faible', 'd' => 'Information fragmentaire annonçant un changement à venir.'],
@@ -152,9 +152,9 @@ function tools_catalog(): array
             ['id' => 'binoculars', 'name' => 'Jumelles d\'observation', 'img' => 'binoculars.svg', 'cat' => 'Observation', 'desc' => 'Optique de terrain pour l\'observation de paysages et de sites publics.',
              'use' => 'Études environnementales, observation d\'infrastructures publiques, sécurité de missions.', 'limits' => 'Jamais vers des espaces privés ni pour suivre une personne.', 'specs' => 'Grossissement 8× à 10×, diamètre 42 mm, traitement antireflet.'],
             ['id' => 'camera', 'name' => 'Appareil photographique professionnel', 'img' => 'camera.svg', 'cat' => 'Documentation', 'desc' => 'Boîtier et objectifs pour la documentation de sites et le constat.',
-             'use' => 'Documentation de terrain, reportage, constat d\'état de lieux.', 'limits' => 'Droit à l\'image, interdictions de photographier certains sites sensibles.', 'specs' => 'Capteur plein format ou APS-C, téléobjectif 70–300 mm, horodatage.'],
+             'use' => 'Documentation de terrain, reportage, constat d\'état de lieux.', 'limits' => 'Droit à l\'image, interdictions de photographier certains sites sensibles.', 'specs' => 'Capteur plein format ou APS-C, téléobjectif 70 à 300 mm, horodatage.'],
             ['id' => 'gps', 'name' => 'GPS de navigation', 'img' => 'gps.svg', 'cat' => 'Navigation', 'desc' => 'Récepteur portable pour l\'orientation et les relevés de terrain.',
-             'use' => 'Orientation, relevés géoréférencés, sécurité des équipes en zone isolée.', 'limits' => 'Ne jamais poser de traceur sur un bien d\'autrui.', 'specs' => 'Multi-constellations (GPS, Galileo, GLONASS), cartes topographiques, précision ≈ 3 m.'],
+             'use' => 'Orientation, relevés géoréférencés, sécurité des équipes en zone isolée.', 'limits' => 'Ne jamais poser de traceur sur un bien d\'autrui.', 'specs' => 'Multi-constellations (GPS, Galileo, GLONASS), cartes topographiques, précision d\'environ 3 m.'],
             ['id' => 'radio', 'name' => 'Matériel de communication sécurisée', 'img' => 'radio.svg', 'cat' => 'Communications', 'desc' => 'Radios et terminaux chiffrés pour la coordination des équipes.',
              'use' => 'Coordination de crise, liaison d\'équipes en mission, continuité des communications.', 'limits' => 'Respect des réglementations radio nationales et des licences de fréquences.', 'specs' => 'Chiffrement standardisé, canaux programmables, autonomie > 12 h.'],
             ['id' => 'workstation', 'name' => 'Station d\'analyse numérique', 'img' => 'workstation.svg', 'cat' => 'Analyse', 'desc' => 'Poste isolé dédié au traitement et à l\'investigation de données.',

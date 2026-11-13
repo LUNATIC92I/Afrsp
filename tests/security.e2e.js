@@ -8,7 +8,7 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@africaspy.test';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin-Test-2026';
 const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N', 'africaspy', '-e', q]).toString().trim();
 let pass = 0, fail = 0;
-const check = (name, cond, extra = '') => { cond ? pass++ : fail++; console.log((cond ? '  PASS ' : '  FAIL ') + name + (extra ? ' — ' + extra : '')); };
+const check = (name, cond, extra = '') => { cond ? pass++ : fail++; console.log((cond ? '  PASS ' : '  FAIL ') + name + (extra ? ' : ' + extra : '')); };
 const token = html => (html.match(/name="_csrf" value="([^"]+)"/) || [])[1];
 
 (async () => {

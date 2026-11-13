@@ -1,5 +1,5 @@
 -- =====================================================================
---  AFRICA'SPY — migration sécurité : limitation de débit, double authentification
+--  AFRICA'SPY : migration sécurité : limitation de débit, double authentification
 --    mysql africaspy < database/migrations/2026_11_14_security.sql
 -- =====================================================================
 SET NAMES utf8mb4;

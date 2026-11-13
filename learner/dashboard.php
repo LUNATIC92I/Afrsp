@@ -1,5 +1,5 @@
 <?php
-/** Espace apprenant — tableau de bord personnalisé (données réelles MySQL). */
+/** Espace apprenant : tableau de bord personnalisé (données réelles MySQL). */
 declare(strict_types=1);
 require dirname(__DIR__) . '/includes/bootstrap.php';
 require APP_ROOT . '/includes/catalog.php';
@@ -44,7 +44,7 @@ $activeApp = 'dashboard';
 require APP_ROOT . '/includes/app-header.php';
 ?>
 <section class="welcome reveal">
-  <p class="welcome__code">Session ouverte · Agent <?= e(strtoupper(substr(hash('crc32b', (string) $uid), 0, 6))) ?> · <span data-utc-clock>UTC</span></p>
+  <p class="welcome__code">Session ouverte | Agent <?= e(strtoupper(substr(hash('crc32b', (string) $uid), 0, 6))) ?> | <span data-utc-clock>UTC</span></p>
   <h1>WELCOME TO AFRICA'SPY INTELLIGENCE ACADEMY.</h1>
   <p>Bonjour <?= e($u['first_name']) ?>. <?php if ($next): ?>Votre prochaine étape : <strong><?= e($next[0]['lesson']['title'] ?? 'examen final de « ' . $next[0]['course']['title'] . ' »') ?></strong>.<?php elseif ($enrolled): ?>Toutes vos formations sont terminées. Explorez le catalogue pour poursuivre votre parcours.<?php else: ?>Commencez par choisir une formation dans le catalogue.<?php endif; ?></p>
   <div class="welcome__next">
@@ -58,7 +58,7 @@ require APP_ROOT . '/includes/app-header.php';
 <section class="stats" data-stagger="70" aria-label="Indicateurs personnels">
   <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--cyan)"></i>Formations suivies</div><div class="stat__value" data-count="<?= $stats['enrolled'] ?>">0</div><div class="stat__hint"><?= $stats['completed'] ?> terminée<?= $stats['completed'] > 1 ? 's' : '' ?></div></div>
   <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--turq)"></i>Leçons terminées</div><div class="stat__value" data-count="<?= $stats['lessons'] ?>">0</div><div class="stat__hint">Progression moyenne <?= $avgProgress ?> %</div></div>
-  <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--gold)"></i>Score moyen aux examens</div><div class="stat__value"><?= $stats['avg'] !== null ? '<span data-count="' . (int) $stats['avg'] . '">0</span><small>%</small>' : '—' ?></div><div class="stat__hint"><?= count($attempts) ? 'Sur vos tentatives soumises' : 'Aucun examen passé' ?></div></div>
+  <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--gold)"></i>Score moyen aux examens</div><div class="stat__value"><?= $stats['avg'] !== null ? '<span data-count="' . (int) $stats['avg'] . '">0</span><small>%</small>' : '-' ?></div><div class="stat__hint"><?= count($attempts) ? 'Sur vos tentatives soumises' : 'Aucun examen passé' ?></div></div>
   <div class="stat"><div class="stat__label"><i class="dot" style="color:var(--green)"></i>Certificats obtenus</div><div class="stat__value" data-count="<?= $stats['certs'] ?>">0</div><div class="stat__hint"><a href="<?= e(url('learner/certificates.php')) ?>">Consulter</a></div></div>
 </section>
 
@@ -76,7 +76,7 @@ require APP_ROOT . '/includes/app-header.php';
           <span class="track__code"><?= e($e['code']) ?></span>
           <p class="track__title"><?= e($e['title']) ?></p>
           <div class="progress" role="progressbar" aria-valuenow="<?= (int) $e['progress'] ?>" aria-valuemin="0" aria-valuemax="100"><span data-p="<?= (int) $e['progress'] ?>"></span></div>
-          <p class="track__meta"><?= (int) $e['progress'] ?> % · <?= $e['status'] === 'completed' ? 'Terminée le ' . e(fmt_date($e['completed_at'], false)) : 'Dernière activité ' . e(time_ago($e['last_activity'] ?? $e['enrolled_at'])) ?></p>
+          <p class="track__meta"><?= (int) $e['progress'] ?> % | <?= $e['status'] === 'completed' ? 'Terminée le ' . e(fmt_date($e['completed_at'], false)) : 'Dernière activité ' . e(time_ago($e['last_activity'] ?? $e['enrolled_at'])) ?></p>
         </div>
         <a class="btn btn--sm" href="<?= e(url('learner/learning.php', ['course' => $e['course_id']])) ?>"><?= $e['status'] === 'completed' ? 'Revoir' : 'Continuer' ?></a>
       </div>
@@ -84,7 +84,7 @@ require APP_ROOT . '/includes/app-header.php';
     </div>
   </section>
   <section class="box reveal">
-    <div class="box__head"><h2>Activité · 14 jours</h2><span class="mono">Leçons terminées</span></div>
+    <div class="box__head"><h2>Activité | 14 jours</h2><span class="mono">Leçons terminées</span></div>
     <div class="box__body">
       <div class="chart" data-chart="bars"><canvas aria-label="Histogramme des leçons terminées par jour" role="img"></canvas><script type="application/json"><?= json_encode($activity) ?></script></div>
     </div>
@@ -97,7 +97,7 @@ require APP_ROOT . '/includes/app-header.php';
     <ul class="feed">
       <?php if (!$next): ?><li><span>Aucune étape en attente.</span><time></time></li><?php endif; ?>
       <?php foreach ($next as $n): ?>
-      <li><span><strong><?= e($n['course']['code']) ?></strong> — <?= $n['kind'] === 'lesson' ? e($n['lesson']['chapter'] . ' › ' . $n['lesson']['title']) : 'Toutes les leçons sont terminées : passez l\'examen final' ?></span>
+      <li><span><strong><?= e($n['course']['code']) ?></strong> : <?= $n['kind'] === 'lesson' ? e($n['lesson']['chapter'] . ' / ' . $n['lesson']['title']) : 'Toutes les leçons sont terminées : passez l\'examen final' ?></span>
         <a class="link-arrow" href="<?= e($n['kind'] === 'lesson' ? url('learner/learning.php', ['course' => $n['course']['course_id'], 'lesson' => $n['lesson']['id']]) : url('learner/exams.php', ['course' => $n['course']['course_id']])) ?>">Go</a></li>
       <?php endforeach; ?>
     </ul>
