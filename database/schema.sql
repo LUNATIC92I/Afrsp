@@ -7,7 +7,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS invoices, invoice_sequences, rate_limits, lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
+DROP TABLE IF EXISTS mfa_trusted_devices, mfa_email_codes, invoices, invoice_sequences, rate_limits, lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
   audit_logs, media, announcement_reads, announcements, certificates,
   attempt_answers, exam_attempts, answers, questions, exams, lesson_progress,
   course_enrollments, lessons, chapters, courses, categories,
@@ -54,7 +54,8 @@ CREATE TABLE users (
   email           VARCHAR(190) NOT NULL,
   password_hash   VARCHAR(255) NOT NULL,
   totp_secret     VARCHAR(255) NULL,
-  totp_enabled    TINYINT(1) NOT NULL DEFAULT 0,
+  totp_enabled    TINYINT(1) NOT NULL DEFAULT 0,      -- double authentification activée (toutes méthodes)
+  mfa_method      ENUM('totp','email') NULL,
   totp_last_step  BIGINT UNSIGNED NULL,
   totp_recovery   TEXT NULL,
   country         VARCHAR(80)  NULL,
@@ -69,6 +70,33 @@ CREATE TABLE users (
   KEY idx_users_role (role_id),
   KEY idx_users_created (created_at),
   CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles (id) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE mfa_email_codes (
+  user_id     INT UNSIGNED NOT NULL,
+  purpose     ENUM('login','setup') NOT NULL,
+  code_hash   CHAR(64) NOT NULL,
+  tries       TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  expires_at  DATETIME NOT NULL,
+  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, purpose),
+  CONSTRAINT fk_mfa_codes_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE mfa_trusted_devices (
+  id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id       INT UNSIGNED NOT NULL,
+  selector      CHAR(24) NOT NULL,
+  token_hash    CHAR(64) NOT NULL,
+  label         VARCHAR(190) NULL,
+  ip_address    VARCHAR(45) NULL,
+  created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_used_at  DATETIME NULL,
+  expires_at    DATETIME NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_mfa_device_selector (selector),
+  KEY idx_mfa_device_user (user_id),
+  CONSTRAINT fk_mfa_device_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE password_resets (

@@ -14,7 +14,8 @@ if (is_post()) {
         redirect('login-2fa.php');
     }
     if ($err === null) {
-        audit('auth.login');
+        audit('auth.login', null, null, $_SESSION['login_via'] ?? null);
+        unset($_SESSION['login_via']);
         $intended = $_SESSION['intended'] ?? '';
         unset($_SESSION['intended']);
         flash('success', 'Connexion établie. Bienvenue, ' . current_user()['first_name'] . '.');

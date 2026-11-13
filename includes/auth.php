@@ -18,7 +18,7 @@ function current_user(bool $refresh = false): ?array
         return $user = null;
     }
     $row = q_one(
-        'SELECT u.id, u.role_id, u.first_name, u.last_name, u.email, u.country, u.organization, u.bio, u.status, u.totp_enabled,
+        'SELECT u.id, u.role_id, u.first_name, u.last_name, u.email, u.country, u.organization, u.bio, u.status, u.totp_enabled, u.mfa_method,
                 u.created_at, u.last_login_at, r.slug AS role_slug, r.name AS role_name
            FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = ?',
         [$id]
@@ -67,6 +67,9 @@ function is_staff(): bool
 function require_login(): array
 {
     $u = current_user();
+    if ($u) {
+        enforce_mfa_policy($u);
+    }
     if (!$u) {
         if (is_ajax()) {
             json_response(['ok' => false, 'message' => 'Session expirée. Veuillez vous reconnecter.'], 401);
@@ -78,20 +81,27 @@ function require_login(): array
     return $u;
 }
 
-/** Le personnel doit activer la 2FA si l'option est imposée dans les paramètres. */
-function enforce_staff_mfa(array $u): void
+/** Politique 2FA (Administration / Paramètres) : sans second facteur actif, seule la page de sécurité reste accessible. */
+function enforce_mfa_policy(array $u): void
 {
-    if (is_staff() && !(int) $u['totp_enabled'] && setting('mfa_required_staff', '0') === '1'
-        && !str_ends_with((string) ($_SERVER['SCRIPT_NAME'] ?? ''), '/learner/security.php')) {
-        flash('warning', 'La double authentification est obligatoire pour les comptes du personnel. Activez-la pour continuer.');
-        redirect('learner/security.php');
+    if ((int) $u['totp_enabled'] === 1 || !mfa_required_for_current()) {
+        return;
     }
+    $script = (string) ($_SERVER['SCRIPT_NAME'] ?? '');
+    if (str_ends_with($script, '/learner/security.php') || str_ends_with($script, '/logout.php')) {
+        return;
+    }
+    $who = mfa_policy() === 'all' ? 'tous les comptes' : 'les comptes du personnel';
+    if (is_ajax()) {
+        json_response(['ok' => false, 'message' => "La double authentification est obligatoire pour $who."], 403);
+    }
+    flash('warning', "La double authentification est obligatoire pour $who. Activez-la pour continuer : cela prend une minute.");
+    redirect('learner/security.php');
 }
 
 function require_permission(string $permission): array
 {
     $u = require_login();
-    enforce_staff_mfa($u);
     if (!can($permission)) {
         audit('access.denied', null, null, $permission . ' | ' . ($_SERVER['REQUEST_URI'] ?? ''));
         if (is_ajax()) {
@@ -158,7 +168,7 @@ function attempt_login(string $email, string $password): ?string
         audit('auth.locked', null, null, mb_substr($email, 0, 190));
         return "Trop de tentatives infructueuses. Par mesure de sécurité, l'accès est temporairement suspendu ($minutes minutes).";
     }
-    $user = q_one('SELECT id, password_hash, status, role_id, totp_enabled FROM users WHERE email = ?', [$email]);
+    $user = q_one('SELECT id, first_name, email, password_hash, status, role_id, totp_enabled, mfa_method FROM users WHERE email = ?', [$email]);
     // Vérification à temps constant même si le compte n'existe pas
     $hash = $user['password_hash'] ?? '$2y$10$894BRSesx9x6nbleA6MFGOSHDyAbiGkCxBRB63ZX403IoqnQfj6iq';
     $valid = password_verify($password, $hash);
@@ -176,9 +186,19 @@ function attempt_login(string $email, string $password): ?string
     }
     record_login_attempt($email, true);
     if ((int) $user['totp_enabled'] === 1) {
-        // Seconde étape : le compte n'est ouvert qu'après le code TOTP
+        if (mfa_device_trusted((int) $user['id'])) {
+            // Appareil de confiance enregistré après une vérification réussie
+            login_user((int) $user['id']);
+            $_SESSION['login_via'] = 'appareil de confiance';
+            return null;
+        }
+        // Seconde étape : le compte n'est ouvert qu'après le code de vérification
         session_regenerate_id(true);
-        $_SESSION['mfa_pending'] = ['uid' => (int) $user['id'], 'at' => time(), 'tries' => 0];
+        $method = $user['mfa_method'] === 'email' ? 'email' : 'totp';
+        $_SESSION['mfa_pending'] = ['uid' => (int) $user['id'], 'at' => time(), 'tries' => 0, 'method' => $method];
+        if ($method === 'email' && rate_limit('mfa_mail:user', (string) $user['id'], 6, 900)) {
+            mfa_email_send($user, 'login');
+        }
         return MFA_REQUIRED;
     }
     login_user((int) $user['id']);

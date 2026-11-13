@@ -140,10 +140,10 @@ async function login(ctx, email, pwd) {
   check('2FA : code de secours déjà utilisé refusé', /Code invalide/.test(await r.text()));
 
   // ---- 6. 2FA obligatoire pour le personnel
-  sql("UPDATE settings SET setting_value='1' WHERE setting_key='mfa_required_staff'");
+  sql("UPDATE settings SET setting_value='staff' WHERE setting_key='mfa_policy'");
   r = await adm.get('/admin/users.php', { maxRedirects: 0 });
   check('Personnel sans 2FA redirigé vers « Sécurité du compte » quand elle est obligatoire', r.status() === 303 && /security\.php/.test(r.headers().location || ''));
-  sql("UPDATE settings SET setting_value='0' WHERE setting_key='mfa_required_staff'");
+  sql("UPDATE settings SET setting_value='optional' WHERE setting_key='mfa_policy'");
 
   // ---- 7. Réencodage des images téléversées
   const evil = path.join(require('os').tmpdir(), 'afspy-polyglot.jpg');

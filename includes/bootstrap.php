@@ -39,6 +39,7 @@ require APP_ROOT . '/includes/functions.php';
 require APP_ROOT . '/includes/security.php';
 require APP_ROOT . '/includes/mailer.php';
 require APP_ROOT . '/includes/auth.php';
+require APP_ROOT . '/includes/mfa.php';
 
 // Installation non effectuée : redirection vers l'assistant (sauf CLI).
 if (!config('installed') && PHP_SAPI !== 'cli' && !defined('AFSPY_INSTALLER')) {

@@ -18,6 +18,7 @@ if ($row && is_post()) {
         $authError = $e;
     } else {
         q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($pwd), $row['user_id']]);
+        mfa_forget_devices((int) $row['user_id']);
         q('UPDATE password_resets SET used_at = UTC_TIMESTAMP() WHERE user_id = ? AND used_at IS NULL', [$row['user_id']]);
         q('DELETE FROM login_attempts WHERE email = ?', [$row['email']]);
         logout_user();

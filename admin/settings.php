@@ -13,6 +13,27 @@ $keys = [
     'security_contact' => ['E-mail de signalement des vulnérabilités (security.txt)', 'email', 190],
     'certificate_signatory_name' => ['Signataire affiché sur les certificats', 'text', 120], 'certificate_signatory_title' => ['Qualité du signataire', 'text', 160],
 ];
+if (is_post() && input('action') === 'mfa') {
+    verify_csrf();
+    $policy = input('mfa_policy');
+    $days = input_int('mfa_trust_days', 30);
+    if (!in_array($policy, ['optional', 'staff', 'all'], true) || $days < 0 || $days > 90) {
+        flash('error', 'Réglage invalide (durée de confiance : 0 à 90 jours).');
+        back(['tab' => 'mfa']);
+    }
+    if ($policy !== 'optional' && !(int) current_user()['totp_enabled']) {
+        flash('error', 'Activez d\'abord la double authentification sur votre propre compte (« Sécurité du compte ») avant de l\'imposer.');
+        back(['tab' => 'mfa']);
+    }
+    set_setting('mfa_policy', $policy);
+    set_setting('mfa_email_enabled', isset($_POST['mfa_email_enabled']) ? '1' : '0');
+    set_setting('mfa_notify', isset($_POST['mfa_notify']) ? '1' : '0');
+    set_setting('mfa_trust_days', (string) $days);
+    if ($days === 0) q('DELETE FROM mfa_trusted_devices');
+    audit('settings.mfa', 'settings', null, "politique=$policy, confiance=$days j, e-mail=" . (isset($_POST['mfa_email_enabled']) ? 'oui' : 'non'));
+    flash('success', 'Politique de double authentification enregistrée.');
+    back(['tab' => 'mfa']);
+}
 if (is_post() && in_array(input('action'), ['mail', 'mail_test', 'billing'], true)) {
     verify_csrf();
     $action = input('action');
@@ -75,7 +96,6 @@ if (is_post()) {
     if ($err) { flash('error', implode(' ', $err)); back(); }
     foreach ($keys as $k => $_) set_setting($k, input($k));
     set_setting('signature_is_fictitious', isset($_POST['signature_is_fictitious']) ? '1' : '0');
-    set_setting('mfa_required_staff', isset($_POST['mfa_required_staff']) ? '1' : '0');
     set_setting('payment_manual_enabled', isset($_POST['payment_manual_enabled']) ? '1' : '0');
     set_setting('registration_open', isset($_POST['registration_open']) ? '1' : '0');
     audit('settings.update', 'settings', null, implode(',', array_keys($keys)));
@@ -129,13 +149,33 @@ $mc = mail_config(); ?>
   </form>
 </div>
 </div>
+<?php $mfaStats = q_all("SELECT r.name, COUNT(*) n, SUM(u.totp_enabled = 1) on2fa, SUM(u.mfa_method = 'email') by_mail FROM users u JOIN roles r ON r.id = u.role_id WHERE u.status = 'active' GROUP BY r.id, r.name ORDER BY r.id"); ?>
+<form class="box reveal" method="post" novalidate id="mfa">
+  <div class="box__head"><h2>Double authentification</h2><span class="status-pill <?= mfa_policy() === 'optional' ? 'status-pill--warn' : 'status-pill--on' ?>"><?= e(['optional' => 'Facultative', 'staff' => 'Obligatoire : personnel', 'all' => 'Obligatoire : tous'][mfa_policy()]) ?></span></div>
+  <div class="box__body">
+    <?= csrf_field() ?><input type="hidden" name="action" value="mfa">
+    <div class="grid-2 grid-2--even">
+      <div>
+        <?= sel('mfa_policy', 'Obligation', ['optional' => 'Facultative (chacun choisit)', 'staff' => 'Obligatoire pour le personnel (administrateurs, responsables pédagogiques)', 'all' => 'Obligatoire pour tous les comptes, apprenants compris'], mfa_policy()) ?>
+        <?= fld('mfa_trust_days', 'Appareils de confiance : durée en jours (0 = désactivé)', (string) mfa_trust_days(), 'number', ['min' => 0, 'max' => 90]) ?>
+        <label class="check mb-2"><input type="checkbox" name="mfa_email_enabled" value="1" <?= mfa_email_allowed() ? 'checked' : '' ?>> Autoriser le code par e-mail (en plus de l'application d'authentification)</label>
+        <label class="check mb-2"><input type="checkbox" name="mfa_notify" value="1" <?= setting('mfa_notify', '1') === '1' ? 'checked' : '' ?>> Alerter l'utilisateur par e-mail à chaque changement de sécurité (activation, désactivation, codes de secours, nouvel appareil)</label>
+        <p class="disclaimer">Un compte soumis à l'obligation et non équipé est redirigé vers « Sécurité du compte » jusqu'à l'activation. Activez d'abord la double authentification sur votre propre compte. En cas de perte du téléphone, un administrateur peut la réinitialiser depuis la fiche de l'utilisateur.</p>
+        <button class="btn btn--primary" type="submit">Enregistrer la politique</button>
+      </div>
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th>Rôle</th><th class="num">Comptes actifs</th><th class="num">2FA activée</th><th class="num">dont e-mail</th></tr></thead>
+        <tbody><?php foreach ($mfaStats as $st): ?><tr><td><?= e($st['name']) ?></td><td class="num"><?= (int) $st['n'] ?></td><td class="num"><?= (int) $st['on2fa'] ?> (<?= $st['n'] ? (int) round(100 * $st['on2fa'] / $st['n']) : 0 ?> %)</td><td class="num"><?= (int) $st['by_mail'] ?></td></tr><?php endforeach; ?></tbody>
+      </table></div>
+    </div>
+  </div>
+</form>
 <form class="box reveal" method="post" novalidate>
   <div class="box__head"><h2>Paramètres institutionnels</h2></div>
   <div class="box__body form-grid">
     <?= csrf_field() ?>
     <?php foreach ($keys as $k => [$label, $type, $max]): ?><?= fld($k, $label, setting($k), $type, ['maxlength' => $max] + ($type === 'textarea' ? ['rows' => 3] : [])) ?><?php endforeach; ?>
     <label class="check full"><input type="checkbox" name="signature_is_fictitious" value="1" <?= setting('signature_is_fictitious', '1') === '1' ? 'checked' : '' ?>> Signature institutionnelle <strong>fictive</strong> (mention explicite sur les certificats : à décocher uniquement si un signataire réel et habilité est désigné)</label>
-    <label class="check full"><input type="checkbox" name="mfa_required_staff" value="1" <?= setting('mfa_required_staff', '0') === '1' ? 'checked' : '' ?>> <strong>Double authentification obligatoire</strong> pour les administrateurs et responsables pédagogiques (recommandé ; activez d'abord la vôtre dans « Sécurité du compte »)</label>
     <label class="check full"><input type="checkbox" name="payment_manual_enabled" value="1" <?= setting('payment_manual_enabled', '1') === '1' ? 'checked' : '' ?>> Proposer le paiement par virement / dépôt (validation manuelle dans Administration / Paiements)</label>
     <label class="check full"><input type="checkbox" name="registration_open" value="1" <?= setting('registration_open', '1') === '1' ? 'checked' : '' ?>> Inscriptions publiques ouvertes</label>
     <div class="full"><button class="btn btn--primary" type="submit">Enregistrer</button></div>

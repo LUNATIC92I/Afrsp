@@ -116,6 +116,7 @@ php install/cli.php --db-host=127.0.0.1 --db-name=africaspy --db-user=USER --db-
 - **Mise à jour d'une installation existante** : `mysql africaspy < database/migrations/2026_11_13_payments.sql` (ajoute les prix, la table `payments` et la permission `payments.manage` ; les inscriptions existantes conservent leur accès).
 - **E-mails** : configurez la messagerie dans *Administration / Paramètres / Messagerie* (SMTP recommandé : serveur, port 587 STARTTLS ou 465 SSL, identifiant, mot de passe chiffré en base, adresse d'expédition), puis cliquez sur **Envoyer un e-mail de test**. Ces réglages remplacent la clé `mail` de `config.local.php`. En mode `log` (défaut de développement), aucun e-mail ne part : chaque message complet (HTML, pièces jointes) est enregistré en `.eml` dans `storage/mail/` et résumé dans `storage/logs/mail.log`. Pour la délivrabilité, publiez SPF, DKIM et DMARC pour le domaine d'expédition.
 - **Facturation** : renseignez raison sociale, adresse, NIF/IFU/NCC, RCCM et taux de taxe dans *Paramètres / Facturation* **avant** les premières ventes (les prix sont TTC ; la taxe est extraite du prix ; à 0 %, la mention d'exonération est imprimée). Les factures émises sont figées (copie des informations au moment de l'émission) et stockées dans `storage/invoices/` (à sauvegarder, hors web).
+- **Double authentification (installation existante)** : `mysql africaspy < database/migrations/2026_11_16_mfa.sql` (méthode au choix, appareils de confiance, politique d'obligation ; l'ancien réglage « obligatoire pour le personnel » est repris). Réglages dans *Administration / Paramètres / Double authentification* : obligation (facultative, personnel, tous les comptes), code par e-mail autorisé ou non, durée de confiance des appareils (0 à 90 jours), alertes de sécurité par e-mail.
 - **Typographie (installation existante)** : `php database/typography-cleanup.php --apply` remplace, dans les contenus déjà en base (formations, leçons, questions, paramètres), les tirets longs, points médians, flèches et puces décoratives par la ponctuation française usuelle. Sans `--apply`, le script affiche seulement le nombre de champs concernés. Les factures déjà émises ne sont pas modifiées.
 - **Factures et e-mails (installation existante)** : `mysql africaspy < database/migrations/2026_11_15_invoices_mail.sql` puis `php database/invoices-backfill.php` (émet, dans l'ordre chronologique, les factures et avoirs des paiements déjà encaissés ou remboursés ; sans envoi d'e-mail).
 - Les variables d'environnement `AFRICASPY_DB_HOST`, `AFRICASPY_DB_NAME`, `AFRICASPY_DB_USER`, `AFRICASPY_DB_PASS`, `AFRICASPY_APP_KEY`, `AFRICASPY_BASE_URL` peuvent remplacer le fichier.
@@ -191,6 +192,7 @@ node tests/learner.e2e.js     # inscription puis formation puis leçons puis QCM
 ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/security.e2e.js
 ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/hardening.e2e.js     # 26 contrôles : verrouillage, débit, Host, Argon2id, 2FA, images
 ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/submissions.e2e.js   # 19 contrôles : notes, dépôt, reprise, correction, sécurité
+ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/mfa.e2e.js          # 42 contrôles : code par e-mail, appareils de confiance, obligation, alertes, désactivation
 ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/mail_invoice.e2e.js  # 36 contrôles : bienvenue, facture PDF jointe, numérotation, TVA, avoir, CSV, SMTP réel (serveur de test local), accès
 # 44 contrôles (dont 9 sur le paiement) : CSRF, force brute, contrôle d'accès, IDOR, injection SQL, XSS, en-têtes,
 # cookie de session, téléversement frauduleux, parcours admin complet, révocation et
@@ -199,7 +201,7 @@ ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/mail_invoice.e2e.js  # 36 contrôl
 Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ; ils sont destinés à un environnement de développement, pas à la production.
 
 ### Captures d'écran
-39 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
+43 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
 
 ## 9. Contenus, visuels et régénération
 

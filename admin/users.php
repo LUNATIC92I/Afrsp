@@ -24,7 +24,7 @@ if (is_post()) {
         if ($err) { flash('error', implode(' ', $err)); set_old($_POST); back(['edit' => $id ?: 'new']); }
         if ($id) {
             q('UPDATE users SET first_name=?, last_name=?, email=?, role_id=?, status=? WHERE id=?', [$d['first_name'], $d['last_name'], $d['email'], (int) $d['role_id'], $d['status'], $id]);
-            if ($d['password'] !== '') q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($d['password']), $id]);
+            if ($d['password'] !== '') { q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($d['password']), $id]); mfa_forget_devices($id); }
             audit('user.update', 'user', $id, $d['email'] . ' | rôle=' . $roles[(int) $d['role_id']] . ' | ' . $d['status'] . ($d['password'] !== '' ? ' | mot de passe réinitialisé' : ''));
         } else {
             q('INSERT INTO users (first_name, last_name, email, role_id, status, password_hash) VALUES (?,?,?,?,?,?)', [$d['first_name'], $d['last_name'], $d['email'], (int) $d['role_id'], $d['status'], hash_password($d['password'])]);
@@ -46,8 +46,9 @@ if (is_post()) {
         back();
     }
     if ($action === 'reset_mfa' && $id) {
-        q('UPDATE users SET totp_secret = NULL, totp_enabled = 0, totp_last_step = NULL, totp_recovery = NULL WHERE id = ?', [$id]);
+        mfa_reset($id);
         audit('security.mfa_reset_by_admin', 'user', $id);
+        mfa_notify($id, 'admin_reset');
         flash('success', 'Double authentification réinitialisée : l\'utilisateur devra la reconfigurer.');
         back(['edit' => $id]);
     }
@@ -90,7 +91,7 @@ if ($editId !== '') {
   </form>
   <?php if ($u): ?>
   <section class="box reveal"><div class="box__head"><h2>Activité</h2></div><div class="box__body">
-    <dl class="kv"><dt>Dernière connexion</dt><dd><?= e(fmt_datetime($u['last_login_at'])) ?></dd><dt>Pays</dt><dd><?= e($u['country'] ?: '-') ?></dd><dt>Organisation</dt><dd><?= e($u['organization'] ?: '-') ?></dd><dt>Double authentification</dt><dd><?= (int) $u['totp_enabled'] ? '<span class="status-pill status-pill--on">Activée</span> ' . action_btn('reset_mfa', ['id' => $u['id']], 'Réinitialiser', 'btn--sm', 'Réinitialiser la 2FA de cet utilisateur (téléphone perdu) ? Vérifiez son identité avant de confirmer.') : '<span class="status-pill status-pill--off">Non activée</span>' ?></dd><dt>Échecs récents</dt><dd><?= $fails ?><?php if ($fails): ?> <?= action_btn('unlock', ['id' => $u['id']], 'Déverrouiller') ?><?php endif; ?></dd></dl>
+    <dl class="kv"><dt>Dernière connexion</dt><dd><?= e(fmt_datetime($u['last_login_at'])) ?></dd><dt>Pays</dt><dd><?= e($u['country'] ?: '-') ?></dd><dt>Organisation</dt><dd><?= e($u['organization'] ?: '-') ?></dd><dt>Double authentification</dt><dd><?= (int) $u['totp_enabled'] ? '<span class="status-pill status-pill--on">Activée</span> <small class="dim">' . e(mfa_method_label($u['mfa_method'] ?? 'totp')) . '</small> ' . action_btn('reset_mfa', ['id' => $u['id']], 'Réinitialiser', 'btn--sm', 'Réinitialiser la 2FA de cet utilisateur (téléphone perdu) ? Vérifiez son identité avant de confirmer.') : '<span class="status-pill status-pill--off">Non activée</span>' ?></dd><dt>Échecs récents</dt><dd><?= $fails ?><?php if ($fails): ?> <?= action_btn('unlock', ['id' => $u['id']], 'Déverrouiller') ?><?php endif; ?></dd></dl>
     <h3 class="mt-2" style="font-size:1rem">Formations (<?= count($enr) ?>)</h3>
     <ul class="feed"><?php foreach ($enr as $e): ?><li><span><?= e($e['code']) ?> | <?= e($e['title']) ?></span><time><?= (int) $e['progress'] ?> %<?= $e['status'] === 'completed' ? ', terminé' : '' ?></time></li><?php endforeach; ?></ul>
     <h3 class="mt-2" style="font-size:1rem">Tentatives d'examen</h3>

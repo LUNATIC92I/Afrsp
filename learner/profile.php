@@ -31,6 +31,7 @@ if (is_post()) {
             $errors['password'] = $p;
         } else {
             q('UPDATE users SET password_hash = ? WHERE id = ?', [hash_password($new), $u['id']]);
+            mfa_forget_devices((int) $u['id']);
             login_user((int) $u['id']); // nouvelle empreinte : les autres sessions sont invalidées
             audit('profile.password', 'user', (int) $u['id']);
             flash('success', 'Mot de passe modifié. Vos autres sessions ont été fermées.');

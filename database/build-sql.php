@@ -151,7 +151,7 @@ $settings = [
     'payment_manual_instructions' => "Virement bancaire ou dépôt Mobile Money au nom d'AFRICA'SPY.\nIndiquez impérativement la référence de paiement dans le libellé.\nCoordonnées bancaires : à compléter dans Administration / Paramètres.",
     'promo_label' => 'Offre de lancement',
     'promo_ends_at' => '',
-    'mfa_required_staff' => '0',
+    'mfa_policy' => 'optional', 'mfa_email_enabled' => '1', 'mfa_trust_days' => '30', 'mfa_notify' => '1',
     'security_contact' => '',
     'seller_legal_name' => "AFRICA'SPY Intelligence Academy", 'seller_address' => '', 'seller_tax_id' => '', 'seller_registration' => '', 'seller_email' => '',
     'tax_rate' => '0', 'tax_label' => 'TVA', 'tax_exempt_mention' => 'TVA non applicable (à adapter selon votre régime fiscal)',
