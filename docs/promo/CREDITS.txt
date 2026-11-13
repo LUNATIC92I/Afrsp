@@ -1,0 +1,11 @@
+Spot publicitaire AFRICA'SPY : crédits
+
+Images : captures de la plateforme AFRICA'SPY.
+Animations et musique : créations originales (composition HTML animée, synthèse sonore), libres de droits pour l'Académie.
+
+Voix off : synthèse vocale Piper (https://github.com/rhasspy/piper), modèle « fr_FR-siwis-medium »,
+entraîné sur la base « SIWIS French Speech Synthesis Database » (Junichi Yamagishi, Pierre-Edouard Honnet,
+Philip N. Garner, Alexandros Lazaridis ; Université d'Édimbourg et Idiap), licence Creative Commons
+Attribution 4.0 International (CC BY 4.0) : https://creativecommons.org/licenses/by/4.0/
+La licence CC BY 4.0 autorise l'usage commercial à condition de citer cette source, par exemple dans la
+description de la vidéo : « Voix de synthèse : Piper, modèle SIWIS (CC BY 4.0). »

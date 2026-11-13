@@ -203,6 +203,8 @@ Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ;
 ### Spot publicitaire
 `docs/promo/africaspy-spot-16x9.mp4` : vidéo de 53 secondes en 1920 x 1080 (H.264 et AAC), image de couverture `docs/promo/africaspy-spot-couverture.jpg`. Musique et animations originales, images issues de la plateforme. Pour modifier un texte (par exemple ajouter votre nom de domaine sur le carton final) : éditez `resources/promo/spot.html`, puis lancez `resources/promo/build.sh` (environ 3 minutes).
 
+Version avec voix off française : `docs/promo/africaspy-spot-16x9-voix.mp4`. Fichiers audio séparés : voix seule (`africaspy-voix-off.wav` et `.mp3`) et bande-son mixée (`africaspy-spot-audio.mp3`, utilisable pour la radio). Le texte minuté est dans `docs/promo/texte-voix-off.txt`. La voix est une synthèse Piper (modèle SIWIS, licence CC BY 4.0) : citez la source indiquée dans `docs/promo/CREDITS.txt`, par exemple dans la description de la vidéo. Le texte se modifie dans `resources/promo/voiceover.py` ; `build.sh` régénère alors la voix et le mixage (nécessite `pip install piper-tts`).
+
 ### Captures d'écran
 43 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
 
