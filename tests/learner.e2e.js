@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const { execFileSync } = require('child_process');
 const B = process.env.BASE_URL || 'http://127.0.0.1:8080';
 const OUT = process.env.OUT_DIR || require('os').tmpdir();
-const sql = q => execFileSync('mysql', ['-N', 'africaspy', '-e', q]).toString().trim();
+const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N', 'africaspy', '-e', q]).toString().trim();
 (async () => {
   // Base de développement : réinitialise les compteurs anti-abus liés à 127.0.0.1
   sql("DELETE FROM login_attempts WHERE ip_address IN ('127.0.0.1','::1')");

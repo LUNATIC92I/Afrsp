@@ -326,3 +326,34 @@
     render();
   });
 })();
+
+/* =====================================================================
+   Notes personnelles (sauvegarde automatique) et compteur du dépôt de travaux
+   ===================================================================== */
+(function () {
+  'use strict';
+  var doc = document, A = window.AFSPY || {};
+  doc.querySelectorAll('textarea[data-note]').forEach(function (ta) {
+    var state = doc.querySelector('[data-note-state]'), timer = null, last = ta.value;
+    function save() {
+      if (ta.value === last) return;
+      var val = ta.value;
+      if (state) state.textContent = 'enregistrement…';
+      A.request(A.url('ajax/note.php'), { body: { lesson_id: ta.dataset.note, content: val } }).then(function (j) {
+        if (j.ok) { last = val; if (state) state.textContent = 'enregistrées · ' + j.saved_at; }
+        else if (state) state.textContent = j.message || 'échec de l\'enregistrement';
+      });
+    }
+    ta.addEventListener('input', function () { clearTimeout(timer); if (state) state.textContent = 'modifications…'; timer = setTimeout(save, 900); });
+    ta.addEventListener('blur', save);
+    window.addEventListener('beforeunload', save);
+  });
+  doc.querySelectorAll('textarea[data-counter]').forEach(function (ta) {
+    var out = ta.form && ta.form.querySelector('[data-count-out]');
+    var upd = function () {
+      var n = ta.value.trim().length;
+      if (out) { out.textContent = n.toLocaleString('fr-FR') + ' caractère' + (n > 1 ? 's' : '') + (n < 200 ? ' · 200 minimum' : ''); out.style.color = n < 200 ? 'var(--gold)' : 'var(--green)'; }
+    };
+    ta.addEventListener('input', upd); upd();
+  });
+})();

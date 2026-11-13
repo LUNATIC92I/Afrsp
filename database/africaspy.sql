@@ -1,6 +1,6 @@
 -- =====================================================================
 --  AFRICA'SPY — base de données complète (schéma + données initiales)
---  Généré le 2026-11-13 06:28 UTC par database/build-sql.php
+--  Généré le 2026-11-13 06:35 UTC par database/build-sql.php
 --  Le compte administrateur n'est PAS inclus : il est créé de manière
 --  sécurisée par l'installateur (install/ ou php install/cli.php).
 -- =====================================================================
@@ -14,7 +14,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS payments, contact_messages, settings, login_attempts, password_resets,
+DROP TABLE IF EXISTS lesson_notes, submissions, payments, contact_messages, settings, login_attempts, password_resets,
   audit_logs, media, announcement_reads, announcements, certificates,
   attempt_answers, exam_attempts, answers, questions, exams, lesson_progress,
   course_enrollments, lessons, chapters, courses, categories,
@@ -427,6 +427,41 @@ CREATE TABLE payments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- ---------------------------------------------------------------------
+--  Travaux rendus (exercices, études de cas) et notes personnelles
+-- ---------------------------------------------------------------------
+CREATE TABLE submissions (
+  id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id       INT UNSIGNED NOT NULL,
+  lesson_id     INT UNSIGNED NOT NULL,
+  content       MEDIUMTEXT NOT NULL,
+  status        ENUM('submitted','reviewed','revision') NOT NULL DEFAULT 'submitted',
+  grade         TINYINT UNSIGNED NULL,
+  feedback      TEXT NULL,
+  reviewer_id   INT UNSIGNED NULL,
+  version       SMALLINT UNSIGNED NOT NULL DEFAULT 1,
+  submitted_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  reviewed_at   DATETIME NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_sub_user_lesson (user_id, lesson_id),
+  KEY idx_sub_status (status, submitted_at),
+  CONSTRAINT fk_sub_user     FOREIGN KEY (user_id)     REFERENCES users (id)   ON DELETE CASCADE,
+  CONSTRAINT fk_sub_lesson   FOREIGN KEY (lesson_id)   REFERENCES lessons (id) ON DELETE CASCADE,
+  CONSTRAINT fk_sub_reviewer FOREIGN KEY (reviewer_id) REFERENCES users (id)   ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE lesson_notes (
+  user_id     INT UNSIGNED NOT NULL,
+  lesson_id   INT UNSIGNED NOT NULL,
+  content     TEXT NOT NULL,
+  updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, lesson_id),
+  KEY idx_notes_lesson (lesson_id),
+  CONSTRAINT fk_notes_user   FOREIGN KEY (user_id)   REFERENCES users (id)   ON DELETE CASCADE,
+  CONSTRAINT fk_notes_lesson FOREIGN KEY (lesson_id) REFERENCES lessons (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 
 -- ------------------------------ Données initiales
 
@@ -448,7 +483,8 @@ INSERT INTO `permissions` (`id`,`slug`,`label`) VALUES
 (10,'settings.manage','Modifier les paramètres institutionnels'),
 (11,'audit.view','Consulter le journal d''audit'),
 (12,'messages.view','Consulter les messages de contact'),
-(13,'payments.manage','Gérer les paiements et valider les règlements');
+(13,'payments.manage','Gérer les paiements et valider les règlements'),
+(14,'submissions.review','Corriger les travaux des apprenants');
 
 INSERT INTO `role_permissions` (`role_id`,`permission_id`) VALUES
 (1,1),
@@ -470,7 +506,9 @@ INSERT INTO `role_permissions` (`role_id`,`permission_id`) VALUES
 (1,10),
 (1,11),
 (1,12),
-(1,13);
+(1,13),
+(1,14),
+(2,14);
 
 INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 ('institution_name','AFRICA''SPY — Intelligence Academy'),

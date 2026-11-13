@@ -251,3 +251,21 @@ body.app::before { opacity: .6; }
 .flash--flat .flash__back { transform: none; opacity: 0; }
 .flash--flat .flash__card.is-flipped .flash__back { opacity: 1; }
 .flash--flat .flash__card.is-flipped .flash__front { opacity: 0; }
+
+/* Dépôt de travaux & notes personnelles */
+.work { margin-top: 36px; padding: 24px; border: 1px solid rgba(213, 179, 106, .4); border-radius: var(--r-md); background: linear-gradient(160deg, rgba(213, 179, 106, .06), transparent 60%); }
+.work__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+.work__head h2 { margin: 0; font: 700 .95rem var(--f-head); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.work__text { min-height: 260px; font-size: .98rem; line-height: 1.65; }
+.work__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; font-size: .74rem; }
+.work__review { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; padding: 16px 18px; margin-bottom: 16px; border: 1px solid var(--line-strong); border-radius: var(--r-sm); background: rgba(5, 7, 11, .5); }
+.work__grade { display: grid; place-items: center; width: 92px; height: 92px; border: 2px solid var(--gold); border-radius: 50%; box-shadow: 0 0 24px rgba(213, 179, 106, .25); }
+.work__grade b { font: 900 1.9rem/1 var(--f-display); color: var(--white); }
+.work__grade small { font: .66rem var(--f-mono); color: var(--gold); margin-top: -14px; }
+.work__readonly { margin-top: 10px; padding: 14px 16px; border: 1px dashed var(--line-strong); border-radius: var(--r-sm); font-size: .94rem; }
+.notes { margin-top: 24px; border: 1px solid var(--line-strong); border-radius: var(--r-md); background: rgba(8, 12, 19, .6); }
+.notes summary { display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; cursor: pointer; list-style: none; font: 700 .82rem var(--f-head); letter-spacing: .18em; text-transform: uppercase; color: var(--silver); }
+.notes summary::-webkit-details-marker { display: none; }
+.notes__state { font-size: .68rem; letter-spacing: .08em; text-transform: none; font-weight: 400; }
+.notes__text { border: 0; border-top: 1px solid var(--line); border-radius: 0 0 var(--r-md) var(--r-md); min-height: 160px; background: transparent; }
+@media (max-width: 560px) { .work__review { grid-template-columns: 1fr; } }

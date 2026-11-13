@@ -288,7 +288,7 @@
       f.querySelectorAll('[aria-invalid]').forEach(function (x) { x.removeAttribute('aria-invalid'); });
       A.request(f.action, { body: new FormData(f) }).then(function (j) {
         if (btn) btn.classList.remove('is-loading');
-        if (j.ok) { A.toast('success', j.message); f.reset(); return; }
+        if (j.ok) { A.toast('success', j.message); if (f.hasAttribute('data-work')) { setTimeout(function () { location.reload(); }, 1200); } else { f.reset(); } return; }
         A.toast('error', j.message || 'Le formulaire contient des erreurs.');
         if (j.errors) Object.keys(j.errors).forEach(function (k) {
           var input = f.querySelector('[name="' + k + '"]');

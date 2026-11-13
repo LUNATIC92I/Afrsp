@@ -7,7 +7,7 @@ const B = process.env.BASE_URL || 'http://127.0.0.1:8080';
 const OUT = path.join(__dirname, '..', 'docs', 'screenshots');
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@africaspy.test';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin-Test-2026';
-const sql = q => execFileSync('mysql', ['-N', 'africaspy', '-e', q]).toString().trim();
+const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N', 'africaspy', '-e', q]).toString().trim();
 require('fs').mkdirSync(OUT, { recursive: true });
 
 async function settle(p, sel) {

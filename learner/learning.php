@@ -46,6 +46,10 @@ if ($quizChapter) {
         $quiz[] = $q;
     }
 }
+$submission = ($lesson && $enrolled && in_array($lesson['type'], ['exercise', 'case_study'], true))
+    ? (q_one('SELECT * FROM submissions WHERE user_id = ? AND lesson_id = ?', [$u['id'], $lesson['id']]) ?: ['status' => null, 'content' => '', 'grade' => null, 'feedback' => null, 'version' => 0])
+    : null;
+$note = ($lesson && $enrolled) ? (string) q_val('SELECT content FROM lesson_notes WHERE user_id = ? AND lesson_id = ?', [$u['id'], $lesson['id']]) : null;
 $progress = $enrolled ? (int) q_val('SELECT progress FROM course_enrollments WHERE user_id = ? AND course_id = ?', [$u['id'], $cid]) : 0;
 
 /** Lecteur vidéo : fichier hébergé (protégé) ou intégration YouTube/Vimeo respectueuse de la vie privée. */
@@ -115,6 +119,40 @@ require APP_ROOT . '/includes/app-header.php';
       <?php endif; ?>
       <div class="prose"><?= sanitize_html($lesson['content']) ?></div>
     </div>
+    <?php if ($submission !== null): $st = $submission['status']; ?>
+    <section class="work reveal" aria-labelledby="work-title">
+      <div class="work__head">
+        <h2 id="work-title">Votre travail</h2>
+        <?php if ($st === 'submitted'): ?><span class="status-pill status-pill--warn">● Déposé · en attente de correction (version <?= (int) $submission['version'] ?>)</span>
+        <?php elseif ($st === 'revision'): ?><span class="status-pill status-pill--bad">● Reprise demandée</span>
+        <?php elseif ($st === 'reviewed'): ?><span class="status-pill status-pill--on">● Corrigé</span>
+        <?php else: ?><span class="status-pill status-pill--off">● Non déposé</span><?php endif; ?>
+      </div>
+      <?php if ($st === 'reviewed' || $st === 'revision'): ?>
+      <div class="work__review">
+        <?php if ($submission['grade'] !== null): ?><div class="work__grade"><b><?= (int) $submission['grade'] ?></b><small>/ 20</small></div><?php endif; ?>
+        <div><p class="label">Commentaire du formateur</p><p style="white-space:pre-line;margin:0"><?= e((string) $submission['feedback']) ?></p></div>
+      </div>
+      <?php endif; ?>
+      <?php if ($st === 'reviewed'): ?>
+        <details class="mt-1"><summary class="link-arrow">Relire mon travail rendu</summary><div class="work__readonly"><?= nl2br(e($submission['content'])) ?></div></details>
+      <?php else: ?>
+      <form method="post" action="<?= e(url('ajax/submission.php')) ?>" data-ajax-form data-work>
+        <?= csrf_field() ?><input type="hidden" name="lesson_id" value="<?= (int) $lesson['id'] ?>">
+        <label class="sr-only" for="work-content">Votre réponse</label>
+        <textarea class="textarea work__text" id="work-content" name="content" minlength="200" maxlength="30000" placeholder="Rédigez ici votre réponse en suivant les consignes et le barème ci-dessus. Les données utilisées doivent rester fictives." data-counter><?= e($submission['content']) ?></textarea>
+        <div class="work__foot"><span class="mono dim" data-count-out>0 caractère</span><button class="btn btn--primary" type="submit"><?= $st ? 'Déposer la nouvelle version' : 'Déposer mon travail' ?></button></div>
+      </form>
+      <?php endif; ?>
+    </section>
+    <?php endif; ?>
+    <?php if ($note !== null): ?>
+    <details class="notes" <?= $note !== '' ? 'open' : '' ?>>
+      <summary><span>Mes notes personnelles</span><span class="mono dim notes__state" data-note-state><?= $note !== '' ? 'enregistrées' : 'privées · sauvegarde automatique' ?></span></summary>
+      <label class="sr-only" for="lesson-notes">Notes personnelles sur cette leçon</label>
+      <textarea class="textarea notes__text" id="lesson-notes" maxlength="20000" data-note="<?= (int) $lesson['id'] ?>" placeholder="Idées clés, questions, exemples de votre contexte professionnel… Visible par vous seul."><?= e($note) ?></textarea>
+    </details>
+    <?php endif; ?>
     <footer class="lesson-foot">
       <div>
         <?php if ($enrolled): ?>

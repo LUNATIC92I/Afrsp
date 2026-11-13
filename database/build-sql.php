@@ -58,6 +58,7 @@ $perms = [
     'audit.view' => 'Consulter le journal d\'audit',
     'messages.view' => 'Consulter les messages de contact',
     'payments.manage' => 'Gérer les paiements et valider les règlements',
+    'submissions.review' => 'Corriger les travaux des apprenants',
 ];
 $permRows = [];
 $i = 0;
@@ -67,7 +68,7 @@ foreach ($perms as $slug => $label) {
 $rp = [];
 foreach ($permRows as $p) {
     $rp[] = ['role_id' => 1, 'permission_id' => $p['id']];
-    if (in_array($p['slug'], ['admin.access', 'stats.view', 'courses.manage', 'exams.manage', 'results.view', 'media.manage', 'announcements.manage'], true)) {
+    if (in_array($p['slug'], ['admin.access', 'stats.view', 'courses.manage', 'exams.manage', 'results.view', 'media.manage', 'announcements.manage', 'submissions.review'], true)) {
         $rp[] = ['role_id' => 2, 'permission_id' => $p['id']];
     }
 }
