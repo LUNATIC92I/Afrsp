@@ -205,6 +205,9 @@ Les tests interrogent la base locale avec le client `mysql` (base `africaspy`) ;
 
 Version avec voix off française : `docs/promo/africaspy-spot-16x9-voix.mp4`. Fichiers audio séparés : voix seule (`africaspy-voix-off.wav` et `.mp3`) et bande-son mixée (`africaspy-spot-audio.mp3`, utilisable pour la radio). Le texte minuté est dans `docs/promo/texte-voix-off.txt`. La voix est une synthèse Piper (modèle SIWIS, licence CC BY 4.0) : citez la source indiquée dans `docs/promo/CREDITS.txt`, par exemple dans la description de la vidéo. Le texte se modifie dans `resources/promo/voiceover.py` ; `build.sh` régénère alors la voix et le mixage (nécessite `pip install piper-tts`).
 
+### Vidéo de synthèse du projet
+`docs/promo/africaspy-synthese-16x9.mp4` : présentation de 2 min 38 s, en 1920 x 1080 et avec voix off française. Elle couvre le constat, les cinq objectifs, le dispositif, les résultats attendus, les avantages pour les États, les avantages pour les agents et analystes, et le cadre éthique. Les résultats y sont présentés comme visés, à mesurer lors du déploiement. Fichiers associés : voix seule (`africaspy-synthese-voix-off.mp3`), texte minuté (`africaspy-synthese-texte.txt`) et image de couverture. Le contenu se modifie dans `resources/promo/resume/script.py`. La mise en page suit automatiquement la durée de la voix ; régénération : `resources/promo/resume/build.sh` (environ 8 minutes).
+
 ### Captures d'écran
 43 captures haute résolution sont disponibles dans `docs/screenshots/` (accueil, offre, centre de commandement, carte, catalogue, fiche formation, caisse, accès accordé, lecteur de cours, QCM, examen, résultat, tableaux de bord, certificat, reçu, administration, mobile). Pour les régénérer : `node tests/screenshots.js` (serveur local lancé).
 
