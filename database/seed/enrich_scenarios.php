@@ -349,4 +349,58 @@ HTML],
     ['Dans une grille de risque pays, la tendance indique :', ['La couleur de la carte', 'L\'évolution probable de la situation', 'Le nom de l\'analyste', 'Le coût du projet'], 1, 'Une même note peut cacher une amélioration ou une dégradation.'],
   ],
 ],
+'AFS-G101' => [
+  'title' => 'Mise en situation : appui renseignement à la sécurisation d\'un scrutin',
+  'summary' => 'Analyser une zone, définir les besoins prioritaires et présenter un briefing au chef.',
+  'lessons' => [
+    ['title' => 'Simulation guidée : briefing avant une période électorale', 'type' => 'exercise', 'minutes' => 75, 'content' => $fictif . <<<'HTML'
+<p>Les forces armées de la République de Kassanié (pays imaginaire) appuient la police pour sécuriser un scrutin local dans la région du Haut-Sorou. Éléments fictifs : deux candidats issus de communautés rivales ; un pont endommagé isole trois bureaux de vote ; des messages appelant au boycott circulent ; la saison des pluies commence ; des déplacés vivent dans un camp près du chef-lieu.</p>
+<h3>Consignes</h3>
+<ol><li>Réalisez l'analyse de la zone avec les grilles PMESII et ASCOPE.</li><li>Formulez trois besoins prioritaires en renseignement liés aux décisions du chef.</li><li>Présentez l'hypothèse la plus probable et la plus dangereuse, avec cinq indicateurs chacune.</li><li>Identifiez les mesures de sécurité des opérations à imposer aux unités.</li><li>Rédigez un briefing de cinq minutes en précisant ce qui relève des autorités civiles et le respect de la neutralité politique des forces.</li></ol>
+HTML . $bareme([['Analyse de zone complète et nuancée', '4'], ['Besoins prioritaires précis et datés', '4'], ['Hypothèses et indicateurs pertinents', '4'], ['Sécurité des opérations et neutralité', '4'], ['Briefing clair et utile au chef', '4']])],
+    ['title' => 'Étude de cas : la photo de la base', 'type' => 'case_study', 'minutes' => 20, 'content' => $fictif . <<<'HTML'
+<p>Un soldat publie sur un réseau social une photo souriante devant le portail d'une base avancée, avec la mention « bientôt la relève ! ». La photo, géolocalisée, montre l'entrée, des véhicules et un planning affiché au mur. Elle est partagée des centaines de fois.</p>
+<ol><li>Quelles informations critiques ont été exposées ?</li><li>Quels risques pour l'unité et pour la population voisine ?</li><li>Quelles mesures immédiates et quelles règles durables proposez-vous ?</li><li>Comment sensibiliser sans humilier le soldat concerné ?</li></ol>
+HTML],
+    ['title' => 'Fiche méthode : le briefing renseignement en cinq minutes', 'type' => 'text', 'minutes' => 10, 'content' => <<<'HTML'
+<table><thead><tr><th>Temps</th><th>Contenu</th></tr></thead><tbody>
+<tr><td>30 secondes</td><td>Le message essentiel : la conclusion d'abord</td></tr>
+<tr><td>1 minute</td><td>La situation : faits évalués, sources et confiance</td></tr>
+<tr><td>2 minutes</td><td>Les hypothèses : la plus probable, la plus dangereuse, et leurs indicateurs</td></tr>
+<tr><td>1 minute</td><td>Les conséquences pour la décision du chef (« et alors ? »)</td></tr>
+<tr><td>30 secondes</td><td>Les lacunes et les besoins de recherche proposés</td></tr>
+</tbody></table>
+<div class="keypoints"><strong>Points clés</strong><ul><li>La conclusion d'abord.</li><li>Une carte simple vaut mieux qu'un long texte.</li><li>Toujours dire ce que l'on ignore.</li></ul></div>
+HTML],
+  ],
+  'quiz' => [
+    ['Dans un briefing renseignement, on présente en premier :', ['L\'historique complet de la région', 'Le message essentiel, la conclusion', 'La liste des sources', 'Les questions du public'], 1, 'Le chef doit saisir l\'essentiel en quelques secondes.'],
+    ['Lors d\'une élection, les forces armées qui appuient la sécurité doivent :', ['Soutenir un candidat', 'Respecter une stricte neutralité politique', 'Organiser le vote', 'Diffuser des consignes de vote'], 1, 'La neutralité est une condition de légitimité et de sécurité.'],
+  ],
+],
+'AFS-G201' => [
+  'title' => 'Mise en situation : cellule d\'analyse d\'une mission régionale',
+  'summary' => 'Fusionner des rapports, protéger les civils et partager l\'information avec les partenaires.',
+  'lessons' => [
+    ['title' => 'Simulation guidée : avant le marché transfrontalier', 'type' => 'exercise', 'minutes' => 75, 'content' => $fictif . <<<'HTML'
+<p>Vous dirigez la cellule d'analyse d'une mission régionale fictive dans la province de Lowani. Vous recevez trois rapports : un contingent signale des hommes armés près d'une piste ; la section des droits humains rapporte des menaces contre des déplacés ; un partenaire étatique transmet une information classifiée, avec interdiction de rediffusion, annonçant une attaque « dans les prochains jours ». Le grand marché transfrontalier a lieu dans quatre jours.</p>
+<h3>Consignes</h3>
+<ol><li>Évaluez et recoupez les trois rapports.</li><li>Construisez la matrice menaces, vulnérabilités et capacités de protection pour le jour du marché.</li><li>Proposez des mesures de protection hiérarchisées et leurs responsables.</li><li>Déterminez ce que vous pouvez partager avec les autorités locales et les humanitaires, sous quelle forme, en respectant le contrôle de l'émetteur.</li><li>Identifiez les risques juridiques et éthiques et les garanties à prévoir.</li></ol>
+HTML . $bareme([['Évaluation et recoupement des rapports', '4'], ['Matrice de protection complète', '4'], ['Mesures réalistes et hiérarchisées', '4'], ['Partage conforme aux règles', '4'], ['Garanties juridiques et éthiques', '4']])],
+    ['title' => 'Étude de cas : le rapport qui n\'a pas circulé', 'type' => 'case_study', 'minutes' => 20, 'content' => $fictif . <<<'HTML'
+<p>Une alerte sur l'imminence de violences contre un village est restée bloquée dans la composante qui l'avait reçue, faute de procédure de partage et par crainte de compromettre la source. Les violences ont eu lieu. Une autre composante disposait pourtant de moyens pour renforcer la présence dans le village.</p>
+<ol><li>Quels dysfonctionnements identifiez-vous ?</li><li>Comment concilier protection de la source et diffusion de l'alerte ?</li><li>Quelles procédures proposer pour l'avenir ?</li></ol>
+HTML],
+    ['title' => 'Fiche méthode : matrice de protection des civils', 'type' => 'text', 'minutes' => 10, 'content' => <<<'HTML'
+<table><thead><tr><th>Lieu ou période</th><th>Menace</th><th>Vulnérabilités</th><th>Capacités de protection</th><th>Mesure proposée</th><th>Responsable</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+<div class="keypoints"><strong>Points clés</strong><ul><li>Une ligne par lieu ou période sensible.</li><li>Chaque mesure a un responsable identifié.</li><li>Revoir la matrice à chaque nouvelle information.</li></ul></div>
+HTML],
+  ],
+  'quiz' => [
+    ['Une information reçue avec interdiction de rediffusion peut être utilisée pour protéger des civils :', ['En la transmettant telle quelle à tous', 'En obtenant l\'accord de l\'émetteur ou en partageant une alerte assainie', 'Jamais, en aucun cas', 'En la publiant'], 1, 'Le contrôle de l\'émetteur se concilie avec la protection par l\'accord ou l\'assainissement.'],
+    ['Une alerte bloquée dans une seule composante révèle surtout :', ['Un excès de partage', 'Une absence de procédure de fusion et de diffusion', 'Un manque de matériel', 'Un problème de langue uniquement'], 1, 'Les procédures de partage interne sont aussi importantes que la collecte.'],
+  ],
+],
 ];

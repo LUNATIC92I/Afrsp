@@ -13,7 +13,7 @@ LINES = [
     (6.45, 1.15, "Anticiper."),
     (7.65, 1.25, "Protéger."),
     (9.10, 5.9, "Former les analystes dont l'Afrique a besoin : une académie, en ligne, rigoureuse et éthique."),
-    (15.6, 5.0, "Six domaines d'expertise. Onze formations complètes."),
+    (15.6, 5.0, "Sept domaines d'expertise. Treize formations complètes."),
     (21.1, 5.0, "Des leçons approfondies, des études de cas, des questionnaires corrigés."),
     (26.7, 4.8, "Un examen final chronométré, corrigé immédiatement."),
     (32.2, 4.8, "Et un certificat vérifiable en ligne, par Q R code."),

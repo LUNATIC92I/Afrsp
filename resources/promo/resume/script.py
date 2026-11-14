@@ -30,8 +30,8 @@ SCENES = [
                ("Cinquième objectif : attester les compétences par un certificat vérifiable.", "Attester les compétences par un certificat vérifiable")]},
 
     {'id': 'dispositif', 'layout': 'stats', 'eyebrow': '03 | Le dispositif', 'title': 'Une académie complète, en ligne', 'image': 'img/11-lecteur-de-cours.jpg',
-     'stats': [['6', 'domaines'], ['11', 'formations'], ['183', 'leçons'], ['232', 'questions de QCM']],
-     'lines': [("Le dispositif : six domaines d'expertise, onze formations, cent quatre-vingt-trois leçons et deux cent trente-deux questions d'évaluation.", None),
+     'stats': [['7', 'domaines'], ['13', 'formations'], ['217', 'leçons'], ['276', 'questions de QCM']],
+     'lines': [("Le dispositif : sept domaines d'expertise, dont le renseignement militaire, treize formations, deux cent dix-sept leçons et deux cent soixante-seize questions d'évaluation.", None),
                ("Chaque formation combine leçons, mises en situation, travaux corrigés par des formateurs, et un examen final chronométré.", "Leçons, mises en situation, travaux corrigés, examen final")]},
 
     {'id': 'resultats', 'layout': 'list', 'eyebrow': '04 | Résultats attendus', 'title': 'Ce que la formation doit produire', 'note': 'Résultats visés, à mesurer lors du déploiement',

@@ -112,7 +112,7 @@ require APP_ROOT . '/includes/header.php';
       <div class="section-head reveal">
         <p class="eyebrow" data-decrypt>02 // Domaines d'expertise</p>
         <h2 id="cmd-title">Interactive Command Center</h2>
-        <p>Sélectionnez un poste pour explorer chacun des cinq domaines d'expertise de l'Académie.</p>
+        <p>Sélectionnez un poste pour explorer les grands domaines d'expertise de l'Académie.</p>
       </div>
       <div class="command reveal reveal--depth" data-command>
         <div class="command__rail" role="tablist" aria-label="Domaines d'expertise">

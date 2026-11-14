@@ -42,7 +42,7 @@ $values = [
           <p>Or l'offre de formation dans ces domaines reste rare, souvent coûteuse, éloignée des réalités africaines, ou au contraire nourrie de fantasmes sur « l'espionnage ». AFRICA'SPY est née de la volonté de proposer un parcours sérieux, structuré et accessible, qui forme des professionnels de l'information plutôt que des agents de fiction.</p>
         </div>
         <ol class="timeline reveal">
-          <li><span class="mono">PHASE 1 : CONCEPTION</span><h3>Un référentiel pédagogique</h3><p>Définition de six domaines de compétences, de leurs objectifs et d'une charte éthique intangible.</p></li>
+          <li><span class="mono">PHASE 1 : CONCEPTION</span><h3>Un référentiel pédagogique</h3><p>Définition de sept domaines de compétences, de leurs objectifs et d'une charte éthique intangible.</p></li>
           <li><span class="mono">PHASE 2 : PRODUCTION</span><h3>Des contenus développés</h3><p>Rédaction des leçons, exercices, études de cas fictives, banques de questions et supports PDF.</p></li>
           <li><span class="mono">PHASE 3 : OUVERTURE</span><h3>La plateforme en ligne</h3><p>Ouverture de l'espace apprenant, du système d'examens et de la certification vérifiable.</p></li>
         </ol>

@@ -17,13 +17,16 @@ $__catalog = [
          'description' => 'Les outils logiciels et matériels de l\'analyste, présentés avec leurs usages légitimes et leur cadre légal.'],
         ['code' => 'F', 'slug' => 'intelligence-strategique-geopolitique', 'name' => 'Intelligence stratégique et géopolitique', 'accent' => '#1AFF9C',
          'description' => 'Intelligence économique, veille, géopolitique africaine, analyse des conflits et des risques pays.'],
+        ['code' => 'G', 'slug' => 'renseignement-militaire', 'name' => 'Renseignement militaire', 'accent' => '#087CFF',
+         'description' => 'Appui à la décision du commandement : environnement opérationnel, estimation, sécurité des opérations, opérations de paix et droit des conflits armés.'],
     ],
     'courses' => array_merge(
         require __DIR__ . '/courses_A.php',
         require __DIR__ . '/courses_B.php',
         require __DIR__ . '/courses_C.php',
         require __DIR__ . '/courses_D.php',
-        require __DIR__ . '/courses_EF.php'
+        require __DIR__ . '/courses_EF.php',
+        require __DIR__ . '/courses_G.php'
     ),
 ];
 

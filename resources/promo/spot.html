@@ -40,9 +40,9 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:
 .caption{position:absolute;left:130px;width:640px}
 .caption .h2{margin:22px 0 22px}
 .tag{display:inline-block;padding:10px 18px;border:1px solid rgba(0,240,208,.45);border-radius:6px;font:600 22px Rajdhani;letter-spacing:.14em;text-transform:uppercase;color:var(--turq);margin:0 10px 12px 0}
-.tile{position:absolute;width:520px;height:150px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,rgba(13,20,30,.95),rgba(8,12,18,.9));padding:26px 30px;display:flex;gap:26px;align-items:center}
-.tile .code{font:900 64px Orbitron;width:70px;text-align:center}
-.tile .name{font:700 30px Rajdhani;line-height:1.15}
+.tile{position:absolute;width:400px;height:160px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,rgba(13,20,30,.95),rgba(8,12,18,.9));padding:26px 30px;display:flex;gap:26px;align-items:center}
+.tile .code{font:900 58px Orbitron;width:62px;flex:none;text-align:center}
+.tile .name{font:700 27px Rajdhani;line-height:1.12}
 .tile .bar2{position:absolute;left:0;bottom:0;height:3px}
 .stat{display:inline-block;margin:0 46px;text-align:center}
 .stat b{display:block;font:900 64px Orbitron;color:var(--white)}
@@ -97,12 +97,12 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:
 
   <!-- 4. Domaines -->
   <section class="scene" id="s4">
-    <div class="c" style="top:150px;transform:translateX(-50%)"><div class="eyebrow" id="e4">6 domaines d'expertise</div></div>
+    <div class="c" style="top:150px;transform:translateX(-50%)"><div class="eyebrow" id="e4">7 domaines d'expertise</div></div>
     <div id="tiles"></div>
     <div class="c" id="stats" style="top:870px;transform:translateX(-50%);white-space:nowrap">
-      <div class="stat"><b data-n="11">0</b><small>formations</small></div>
-      <div class="stat"><b data-n="183">0</b><small>leçons</small></div>
-      <div class="stat"><b data-n="232">0</b><small>questions de QCM</small></div>
+      <div class="stat"><b data-n="13">0</b><small>formations</small></div>
+      <div class="stat"><b data-n="217">0</b><small>leçons</small></div>
+      <div class="stat"><b data-n="276">0</b><small>questions de QCM</small></div>
     </div>
   </section>
 
@@ -205,8 +205,8 @@ function set(el, o){ if(typeof el==='string') el=$(el); if(!el) return; for(cons
 function enter(el,t,t0,d=.7,dx=0,dy=40,extra=''){ const p=eo(lin(t,t0,t0+d)); set(el,{o:p,tf:`translate(${(1-p)*dx}px,${(1-p)*dy}px) ${extra}`}); return p; }
 
 // ---------- Domaines (données réelles du catalogue)
-const doms = [['A','Fondements du renseignement','#00C8FF'],['B','Espionnage et renseignement humain','#D5B36A'],['C','Contre-espionnage','#FF4057'],['D','Cyberespionnage et renseignement numérique','#865DFF'],['E','Outils du renseignement','#00F0D0'],['F','Intelligence stratégique et géopolitique','#1AFF9C']];
-doms.forEach((d,i)=>{ const el=document.createElement('div'); el.className='tile'; el.style.left=(150+(i%3)*560)+'px'; el.style.top=(300+Math.floor(i/3)*190)+'px';
+const doms = [['A','Fondements du renseignement','#00C8FF'],['B','Espionnage et renseignement humain','#D5B36A'],['C','Contre-espionnage','#FF4057'],['D','Cyberespionnage et renseignement numérique','#865DFF'],['E','Outils du renseignement','#00F0D0'],['F','Intelligence stratégique et géopolitique','#1AFF9C'],['G','Renseignement militaire','#087CFF']];
+doms.forEach((d,i)=>{ const el=document.createElement('div'); el.className='tile'; const row=i<4?0:1, col=row?i-4:i; el.style.left=((row?330:120)+col*420)+'px'; el.style.top=(290+row*190)+'px';
   el.innerHTML=`<div class="code" style="color:${d[2]};text-shadow:0 0 30px ${d[2]}88">${d[0]}</div><div class="name">${d[1]}</div><div class="bar2" style="background:${d[2]}"></div>`; $('#tiles').appendChild(el); });
 
 // ---------- Particules déterministes
@@ -250,7 +250,7 @@ function render(t){
   { enter('#cap3',t,10,.8,-60,0); const p=eo(lin(t,9.8,10.9)); set('#br3',{o:p,tf:`translateX(${(1-p)*220}px) perspective(1800px) rotateY(${mix(-14,-7,p)}deg)`});
     set('#im3',{tf:`scale(${1+lin(t,10,15.2)*.12}) translate(${-lin(t,10,15.2)*30}px,${-lin(t,10,15.2)*18}px)`}); }
   // 4. Domaines
-  { enter('#e4',t,15.4,.6,0,20); document.querySelectorAll('.tile').forEach((el,i)=>{ const t0=15.7+i*.22; const p=eo(lin(t,t0,t0+.6)); set(el,{o:p,tf:`translateY(${(1-p)*50}px) scale(${mix(.92,1,p)})`}); set(el.querySelector('.bar2'),{width:(lin(t,t0+.3,t0+1.1)*100)+'%'}); });
+  { enter('#e4',t,15.4,.6,0,20); document.querySelectorAll('.tile').forEach((el,i)=>{ const t0=15.6+i*.2; const p=eo(lin(t,t0,t0+.6)); set(el,{o:p,tf:`translateY(${(1-p)*50}px) scale(${mix(.92,1,p)})`}); set(el.querySelector('.bar2'),{width:(lin(t,t0+.3,t0+1.1)*100)+'%'}); });
     enter('#stats',t,17.6,.6,0,30,''); $('#stats').style.transform += ' translateX(-50%)';
     document.querySelectorAll('#stats b').forEach(b=>{ b.textContent=Math.round(+b.dataset.n*eo(lin(t,17.7,19.4))); }); }
   // 5. Cours

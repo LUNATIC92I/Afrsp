@@ -29,6 +29,10 @@ function command_panels(): array
          'lead' => 'Lire les dynamiques du continent pour anticiper les risques et saisir les opportunités.',
          'points' => ['Intelligence économique et veille', 'Géopolitique africaine', 'Analyse des conflits et alerte précoce', 'Risques pays et notes stratégiques'],
          'detail' => 'ZLECAf, transition énergétique, minerais critiques, démographie, recompositions diplomatiques : l\'Afrique vit des transformations majeures. L\'analyse stratégique fournit aux décideurs publics et privés des grilles de lecture rigoureuses, nuancées et débarrassées des clichés.', 'glyph' => 'strategic'],
+        ['id' => 'military', 'code' => 'CMD-06', 'name' => 'Military Intelligence', 'fr' => 'Renseignement militaire', 'cat' => 'renseignement-militaire',
+         'lead' => 'Éclairer la décision du commandement et protéger les populations, dans le respect du droit des conflits armés.',
+         'points' => ['Analyse de l\'environnement opérationnel', 'Capacités, intentions et indicateurs d\'alerte', 'Sécurité des opérations', 'Opérations de paix et protection des civils'],
+         'detail' => 'Le renseignement militaire est une fonction d\'appui à la décision, subordonnée au pouvoir civil et soumise au droit international humanitaire. L\'Académie l\'enseigne sous un angle doctrinal et analytique : comprendre un environnement, estimer sans fausse certitude, protéger ses propres informations, coopérer entre partenaires et protéger les civils. Aucune procédure de ciblage n\'est enseignée.', 'glyph' => 'military'],
     ];
 }
 
@@ -41,6 +45,7 @@ function command_glyph(string $kind): string
         'counter'   => '<path d="M50 12l30 12v22c0 20-13 34-30 42C33 80 20 66 20 46V24z"/><path d="M36 50l10 10 18-22" stroke="#D5B36A" stroke-width="2.4"/>',
         'cyber'     => '<circle cx="50" cy="22" r="6"/><circle cx="22" cy="72" r="6"/><circle cx="78" cy="72" r="6"/><circle cx="50" cy="54" r="8" stroke="#D5B36A" stroke-width="2.4"/><path d="M50 28v18M44 58L27 68M56 58l17 10"/>',
         'strategic' => '<path d="M14 74l22-12 24 10 26-14V22L60 36 36 26 14 38z"/><path d="M36 26v36M60 36v36"/><circle cx="60" cy="50" r="5" stroke="#D5B36A" stroke-width="2.4"/>',
+        'military'  => '<rect x="16" y="16" width="68" height="68" rx="3"/><path d="M16 39h68M16 61h68M39 16v68M61 16v68" stroke-dasharray="2 4"/><path d="M24 76c10-6 14-18 26-20s18-14 26-28" stroke="#D5B36A" stroke-width="2.4"/><circle cx="50" cy="56" r="4"/><path d="M76 20l-3 8 8-3z"/>',
     ];
     return '<svg viewBox="0 0 100 100" fill="none" stroke="#00F0D0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . ($g[$kind] ?? '') . '</svg>';
 }
@@ -121,6 +126,7 @@ function radar_items(): array
         ['t' => 'Signal faible', 'd' => 'Information fragmentaire annonçant un changement à venir.'],
         ['t' => 'BLUF', 'd' => 'Bottom Line Up Front : la conclusion en tête du rapport.'],
         ['t' => 'Pyramide de la douleur', 'd' => 'Détecter les comportements de l\'adversaire plutôt que ses adresses IP.'],
+        ['t' => 'Capacités et intentions', 'd' => 'Ce qu\'un acteur peut faire, ce qu\'il veut faire : deux questions distinctes.'],
     ];
 }
 

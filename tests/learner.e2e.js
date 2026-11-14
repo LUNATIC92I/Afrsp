@@ -1,6 +1,7 @@
 const { chromium } = require('playwright');
 const { execFileSync } = require('child_process');
 const B = process.env.BASE_URL || 'http://127.0.0.1:8080';
+const SLUG = process.env.COURSE_SLUG || 'fondements-du-renseignement'; // formation testée (paramétrable)
 const OUT = process.env.OUT_DIR || require('os').tmpdir();
 const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N', 'africaspy', '-e', q]).toString().trim();
 (async () => {
@@ -22,11 +23,11 @@ const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N',
   await p.check('input[name=charter]');
   await Promise.all([p.waitForNavigation(), p.click('form button[type=submit]')]);
   console.log('after register:', p.url());
-  const cidPre = sql("SELECT id FROM courses WHERE slug='fondements-du-renseignement'");
+  const cidPre = sql(`SELECT id FROM courses WHERE slug='${SLUG}'`);
   // Avant paiement : aucun accès au cours
   await p.goto(B + '/learner/learning.php?course=' + cidPre);
   console.log('learning before payment ->', p.url().replace(B, ''));
-  await p.goto(B + '/course.php?slug=fondements-du-renseignement');
+  await p.goto(B + '/course.php?slug=' + SLUG);
   console.log('price shown:', (await p.textContent('.course-aside .price__now')).trim(), '| old:', (await p.textContent('.course-aside .price__old')).trim());
   await Promise.all([p.waitForNavigation(), p.click('.course-aside .btn--pay')]);
   console.log('checkout:', p.url().replace(B, ''), '| total:', (await p.textContent('.order__total span:last-child')).trim());
@@ -50,7 +51,7 @@ const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N',
   await p.screenshot({ path: OUT + '/learning.png' });
   await p.click('[data-complete]'); await p.waitForTimeout(900);
   await p.screenshot({ path: OUT + '/learning-done.png' });
-  const cid = sql("SELECT id FROM courses WHERE slug='fondements-du-renseignement'");
+  const cid = sql(`SELECT id FROM courses WHERE slug='${SLUG}'`);
   const ids = sql('SELECT l.id FROM lessons l JOIN chapters c ON c.id=l.chapter_id WHERE c.course_id=' + cid).split('\n');
   for (const id of ids) {
     const r = await p.evaluate(async (id) => (await AFSPY.request(AFSPY.url('ajax/progress.php'), { body: { lesson_id: id } })), id);
@@ -84,7 +85,8 @@ const sql = q => execFileSync('mysql', ['--default-character-set=utf8mb4', '-N',
   const res = await p.request.get(B + '/learner/certificate.php?no=' + no + '&dl=1');
   console.log('pdf:', res.status(), res.headers()['content-type'], (await res.body()).length);
   require('fs').writeFileSync(OUT + '/cert.pdf', await res.body());
-  const vid = await p.request.get(B + '/download.php?media=1', { headers: { Range: 'bytes=0-99' } });
+  const vmid = sql(`SELECT l.media_id FROM lessons l JOIN chapters ch ON ch.id = l.chapter_id WHERE ch.course_id = ${cid} AND l.type = 'video' LIMIT 1`);
+  const vid = await p.request.get(B + '/download.php?media=' + vmid, { headers: { Range: 'bytes=0-99' } });
   console.log('video range:', vid.status(), vid.headers()['content-range']);
   await p.goto(B + '/verify-certificate.php?code=' + no);
   console.log('verify:', (await p.textContent('.verify-result__status')).trim());

@@ -4,7 +4,7 @@
  * glossaire et bibliographie ajoutés au dernier chapitre de chaque formation.
  * @return array<string, array{chapters: array<int, array{lessons: array, quiz: array}>, final: array}>
  */
-$parts = array_merge(require __DIR__ . '/enrich_AB.php', require __DIR__ . '/enrich_CD.php', require __DIR__ . '/enrich_EF.php');
+$parts = array_merge(require __DIR__ . '/enrich_AB.php', require __DIR__ . '/enrich_CD.php', require __DIR__ . '/enrich_EF.php', require __DIR__ . '/enrich_G.php');
 $gloss = require __DIR__ . '/glossaries.php';
 $scenarios = require __DIR__ . '/enrich_scenarios.php';
 $out = [];

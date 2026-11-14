@@ -358,7 +358,7 @@ def lab():
 
 
 # ---------------------------------------------------------------------------
-#  5. Couvertures de domaines (A à F)
+#  5. Couvertures de domaines (A à G)
 # ---------------------------------------------------------------------------
 def cover(code, accent, motif):
     W, H = 960, 600
@@ -458,6 +458,41 @@ def m_geo(d, W, H, a):
     map_lines(d, 60, 60, 0.42, (120, 135, 150), 1)
 
 
+def m_military(d, W, H, a):
+    # carte d'état-major stylisée : courbes de niveau, cours d'eau, carroyage, itinéraire et repères neutres
+    for k in range(9):
+        cx, cy = 300 + (k % 3) * 40, 260 + (k // 3) * 10
+        pts = []
+        for t in range(0, 361, 8):
+            ang = math.radians(t)
+            r = 30 + k * 24 + 14 * math.sin(4 * ang + k) + 8 * math.cos(7 * ang)
+            pts.append((cx + 1.5 * r * math.cos(ang), cy + r * math.sin(ang)))
+        d.line(pts, fill=(45, 70, 95) if k % 3 else (70, 100, 130), width=1)
+    river = [(W * 0.52 + 60 * math.sin(y / 70), y) for y in range(0, H, 10)]
+    d.line(river, fill=(40, 110, 170), width=4)
+    for x in range(120, W, 120):
+        d.line([(x, 0), (x, H)], fill=(35, 55, 75), width=1)
+        d.text((x + 4, 6), f'{x // 12:02d}', fill=(110, 130, 150), font=font(FONT_MONO, 14))
+    for y in range(120, H, 120):
+        d.line([(0, y), (W, y)], fill=(35, 55, 75), width=1)
+        d.text((6, y + 4), f'{y // 12:02d}', fill=(110, 130, 150), font=font(FONT_MONO, 14))
+    route = [(90, 520), (260, 430), (420, 400), (560, 300), (700, 240), (880, 150)]
+    for i in range(len(route) - 1):
+        (x1, y1), (x2, y2) = route[i], route[i + 1]
+        n = int(math.dist((x1, y1), (x2, y2)) // 14)
+        for j in range(0, n, 2):
+            p1 = (x1 + (x2 - x1) * j / n, y1 + (y2 - y1) * j / n); p2 = (x1 + (x2 - x1) * (j + 1) / n, y1 + (y2 - y1) * (j + 1) / n)
+            d.line([p1, p2], fill=a, width=3)
+    for (x, y) in [(260, 430), (560, 300), (700, 240)]:
+        d.rectangle((x - 16, y - 11, x + 16, y + 11), outline=(232, 242, 250), width=2)
+    for (x, y) in [(420, 400), (880, 150)]:
+        d.polygon([(x, y - 14), (x + 14, y), (x, y + 14), (x - 14, y)], outline=a, width=3)
+    cx, cy = 830, 470
+    d.ellipse((cx - 44, cy - 44, cx + 44, cy + 44), outline=(110, 130, 150), width=1)
+    d.polygon([(cx, cy - 56), (cx + 9, cy), (cx, cy + 10), (cx - 9, cy)], fill=a)
+    d.text((cx - 5, cy - 82), 'N', fill=(232, 242, 250), font=font(FONT_MONO, 18))
+
+
 if __name__ == '__main__':
     os.makedirs(os.path.join(OUT, 'covers'), exist_ok=True)
     hero(); ops_room(); geo_table(); lab()
@@ -467,3 +502,4 @@ if __name__ == '__main__':
     cover('D', VIOLET, m_cyber)
     cover('E', TURQ, m_tools)
     cover('F', GREEN, m_geo)
+    cover('G', BLUE, m_military)
