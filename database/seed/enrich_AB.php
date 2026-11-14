@@ -45,8 +45,32 @@ HTML]],
 <h3>En Afrique</h3>
 <p>Plusieurs constitutions africaines adoptées ou révisées depuis les années 1990 encadrent explicitement les services de sécurité (par exemple l'Afrique du Sud, avec un inspecteur général du renseignement et une commission parlementaire conjointe). La tendance générale est à l'inscription des services dans la loi et à la création d'organes de contrôle.</p>
 <div class="keypoints"><strong>Points clés</strong><ul><li>Légitimité et efficacité vont de pair.</li><li>Le contrôle combine plusieurs niveaux complémentaires.</li><li>La loi publique fixe le mandat ; le secret porte sur les opérations, pas sur les règles.</li></ul></div>
+HTML], ['title' => 'Approfondissement : CIA, KGB, Mossad, ce que l\'Afrique peut en retenir', 'type' => 'text', 'minutes' => 25, 'content' => <<<'HTML'
+<p>Trois services ont marqué l'histoire du renseignement au XXe siècle : la <strong>CIA</strong> (États-Unis, créée en 1947), le <strong>KGB</strong> (Union soviétique, 1954 à 1991) et le <strong>Mossad</strong> (Israël, créé en 1949). Les étudier ne consiste pas à les imiter : il s'agit de comprendre ce qui a fonctionné, ce qui a échoué et ce qui a dérivé, pour construire des pratiques adaptées aux réalités africaines et à l'État de droit.</p>
+<div class="note">AFRICA'SPY n'a aucun lien avec ces services. Cette leçon s'appuie uniquement sur des sources publiques : travaux d'historiens, rapports officiels déclassifiés, commissions d'enquête.</div>
+<h3>Ce que l'on peut retenir</h3>
+<table><thead><tr><th>Service</th><th>Apport méthodologique reconnu</th></tr></thead><tbody>
+<tr><td>CIA</td><td>La formalisation de l'<strong>analyse</strong> : Sherman Kent a codifié l'expression des probabilités (« presque certain », « probable », etc.) ; Richards Heuer a popularisé l'analyse des hypothèses concurrentes et l'étude des biais cognitifs (<em>Psychology of Intelligence Analysis</em>, 1999, en accès libre).</td></tr>
+<tr><td>KGB</td><td>L'importance de la <strong>contre-ingérence</strong> et la connaissance des « mesures actives » : campagnes de désinformation, comme celle des années 1980 attribuant faussement l'origine du sida à un laboratoire américain. Les connaître aide aujourd'hui à détecter et contrer la désinformation.</td></tr>
+<tr><td>Mossad</td><td>Une organisation compacte, une forte culture du <strong>renseignement humain</strong> et de la sécurité des sources, et l'importance de la remise en question après les échecs.</td></tr>
+</tbody></table>
+<h3>Ce qu'il faut rejeter : échecs et dérives</h3>
+<ul>
+<li><strong>Échecs d'analyse</strong> : le débarquement de la baie des Cochons (1961) ; l'évaluation erronée des armes de destruction massive irakiennes (2002), critiquée par la commission américaine Silberman-Robb en 2005 ; la surprise de la guerre du Kippour (1973), analysée en Israël par la commission Agranat. Dans chaque cas, une conviction dominante a étouffé les hypothèses alternatives.</li>
+<li><strong>Dérives</strong> : le KGB a été un instrument de surveillance et de répression des citoyens soviétiques ; aux États-Unis, la commission Church (1975) a révélé des abus graves, à l'origine du contrôle parlementaire permanent ; en 1973, à Lillehammer (Norvège), des agents israéliens ont tué un innocent, confondu avec une autre personne, et plusieurs ont été condamnés par la justice norvégienne.</li>
+</ul>
+<h3>Leçons pour l'Afrique</h3>
+<ol>
+<li>Les méthodes d'analyse rigoureuses sont universelles et transposables.</li>
+<li>Un service sans contrôle finit par se retourner contre les citoyens.</li>
+<li>Les opérations illégales détruisent la légitimité et la confiance, et se paient durablement.</li>
+<li>Les modèles étrangers doivent être adaptés aux contextes, aux langues et aux institutions africaines.</li>
+</ol>
+<div class="keypoints"><strong>Points clés</strong><ul><li>Étudier les grands services, c'est apprendre de leurs réussites comme de leurs fautes.</li><li>Les apports durables sont méthodologiques : analyse, contre-ingérence, protection des sources.</li><li>Les dérives rappellent que le contrôle démocratique est indispensable.</li></ul></div>
 HTML]],
       'quiz' => [
+        ['Quel analyste de la CIA a popularisé l\'analyse des hypothèses concurrentes et l\'étude des biais cognitifs ?', ['Allen Dulles', 'Richards Heuer', 'Kim Philby', 'Sherman Adams'], 1, 'Richards Heuer, auteur de Psychology of Intelligence Analysis (1999).'],
+        ['Que révèlent la baie des Cochons, l\'évaluation des armes irakiennes de 2002 et la surprise du Kippour ?', ['Que les services ne se trompent jamais', 'Qu\'une conviction dominante peut étouffer les hypothèses alternatives', 'Que l\'analyse est inutile', 'Que seule la technologie compte'], 1, 'Dans ces trois cas, l\'absence de remise en cause a conduit à l\'erreur.'],
         ['Quel pays africain dispose d\'un inspecteur général du renseignement prévu par ses textes ?', ['L\'Afrique du Sud', 'Aucun', 'Seulement les pays du Maghreb', 'Tous les pays de la CEDEAO'], 0, 'L\'Afrique du Sud a institué un Inspector-General of Intelligence.'],
         ['Selon les bonnes pratiques internationales, qu\'est-ce qui doit rester public ?', ['Les opérations en cours', 'Le mandat légal des services', 'L\'identité des sources', 'Les budgets détaillés par opération'], 1, 'Le secret porte sur les opérations, pas sur les règles qui encadrent les services.'],
       ],

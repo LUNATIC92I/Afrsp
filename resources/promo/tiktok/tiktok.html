@@ -109,6 +109,11 @@ function build() {
       const f = [['lecons', 'Leçons approfondies', '#00C8FF'], ['situ', 'Mises en situation', '#00F0D0'], ['corr', 'Travaux corrigés par des formateurs', '#D5B36A'], ['exam', 'Examen final', '#865DFF'], ['cert', 'Certificat vérifiable par QR code', '#1AFF9C'], ['mob', '100 % en ligne, sur mobile', '#00C8FF']];
       h = `<div class="col" style="top:300px"><div class="eyebrow" style="color:var(--gold)">Chaque formation</div><div class="h2" style="margin-top:12px">Une formation complète</div></div>
         ${f.map(([k, txt, c], i) => `<div class="tile ft" style="left:${60 + (i % 2) * 460}px;top:${520 + Math.floor(i / 2) * 250}px;color:${c}">${ICON[k]}<b style="color:var(--white)">${txt}</b></div>`).join('')}`;
+    } else if (sc.layout === 'agencies') {
+      h = `<div class="col" style="top:300px"><div class="eyebrow" style="color:var(--gold)">Des méthodes éprouvées</div><div class="h2" style="margin-top:12px;font-size:66px">Étudiées à travers l'histoire des grands services</div></div>
+        ${[['CIA', 'États-Unis', '#00C8FF'], ['KGB', 'URSS', '#FF4057'], ['MOSSAD', 'Israël', '#D5B36A']].map(([n, c, a], i) => `<div class="ag" style="position:absolute;left:60px;top:${590 + i * 170}px;width:880px;height:140px;border-radius:20px;border:2px solid ${a}88;background:rgba(5,7,11,.85);display:flex;align-items:center;gap:30px;padding:0 36px;opacity:0"><b style="font:900 64px Orbitron;color:${a};min-width:330px">${n}</b><span style="font:600 34px Rajdhani;color:var(--silver);letter-spacing:.08em">${c}</span></div>`).join('')}
+        <div class="adapt" style="position:absolute;left:60px;top:1085px;width:880px;padding:22px 30px;border-radius:18px;background:linear-gradient(135deg,rgba(8,124,255,.25),rgba(0,240,208,.12));border:2px solid rgba(0,240,208,.6);font:700 42px/1.15 Rajdhani;opacity:0">Adaptées aux réalités africaines et à l'État de droit</div>
+        <div class="small nolink" style="position:absolute;left:60px;top:1262px;width:880px;opacity:0">Étude historique fondée sur des sources publiques. AFRICA'SPY n'a aucun lien avec ces services.</div>`;
     } else if (sc.layout === 'africa') {
       h = `<div class="map am" style="position:absolute;left:140px;top:420px;width:900px;opacity:.85;filter:drop-shadow(0 0 22px rgba(213,179,106,.45))">${AFR}</div>
         <div class="col" style="top:330px"><div class="eyebrow" style="color:var(--gold)">Pour les pays africains</div><div class="big sv" style="font-size:96px;margin-top:16px">SOUVERAINETÉ</div></div>
@@ -167,6 +172,10 @@ function render(t) {
       const s = [T0 + .2, T0 + it[0].d * .3, T0 + it[0].d * .55, it[1].t + .3, it[1].t + it[1].d * .45, it[1].t + it[1].d * .8];
       $$('.ft', el).forEach((x, i) => { enter(x, t, s[i], .45, 0, 50, .85); const on = t > s[i] && t < s[i] + 1.4; x.style.borderColor = on ? 'currentColor' : '#293444'; x.style.boxShadow = on ? '0 0 40px rgba(0,200,255,.25)' : 'none'; });
       enter($('.col', el), t, sc.start, .4, 0, 30);
+    } else if (sc.layout === 'agencies') {
+      enter($('.col', el), t, sc.start, .4, 0, 30);
+      $$('.ag', el).forEach((x, i) => enter(x, t, T0 + it[0].d * (.55 + i * .15), .4, -60, 0, .9));
+      enter($('.adapt', el), t, it[1].t + .2, .45, 0, 30, .9); enter($('.nolink', el), t, it[0].t + 1, .5, 0, 10);
     } else if (sc.layout === 'africa') {
       $('.am', el).style.transform = `scale(${1 + lin(t, sc.start, sc.end) * .06})`; $$('.am .country', el).forEach((c, i) => { c.style.stroke = 'rgba(213,179,106,.8)'; c.style.fill = `rgba(213,179,106,${.04 + .22 * eo(lin(t, T0 + i * .025, T0 + .6 + i * .025))})`; });
       enter($('.col', el), t, sc.start, .4, 0, 30); const sv = $('.sv', el); const p = lin(t, T0 + .4, T0 + 1); sv.style.transform = `scale(${mix(1.3, 1, eo(p))})`; sv.style.opacity = eo(p); sv.style.textShadow = `0 0 ${40 * p}px rgba(213,179,106,.6)`;

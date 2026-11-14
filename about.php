@@ -83,7 +83,7 @@ $values = [
       <section class="dossier__section" id="pedagogie">
         <p class="eyebrow">05 // Approche pédagogique</p>
         <h2 class="reveal">Apprendre en analyste</h2>
-        <div class="prose reveal"><p>Chaque formation suit une progression en quatre phases, du concept à la mise en situation. Les contenus sont rédigés pour être lus, compris et appliqués, pas seulement survolés.</p></div>
+        <div class="prose reveal"><p>Chaque formation suit une progression en quatre phases, du concept à la mise en situation. Les contenus sont rédigés pour être lus, compris et appliqués, pas seulement survolés.</p><p>Les méthodes enseignées s'appuient sur la doctrine publique, la recherche académique et l'étude des grands services du XXe siècle (<strong>CIA, KGB, Mossad</strong>) : leurs réussites, leurs échecs et leurs dérives, pour en retenir des méthodes éprouvées, adaptées aux réalités africaines et à l'État de droit. AFRICA'SPY n'a aucun lien avec ces services.</p></div>
         <ol class="pedagogy reveal">
           <li><strong>Comprendre</strong><span>Leçons développées, briefing vidéo, support PDF téléchargeable.</span></li>
           <li><strong>Vérifier</strong><span>QCM formatif à la fin de chaque chapitre, avec explications.</span></li>

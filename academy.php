@@ -26,7 +26,7 @@ require APP_ROOT . '/includes/header.php';
       <nav class="crumbs" aria-label="Fil d'Ariane"><a href="<?= e(url('index.php')) ?>">Accueil</a><span aria-hidden="true">/</span><span>Académie</span></nav>
       <p class="eyebrow">Catalogue | <?= (int) $total ?> formations | <?= count($categories) ?> domaines</p>
       <h1 data-split>Académie de formation</h1>
-      <p class="reveal">Sept domaines, des parcours progressifs du niveau fondamental au niveau avancé. Chaque formation comprend des leçons développées, un briefing vidéo, un support PDF, des exercices, des études de cas, des QCM par chapitre et un examen final certifiant.</p>
+      <p class="reveal">Des méthodes éprouvées, étudiées à travers l'histoire des grands services (CIA, KGB, Mossad) et adaptées aux réalités africaines. Sept domaines, des parcours progressifs du niveau fondamental au niveau avancé. Chaque formation comprend des leçons développées, un briefing vidéo, un support PDF, des exercices, des études de cas, des QCM par chapitre et un examen final certifiant.</p>
     </div>
   </section>
 
