@@ -1,12 +1,12 @@
 const { chromium } = require('playwright'); const path = require('path');
-// Paramètres : PAGE (adresse de la composition), DURATION (s), OUT (dossier des images)
+// Paramètres : PAGE (adresse de la composition), DURATION (s), OUT (dossier des images), VW et VH (taille, 1920 x 1080 par défaut)
 const FPS = 30, OUT = process.env.OUT || path.join(__dirname, 'build', 'frames'), W = +process.env.WORKERS || 4;
 const PAGE = process.env.PAGE || 'http://127.0.0.1:8090/build/spot.html';
 (async () => {
   const b = await chromium.launch();
   const total = Math.round((+process.env.DURATION || 53) * FPS); const t0 = Date.now();
   await Promise.all([...Array(W)].map(async (_, k) => {
-    const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
+    const p = await b.newPage({ viewport: { width: +process.env.VW || 1920, height: +process.env.VH || 1080 } });
     p.on('pageerror', e => console.log('ERR', e.message));
     await p.goto(PAGE); await p.waitForFunction(() => window.READY);
     await p.evaluate(() => document.fonts.ready);

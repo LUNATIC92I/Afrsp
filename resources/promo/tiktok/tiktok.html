@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Spot TikTok AFRICA'SPY</title>
+<style>
+@font-face{font-family:Orbitron;font-weight:500 900;src:url(img/orbitron-500.woff2)}
+@font-face{font-family:Rajdhani;font-weight:600;src:url(img/rajdhani-600.woff2)}
+@font-face{font-family:Rajdhani;font-weight:700;src:url(img/rajdhani-700.woff2)}
+@font-face{font-family:Inter;src:url(img/inter-400.woff2)}
+@font-face{font-family:Mono;src:url(img/share-tech-mono-400.woff2)}
+:root{--cyan:#00C8FF;--blue:#087CFF;--turq:#00F0D0;--green:#1AFF9C;--silver:#AEBBC9;--gold:#D5B36A;--white:#E8F2FA;--red:#FF4057;--violet:#865DFF;--line:#293444}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#05070B;color:var(--white);font-family:Inter,sans-serif}
+#stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(900px 1200px at 50% 38%,#0C1828 0%,#05070B 75%)}
+.grid{position:absolute;inset:-120px;background-image:linear-gradient(rgba(0,200,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,.055) 1px,transparent 1px);background-size:54px 54px}
+canvas{position:absolute;inset:0}
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden}
+/* Zone utile : x 60 à 940 (colonne d'icônes TikTok à droite), y 260 à 1300 ; sous-titres 1330 à 1530 */
+.col{position:absolute;left:60px;width:880px}
+.eyebrow{font:400 26px Mono;letter-spacing:.32em;color:var(--turq);text-transform:uppercase}
+.big{font:900 88px/1.08 Orbitron;letter-spacing:.02em}
+.h2{font:700 72px/1.02 Rajdhani}
+.chip{display:inline-block;padding:14px 26px;border-radius:40px;border:2px solid rgba(0,200,255,.5);font:700 34px Rajdhani;letter-spacing:.06em;margin:0 12px 16px 0;background:rgba(5,7,11,.7)}
+.pt{display:flex;align-items:center;gap:22px;font:700 44px/1.1 Rajdhani;margin-top:26px}
+.pt i{flex:none;width:22px;height:22px;transform:rotate(45deg);border:4px solid currentColor}
+#brand{position:absolute;left:60px;top:150px;display:flex;align-items:center;gap:16px}
+#brand .lg{width:64px;height:64px}
+#brand b{font:900 34px Orbitron;letter-spacing:.14em}
+#brand small{display:block;font:400 15px Mono;letter-spacing:.34em;color:var(--gold)}
+#bar{position:absolute;left:60px;width:880px;top:238px;height:6px;display:flex;gap:6px}
+#bar span{flex:1;background:rgba(41,52,68,.9);border-radius:3px;overflow:hidden}
+#bar span b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--turq))}
+#cap{position:absolute;left:60px;width:880px;top:1390px;text-align:center}
+#cap span{display:inline-block;padding:16px 28px;border-radius:18px;background:rgba(3,6,10,.82);border:1px solid rgba(0,200,255,.28);font:700 54px/1.18 Rajdhani;color:#fff;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+#cap em{font-style:normal;color:var(--gold)}
+.phone{position:absolute;width:420px;height:860px;border-radius:56px;background:#0A0F16;border:4px solid #2B3A4C;box-shadow:0 40px 120px rgba(0,0,0,.8),0 0 80px rgba(0,240,208,.22);overflow:hidden}
+.phone .v{position:absolute;inset:16px;border-radius:42px;overflow:hidden}
+.phone img{position:absolute;left:0;top:0;width:100%}
+.cover{position:absolute;left:0;top:0;width:1080px;height:760px;overflow:hidden}
+.cover img{position:absolute;left:-60px;top:0;width:1200px;height:760px;object-fit:cover}
+.cover:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,11,.15) 0%,rgba(5,7,11,.0) 40%,#05070B 98%)}
+.letter{position:absolute;left:60px;top:560px;width:220px;height:220px;border-radius:30px;display:grid;place-items:center;font:900 150px Orbitron;background:rgba(5,7,11,.85);border:3px solid}
+.dots{position:absolute;left:60px;top:1230px;display:flex;gap:14px}
+.dots span{width:94px;height:58px;border-radius:12px;border:2px solid var(--line);display:grid;place-items:center;font:900 28px Orbitron;color:#4A5666}
+.tile{position:absolute;width:420px;height:230px;border-radius:22px;border:2px solid var(--line);background:linear-gradient(135deg,rgba(13,20,30,.96),rgba(8,12,18,.92));padding:30px;opacity:0}
+.tile svg{width:64px;height:64px}
+.tile b{display:block;margin-top:18px;font:700 40px/1.1 Rajdhani}
+.btn{display:inline-block;padding:34px 70px;border-radius:20px;background:linear-gradient(135deg,var(--blue),var(--cyan));font:700 50px Rajdhani;letter-spacing:.16em;color:#031019;box-shadow:0 0 60px rgba(0,200,255,.45)}
+.small{font:400 22px/1.5 Inter;color:rgba(174,187,201,.85)}
+.map svg{width:100%;height:auto;display:block}
+.map .country{fill:rgba(0,200,255,.07);stroke:rgba(0,200,255,.75);stroke-width:1.2}
+.map .graticule{stroke:rgba(0,200,255,.12);stroke-width:1;fill:none}
+#scan{position:absolute;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--cyan),var(--turq),transparent);box-shadow:0 0 30px 8px rgba(0,200,255,.45);opacity:0}
+</style></head>
+<body><div id="stage">
+  <div class="grid" id="grid"></div><canvas id="pc" width="1080" height="1920"></canvas>
+  <div id="scenes"></div>
+  <div id="brand"><div class="lg" id="lg0"></div><div><b>AFRICA'SPY</b><small>INTELLIGENCE ACADEMY</small></div></div>
+  <div id="bar"></div>
+  <div id="cap"><span></span></div>
+  <div id="scan"></div>
+</div>
+<script>
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), lin = (t, a, b) => clamp((t - a) / (b - a));
+const eo = x => 1 - Math.pow(1 - x, 3), eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const mix = (a, b, p) => a + (b - a) * p;
+const ic = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const ICON = {
+  lecons: ic('<path d="M4 4h10a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 8h6M8 12h6"/>'),
+  situ: ic('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>'),
+  corr: ic('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>'),
+  exam: ic('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>'),
+  cert: ic('<circle cx="12" cy="9" r="6"/><path d="M8.5 14l-1.5 8 5-3 5 3-1.5-8"/>'),
+  mob: ic('<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>'),
+};
+let TL, LOGO = '', AFR = '';
+let seed = 21; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+const P = [...Array(80)].map(() => ({ x: rnd() * 1080, y: rnd() * 1920, vx: (rnd() - .5) * 16, vy: (rnd() - .5) * 22, r: rnd() * 2 + .7, c: rnd() < .8 ? '0,200,255' : '213,179,106' }));
+const cx = $('#pc').getContext('2d');
+function particles(t) {
+  cx.clearRect(0, 0, 1080, 1920);
+  const pts = P.map(p => ({ x: ((p.x + p.vx * t) % 1080 + 1080) % 1080, y: ((p.y + p.vy * t) % 1920 + 1920) % 1920, r: p.r, c: p.c }));
+  for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) { const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = dx * dx + dy * dy; if (d < 22000) { cx.strokeStyle = `rgba(0,200,255,${.11 * (1 - Math.sqrt(d) / 148)})`; cx.beginPath(); cx.moveTo(pts[i].x, pts[i].y); cx.lineTo(pts[j].x, pts[j].y); cx.stroke(); } }
+  for (const p of pts) { cx.fillStyle = `rgba(${p.c},.75)`; cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 7); cx.fill(); }
+}
+function build() {
+  const root = $('#scenes'); const mods = TL.scenes.filter(s => s.layout === 'module');
+  for (const sc of TL.scenes) {
+    const el = document.createElement('section'); el.className = 'scene'; el.id = 'sc-' + sc.id; let h = '';
+    if (sc.layout === 'hook') {
+      h = `<div class="map hm" style="position:absolute;left:180px;top:420px;width:1000px;opacity:.45;filter:drop-shadow(0 0 18px rgba(0,200,255,.5))">${AFR}</div>
+        <div class="col" style="top:520px"><div class="big hk" style="font-size:98px">${["Et si", "<span style='color:var(--gold)'>VOUS</span>", "deveniez", "l'analyste", "dont l'Afrique", "a besoin ?"].map(w => `<span class="w" style="display:inline-block;margin-right:26px">${w}</span>`).join('')}</div></div>`;
+    } else if (sc.layout === 'promise') {
+      h = `<div class="col" style="top:320px"><div class="eyebrow" style="color:var(--red)">Le constat</div>
+          <div class="thr" style="margin-top:26px">${[['Cybermenaces', '#865DFF'], ['Désinformation', '#FF4057'], ['Ingérences', '#D5B36A']].map(([x, c]) => `<span class="chip" style="border-color:${c};color:${c}">${x}</span>`).join('')}</div></div>
+        <div class="phone" style="left:60px;top:560px"><div class="v"><img src="img/23-mobile-accueil.jpg" alt=""></div></div>
+        <div class="col pr" style="left:530px;width:410px;top:600px"><div class="eyebrow">La solution</div><div class="h2" style="font-size:62px;margin-top:14px">Une académie en ligne</div>
+          ${['En ligne', 'En français', 'À votre rythme'].map(x => `<div class="pt" style="font-size:40px;color:var(--turq)"><i></i><span style="color:var(--white)">${x}</span></div>`).join('')}</div>
+        <div class="seven" style="position:absolute;left:0;right:0;top:560px;text-align:center"><div class="big" style="font-size:150px;color:var(--gold)">7</div><div class="h2" style="font-size:80px">MODULES</div>
+          <div style="margin-top:40px;display:flex;gap:14px;justify-content:center">${mods.map(m => `<span class="lt" style="width:96px;height:96px;border-radius:18px;border:3px solid ${m.accent};color:${m.accent};display:grid;place-items:center;font:900 48px Orbitron">${m.id}</span>`).join('')}</div></div>`;
+    } else if (sc.layout === 'module') {
+      h = `<div class="cover"><img src="img/cover-${sc.id}.webp" alt=""></div>
+        <div class="letter" style="color:${sc.accent};border-color:${sc.accent};box-shadow:0 0 70px ${sc.accent}66">${sc.id}</div>
+        <div class="col" style="left:310px;width:630px;top:600px"><div class="eyebrow" style="color:${sc.accent}">Module ${sc.id}</div><div class="h2 nm" style="margin-top:10px">${sc.name}</div></div>
+        <div class="col" style="top:830px">${sc.points.map(p => `<div class="pt" style="color:${sc.accent}"><i></i><span style="color:var(--white)">${p}</span></div>`).join('')}
+          <div class="chip info" style="margin-top:40px;border-color:${sc.accent}88;color:var(--silver);font-size:30px">${sc.n} formation${sc.n > 1 ? 's' : ''} | certificat</div></div>
+        <div class="dots">${mods.map(m => `<span data-m="${m.id}" style="${m.id === sc.id ? `border-color:${m.accent};color:${m.accent};box-shadow:0 0 24px ${m.accent}66;background:rgba(5,7,11,.9)` : ''}">${m.id}</span>`).join('')}</div>`;
+    } else if (sc.layout === 'features') {
+      const f = [['lecons', 'Leçons approfondies', '#00C8FF'], ['situ', 'Mises en situation', '#00F0D0'], ['corr', 'Travaux corrigés par des formateurs', '#D5B36A'], ['exam', 'Examen final', '#865DFF'], ['cert', 'Certificat vérifiable par QR code', '#1AFF9C'], ['mob', '100 % en ligne, sur mobile', '#00C8FF']];
+      h = `<div class="col" style="top:300px"><div class="eyebrow" style="color:var(--gold)">Chaque formation</div><div class="h2" style="margin-top:12px">Une formation complète</div></div>
+        ${f.map(([k, txt, c], i) => `<div class="tile ft" style="left:${60 + (i % 2) * 460}px;top:${520 + Math.floor(i / 2) * 250}px;color:${c}">${ICON[k]}<b style="color:var(--white)">${txt}</b></div>`).join('')}`;
+    } else if (sc.layout === 'africa') {
+      h = `<div class="map am" style="position:absolute;left:140px;top:420px;width:900px;opacity:.85;filter:drop-shadow(0 0 22px rgba(213,179,106,.45))">${AFR}</div>
+        <div class="col" style="top:330px"><div class="eyebrow" style="color:var(--gold)">Pour les pays africains</div><div class="big sv" style="font-size:96px;margin-top:16px">SOUVERAINETÉ</div></div>
+        <div class="col bn" style="top:830px">${[['Compétences africaines', '#00F0D0'], ['Formées aux réalités du continent', '#D5B36A'], ['Institutions mieux protégées', '#1AFF9C']].map(([x, c]) => `<div class="pt" style="color:${c};font-size:48px;background:rgba(5,7,11,.82);padding:18px 24px;border-radius:16px;border:1px solid ${c}55"><i></i><span style="color:var(--white)">${x}</span></div>`).join('')}</div>`;
+    } else if (sc.layout === 'offer') {
+      h = `<div class="col" style="top:380px;text-align:center"><div class="eyebrow" style="color:var(--gold);font-size:32px">Offre de lancement</div>
+          <div class="old" style="position:relative;display:inline-block;margin-top:50px;font:700 76px Orbitron;color:var(--silver)">900 000 FCFA<span class="st" style="position:absolute;left:-10px;top:50%;height:8px;background:var(--red);width:0;box-shadow:0 0 18px var(--red)"></span></div>
+          <div class="nw" style="margin-top:30px;font:900 170px/1 Orbitron;color:var(--gold);text-shadow:0 0 70px rgba(213,179,106,.5)">170 000</div>
+          <div class="nw2" style="font:900 70px Orbitron;color:var(--gold);margin-top:6px">FCFA</div>
+          <div class="bd" style="display:inline-block;margin-top:34px;padding:12px 30px;background:var(--red);border-radius:10px;font:700 46px Rajdhani;color:#fff">-81 %</div>
+          <div class="pay" style="margin-top:56px">${['Mobile Money', 'Carte', 'Virement'].map(x => `<span class="chip">${x}</span>`).join('')}</div></div>`;
+    } else if (sc.layout === 'cta') {
+      h = `<div class="col" style="top:330px;text-align:center"><div class="lg2" style="width:250px;height:250px;margin:0 auto">${LOGO.replace(/afl1/g, 'afl7')}</div>
+          <div class="h2 ins" style="margin-top:50px;font-size:84px">Inscrivez-vous maintenant</div>
+          <div class="btn" style="margin-top:56px">Je m'inscris</div>
+          <div class="eyebrow bio" style="margin-top:46px;font-size:30px;color:var(--gold)">Lien dans la bio</div>
+          <div class="mot" style="margin-top:60px;font:900 44px Orbitron;letter-spacing:.06em"><span>COMPRENDRE.</span> <span style="color:var(--cyan)">ANTICIPER.</span> <span style="color:var(--gold)">PROTÉGER.</span></div>
+          <p class="small disc" style="margin-top:44px">Organisme de formation privé. Certificat d'établissement, non assimilé à un diplôme d'État. Formations conformes au droit et à l'éthique.</p></div>`;
+    }
+    el.innerHTML = h; root.appendChild(el);
+  }
+  $('#bar').innerHTML = TL.scenes.map(() => '<span><b></b></span>').join('');
+}
+function enter(el, t, t0, d = .5, dx = 0, dy = 40, sc0 = 1) { if (!el) return 0; const p = eo(lin(t, t0, t0 + d)); el.style.opacity = p; el.style.transform = `translate(${(1 - p) * dx}px,${(1 - p) * dy}px) scale(${mix(sc0, 1, p)})`; return p; }
+function render(t) {
+  $('#grid').style.transform = `translate(${(t * 12) % 54}px,${(t * 20) % 54}px)`; particles(t);
+  let sy = 0, sw = 0;
+  TL.scenes.forEach((sc, k) => {
+    const el = $('#sc-' + sc.id), last = k === TL.scenes.length - 1;
+    const o = Math.min(lin(t, sc.start - .15, sc.start + .3), last ? 1 : 1 - lin(t, sc.end - .2, sc.end + .15));
+    el.style.opacity = o; el.style.visibility = o > 0 ? 'visible' : 'hidden';
+    $$('#bar b')[k].style.width = (lin(t, sc.start, sc.end) * 100) + '%';
+    if (k) { const p = lin(t, sc.start - .3, sc.start + .25); if (p > 0 && p < 1) { sw = Math.sin(p * Math.PI); sy = 260 + p * 1100; } }
+    if (o <= 0) return;
+    const it = sc.items, T0 = it[0].t;
+    if (sc.layout === 'hook') {
+      $$('.w', el).forEach((w, i) => { const s = T0 + i * it[0].d / 6.3; const p = eo(lin(t, s - .12, s + .25)); w.style.opacity = p; w.style.transform = `translateY(${(1 - p) * 50}px) scale(${mix(1.25, 1, p)})`; });
+      $('.hm', el).style.transform = `scale(${1 + lin(t, 0, 3.4) * .08})`;
+    } else if (sc.layout === 'promise') {
+      const t2 = it[2].t;
+      $$('.thr .chip', el).forEach((c, i) => enter(c, t, T0 + i * .55, .4, 0, 30, .7));
+      $('.col', el).style.opacity = 1 - lin(t, t2 - .3, t2);
+      const ph = $('.phone', el); const p = enter(ph, t, it[1].t - .3, .6, 0, 120); ph.style.opacity = p * (1 - lin(t, t2 - .3, t2));
+      $('.phone img', el).style.transform = `translateY(${-eio(lin(t, it[1].t, t2)) * 300}px)`;
+      const pr = $('.pr', el); enter(pr, t, it[1].t - .1, .5, 60, 0); pr.style.opacity = eo(lin(t, it[1].t - .1, it[1].t + .4)) * (1 - lin(t, t2 - .3, t2));
+      $$('.pr .pt', el).forEach((x, i) => enter(x, t, it[1].t + .9 + i * 1.0, .4, 40, 0));
+      const sv = $('.seven', el); sv.style.opacity = lin(t, t2 - .2, t2 + .2); sv.style.transform = `scale(${mix(.8, 1, back(lin(t, t2 - .2, t2 + .4)))})`;
+      $$('.seven .lt', el).forEach((x, i) => enter(x, t, t2 + .15 + i * .1, .3, 0, 30, .5));
+    } else if (sc.layout === 'module') {
+      $('.cover img', el).style.transform = `scale(${1.04 + lin(t, sc.start, sc.end) * .08}) translateX(${-lin(t, sc.start, sc.end) * 30}px)`;
+      const L = $('.letter', el); const p = lin(t, sc.start, sc.start + .5); L.style.opacity = eo(p); L.style.transform = `scale(${mix(.5, 1, back(p))}) rotate(${(1 - eo(p)) * -10}deg)`;
+      enter($('.col .eyebrow', el), t, sc.start + .15, .4, 40, 0); enter($('.nm', el), t, sc.start + .25, .5, 40, 0);
+      const d = it[0].d; $$('.pt', el).forEach((x, i) => enter(x, t, T0 + .45 + i * .55, .4, -40, 0)); enter($('.info', el), t, T0 + 1.6, .4, 0, 20);
+      $$('.dots span', el).forEach((s, i) => s.style.opacity = .35 + .65 * lin(t, sc.start + i * .04, sc.start + .3 + i * .04));
+    } else if (sc.layout === 'features') {
+      const s = [T0 + .2, T0 + it[0].d * .3, T0 + it[0].d * .55, it[1].t + .3, it[1].t + it[1].d * .45, it[1].t + it[1].d * .8];
+      $$('.ft', el).forEach((x, i) => { enter(x, t, s[i], .45, 0, 50, .85); const on = t > s[i] && t < s[i] + 1.4; x.style.borderColor = on ? 'currentColor' : '#293444'; x.style.boxShadow = on ? '0 0 40px rgba(0,200,255,.25)' : 'none'; });
+      enter($('.col', el), t, sc.start, .4, 0, 30);
+    } else if (sc.layout === 'africa') {
+      $('.am', el).style.transform = `scale(${1 + lin(t, sc.start, sc.end) * .06})`; $$('.am .country', el).forEach((c, i) => { c.style.stroke = 'rgba(213,179,106,.8)'; c.style.fill = `rgba(213,179,106,${.04 + .22 * eo(lin(t, T0 + i * .025, T0 + .6 + i * .025))})`; });
+      enter($('.col', el), t, sc.start, .4, 0, 30); const sv = $('.sv', el); const p = lin(t, T0 + .4, T0 + 1); sv.style.transform = `scale(${mix(1.3, 1, eo(p))})`; sv.style.opacity = eo(p); sv.style.textShadow = `0 0 ${40 * p}px rgba(213,179,106,.6)`;
+      $$('.bn .pt', el).forEach((x, i) => enter(x, t, it[1].t + i * it[1].d * .3, .45, -50, 0));
+    } else if (sc.layout === 'offer') {
+      enter($('.eyebrow', el), t, sc.start, .4, 0, 20); enter($('.old', el), t, T0 + .4, .4, 0, 20);
+      $('.st', el).style.width = (eio(lin(t, T0 + it[0].d * .55, T0 + it[0].d * .7)) * 110) + '%';
+      const p = lin(t, T0 + it[0].d * .38, T0 + it[0].d * .38 + .5); const nw = $('.nw', el); nw.style.opacity = eo(p); nw.style.transform = `scale(${mix(1.6, 1, back(p))})`; nw.style.filter = `blur(${(1 - eo(p)) * 12}px)`;
+      enter($('.nw2', el), t, T0 + it[0].d * .5, .4, 0, 20); enter($('.bd', el), t, T0 + it[0].d * .8, .35, 0, 0, .3);
+      $$('.pay .chip', el).forEach((x, i) => enter(x, t, it[1].t + .3 + i * .5, .35, 0, 30, .7));
+    } else if (sc.layout === 'cta') {
+      const lg = $('.lg2', el); const p = lin(t, sc.start, sc.start + .7); lg.style.opacity = eo(p); lg.style.transform = `scale(${mix(.6, 1, back(p))})`; lg.style.filter = 'drop-shadow(0 0 30px rgba(0,200,255,.55))';
+      enter($('.ins', el), t, T0, .5, 0, 30); const b = $('.btn', el); enter(b, t, T0 + .9, .45, 0, 0, .7); b.style.boxShadow = `0 0 ${50 + 30 * Math.sin(t * 5)}px rgba(0,200,255,.5)`;
+      enter($('.bio', el), t, T0 + 1.6, .4, 0, 20); $$('.mot span', el).forEach((x, i) => { x.style.display = 'inline-block'; enter(x, t, it[1].t + .9 + i * .55, .35, 0, 20, 1.3); }); enter($('.disc', el), t, it[1].t + .5, .5, 0, 10);
+    }
+  });
+  // Sous-titres synchronisés
+  const c = TL.captions.find(c => t >= c.t - .05 && t < c.e + .05); const cs = $('#cap span');
+  if (c) { cs.textContent = c.text; const p = eo(lin(t, c.t - .05, c.t + .12)); cs.style.opacity = p; cs.style.transform = `scale(${mix(.92, 1, p)})`; } else { cs.style.opacity = 0; }
+  $('#scan').style.opacity = sw; $('#scan').style.top = sy + 'px';
+  const bo = lin(t, .2, .8); $('#brand').style.opacity = bo; $('#bar').style.opacity = bo;
+  $('#stage').style.filter = `brightness(${1 - lin(t, TL.duration - .9, TL.duration)})`;
+}
+Promise.all([fetch('timeline.json').then(r => r.json()), fetch('img/logo.svg').then(r => r.text()), fetch('img/africa.svg').then(r => r.text())]).then(([tl, svg, afr]) => {
+  AFR = afr;
+  TL = tl; LOGO = svg.replace('<svg ', '<svg style="width:100%;height:100%" '); $('#lg0').innerHTML = LOGO.replace(/afl1/g, 'afl6'); build(); window.READY = true; render(0);
+});
+</script></body></html>
